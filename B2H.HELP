@@ -1,0 +1,1941 @@
+  COPYRIGHT (c) Copyright 2000 AT&T
+
+  B2H - Convert a BookMaster, GML or "flat" file to HTML
+|       (Lines with a vertical bar were updated for Release 4.5)
+
+  B2H reads a file written in Script/VS, BookMaster, GML, or a 'flat'
+  file and converts it into HTML format suitable for use in an Internet
+  World-Wide-Web environment.
+
+  B2H runs under AIX, Linux, MVS (OS/390), OS/2, VM/ESA, Windows 95/98 and
+  Windows NT.  On VM/ESA, B2H can run either as a stand-alone EXEC or
+  as a CMS Pipeline filter.  On MVS, B2H can run either as a stand-alone
+  program or as a MVS/BatchPipeWorks pipeline filter.
+
+  Options are available to control the operation of B2H and can be
+  provided using any or all of the following methods:
+  o  Within the source file via a ".*B2H OPTION parm1 parm2 ... parmx" stmt
+  o  Within the source file via the BookMaster :DOCPROF tag
+  o  As parameters on the B2H command itself
+  o  Within user profile(s)
+  o  Within the B2H system profile
+  o  "Hardcoded" defaults within the B2H program itself
+
+  A parameter's value must be specified immediately after the equal-sign,
+  no blanks are allowed,  e.g.  MSGLEVEL=WARNING
+  If the value contains blanks, then the entire value must be enclosed
+  using either single-quote or double-quote characters:
+     ABSTRACT='How to play the piano'
+  Use consecutive quote characters if needed. The following are equivalent:
+     ABSTRACT='Murphy''s Law'
+     ABSTRACT="Murphy's Law"
+
+  General usage information is available in the B2H User's Guide.
+
+  ============================================================================
+  RUNNING B2H ON OS/2:
+  When B2H is run on OS/2, it determines whether it should run in "FAT" or
+  "HPFS" mode by examining the name of the input file.  If the name contains
+  more than one period, the filename is longer then eight characters or the
+  extension is longer then three characters, then "HPFS" mode is assumed.
+  Otherwise, "FAT" mode is assumed.  In the following, "HPFS" refers to OS/2
+  using the HPFS file system and "OS2" refers to OS/2 using the FAT file
+  system.
+
+  ============================================================================
+
+  Format of the B2H command:
+    ("PC" means either AIX, OS2-HPFS, OS2-FAT, Windows 95/98 or Windows NT)
+    ("Win9x" refers to either Windows 95 or Windows 98)
+
+    An item within "<" and ">" means the item is optional,
+    Example: "<?>" means the question mark is optional.
+
+
+      +-----------------------------------------------------------------------+
+   AIX| b2h      file              < '(' parm1 parm2 ... parmx  <)>  >        |
+  HPFS| b2h      file              <  (  parm1 parm2 ... parmx  <)>  >        |
+ Linux| b2h      file              < '(' parm1 parm2 ... parmx  <)>  >        |
+   MVS| B2H      file              <  (  parm1 parm2 ... parmx  <)>  >        |
+   MVS| B2H      DD:ddname         <  (  parm1 parm2 ... parmx  <)>  >        |
+   MVS| B2H      DD:ddname(member) <  (  parm1 parm2 ... parmx  <)>  >        |
+   OS2| B2H      fn.ext            <  (  parm1 parm2 ... parmx  <)>  >        |
+    VM| B2H      fn ft <fm>        <  (  parm1 parm2 ... parmx  <)>  >        |
+ Win9x| REXX B2H fn.ext            <  (  parm1 parm2 ... parmx  <)>  >        |
+ WinNT| REXX B2H fn.ext            <  (  parm1 parm2 ... parmx  <)>  >        |
+   All| B2H      <?>     (displays this help file)                            |
+      |-----------------------------------------------------------------------|
+      |                                                                       |
+      | Parameters:                                                           |
+      |                                                                       |
+      |   Destination System                               Default value:     |
+      |   ------------------                               --------------     |
+   AIX|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=AIX        |
+  HPFS|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=HPFS       |
+ Linux|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=LINUX      |
+   MVS|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=MVS        |
+   OS2|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=OS2        |
+    VM|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=VM         |
+ Win9x|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=WIN95      |
+ WinNT|   DESTSYS={AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT}  DESTSYS=WINNT      |
+      |                                                                       |
+      |   Input File Characteristics                   Default value:         |
+      |   ----------------------------                 --------------         |
+      |   EXPDATE=<yyyymmdd | {+|-}ddd | text>         source date + 2 years  |
+|     |   LINENUM={ NO | BEGIN | END | scol-ecol }     LINENUM=NO             |
+      |   REVDATE=<yyyymmdd | {+|-}ddd | text>         source date + 1 year   |
+      |   SOURCE={ SCRIPT | SCRIPTONLY | FLAT }        SOURCE=SCRIPT          |
+      |   SOURCE='FLAT,pre,blanksub'                                          |
+      |   SYMCHARS='ccc...ccc'                         SYMCHARS=''            |
+      |                                                                       |
+      |   Table-of-Content, Index & Sectioning         Default value:         |
+      |   ------------------------------------         --------------         |
+      |   BODYHD0='text'                               BODYHD0=''             |
+      |   BODYHD0X='text'                              BODYHD0X=''            |
+      |   BODYHD1='text'                               BODYHD1=''             |
+      |   BODYHD1X='text'                              BODYHD1X=''            |
+      |   FBC={ YES | NO }                             FBC=NO                 |
+      |   FIGLIST={ YES | NO }                         FIGLIST=YES            |
+      |   FTSEP={ YES | NO }                           FTSEP=YES              |
+      |   HEADNUM={ YES | NO | xyz | *x }              HEADNUM=NO             |
+      |   INDEX={YES|NO}  { INDEX | NOINDEX }          INDEX=NO               |
+|     |   INDEXREFLINK={ NO | YES }                    INDEXREFLINK=NO        |
+      |   INDEXSORT.type='x<-y> ... x<-y> >'           See below              |
+      |   INDEXTOC={YES|NO|number}                     INDEXTOC=50            |
+      |   INDEXTOCTAG='ts,te,ss,se,ns,ne,as,ae'        See below              |
+      |   PTOC={ NO | num | *num | 4 }                 PTOC=4                 |
+      |   TLIST={ YES | NO }                           TLIST=YES              |
+      |   TOC={ NO | xyz | *x }                        TOC=*3                 |
+      |   TOCC={ YES | NO }                            TOCC=NO                |
+      |   TOCINDENT={ YES | NO }                       TOCINDENT=YES          |
+      |   TOCSUPPRESS=number                           TOCSUPPRESS=0          |
+      |   TOCTAG='ls,le,is,ie,ts,te'                   See below              |
+      |                                                                       |
+      |   Hyperlinking within the file                 Default value:         |
+      |   ----------------------------                 --------------         |
+      |   FNLINK={ NO | TO | FROM | BOTH }             FNLINK=BOTH            |
+      |   FTLINK={ YES | NO }                          FTLINK=YES             |
+      |   TOCRET={ NO | TOC | PTOC | PTOCx }           TOCRET=PTOC            |
+      |                                                                       |
+      |   HTML file's content & structure              Default value:         |
+      |   -------------------------------              --------------         |
+      |   ABSTRACT='text'                              ABSTRACT=''            |
+      |   ANNOT={ YES | NO }                           ANNOT=NO               |
+      |   AUTOSPLIT=<'>{ NO | YES | x | *x }           AUTOSPLIT=NO           |
+      |                { LEN={ x | *x | SEP }                                 |
+      |                { BYPASS={ 0 | x } }                                   |
+      |                { IMBED | NOIMBED }                                    |
+      |                { SETUP | NOSETUP }<'>                                 |
+      |   BODYTAG='tag'    '                           BODYTAG='<BODY>'       |
+      |   CENTERTAG={ YES | NO }                       CENTERTAG=NO           |
+      |   COMMENT={ 'text' | CLEAR }                   COMMENT=''             |
+      |   COMMENTHEAD='text'                           See below              |
+      |   CONTACT='text'                               CONTACT=''             |
+|     |   DEFTEXT.name='...text...'                    See below              |
+      |   DEFTEXT.name='...text...',<width>            See below              |
+      |   DIALOG='<LABEL> <FONT> <COLOR>'              DIALOG=LABEL           |
+      |   DIALOGTAG.x='ts,te,fs,fe,cs,ce'              See below              |
+|     |   DLFMT={ DL | TABLE }                         See below              |
+      |   DLTAG.x='ls,le,ts,te,ds,de'                  See below              |
+      |   FIGCAPLOC={ BEFORE | AFTER }                 FIGCAPLOC=BEFORE       |
+      |   FNTAG='cs,ce,ls,le,lcs,lce,lts,lte,ts,te'    See below              |
+|     |   FONTTAG='fonttext,efonttext,<PROP|NOPROP>'   FONTTAG=''             |
+|     |   FONTTAG.name='fonttext,efonttext,<PROP|NOPROP>' FONTTAG.id=''       |
+      |   FOOTER={ NO | file }                         FOOTER=NO              |
+   MVS|   FOOTER={NO|file|DD:ddname|DD:ddname(member)} FOOTER=NO              |
+|     |   GLFMT={ DL | TABLE }                         See below              |
+      |   GLTAG.x='ls,le,ts,te,ds,ds2,de,gs,ge'        See below              |
+      |   HEADER={ NO | file }                         HEADER=NO              |
+   MVS|   HEADER={NO|file|DD:ddname|DD:ddname(member)} HEADER=NO              |
+      |   HEADREC=CLEAR                                See below              |
+      |   HEADREC.FILE=file                            See below              |
+      |   HEADREC.TEXT='text'                          See below              |
+      |   HRTAG='tag'                                  See below              |
+      |   HRTAG.x='tag'                                See below              |
+      |   HTAG='hs,he,ss,sr'                           See below              |
+      |   HTAG.num='hs,he,ss,sr'                       See below              |
+      |   HTML={ 2 | 3 | 4 }                           HTML=3                 |
+      |   HTMLATT.name='attributes'                    See below              |
+      |   HTMLDOCID.htmlrel='text'                     See below              |
+      |   INDEXTAG='ls,le,ts,te,is,ie'                 See below              |
+      |   LINES={ PRE | BR }                           LINES=PRE              |
+      |   LINEWIDTH=number                             LINEWIDTH=78           |
+      |   LIREF={ NO | ID | NUM }                      LIREF=NUM              |
+      |   MASTALT='alternate text'                     MASTALT=''             |
+      |   MASTIMG='file.gif,{ALL|FIRST}'               MASTIMG=''             |
+      |   META={ YES | NO }                            META=YES               |
+      |   METAKEYS='key1 key2 ... keyx'                METAKEYS=''            |
+      |   NOTELTAG.x='ls,le,is,ie'                     See below              |
+      |   OLSEQ='sequence codes'                       OLSEQ='Nar'            |
+      |   OLTAG.x='ls,le,is,ie'                        See below              |
+      |   OWNER='text'                                 OWNER=''               |
+      |   REVTAG='revtext,erevtext,<PROP|NOPROP>'      REVTAG=''              |
+      |   REVTAG.id='revtext,erevtext,<PROP|NOPROP>'   REVTAG.id=''           |
+      |   SETUPTAG.tagname='beforetext','aftertext'    SETUPTAG=''            |
+      |   SHADE.name=rrggbb                            See below              |
+      |   SLTAG.x='ls,le,is,ie'                        See below              |
+      |   SPLITLINK={ YES | NO }                       SPLITLINK=YES          |
+      |   SPLITLINK.x='text'                           See below              |
+      |   SYNFONT={ YES | NO }                         SYNFONT=NO             |
+      |   TABLE2='fl,fm,fr,fv,fhn,fhh,gutl,gutr'       See below              |
+      |   TFIGLISTTAG.x='ls,le,is,ie'                  See below              |
+      |   TOPHEAD={1|2|3|4|5|6|NO}                     TOPHEAD=1              |
+      |   TITLE='text'                                 See below              |
+      |   ULTAG.x='ls,le,is,ie'                        See below              |
+      |   XEDITG={ YES | NO }                          XEDITG=YES             |
+      |                                                                       |
+      |   File Locations, Names & Format               Default value:         |
+      |   ------------------------------               --------------         |
+   AIX|   HTMLEXT=logical-ext                          HTMLEXT=html           |
+  HPFS|   HTMLEXT=logical-ext                          HTMLEXT=html           |
+ Linux|   HTMLEXT=logical-ext                          HTMLEXT=html           |
+   MVS|   HTMLEXT=logical-ext                          HTMLEXT=html           |
+   OS2|   HTMLEXT=logical-ext                          HTMLEXT=htm            |
+    VM|   HTMLEXT=logical-ext                          HTMLEXT=htm            |
+ Win9x|   HTMLEXT=logical-ext                          HTMLEXT=htm            |
+ WinNT|   HTMLEXT=logical-ext                          HTMLEXT=htm            |
+   AIX|   HTMPEXT=physical-ext                         HTMPEXT=html           |
+  HPFS|   HTMPEXT=physical-ext                         HTMPEXT=html           |
+ Linux|   HTMPEXT=physical-ext                         HTMPEXT=html           |
+   MVS|   HTMPEXT=physical-ext                         HTMPEXT=HTML           |
+   OS2|   HTMPEXT=physical-ext                         HTMPEXT=htm            |
+    VM|   HTMPEXT=physical-ext                         HTMPEXT=HTM            |
+ Win9x|   HTMPEXT=physical-ext                         HTMPEXT=htm            |
+ winNT|   HTMPEXT=physical-ext                         HTMPEXT=htm            |
+   AIX|   IMBFT=ext                                    IMBFT=.script          |
+  HPFS|   IMBFT=ext                                    IMBFT=script           |
+ Linux|   IMBFT=ext                                    IMBFT=.script          |
+   MVS|   IMBFT=ext                                    (not applicable)       |
+   OS2|   IMBFT=ext                                    IMBFT=scr              |
+    VM|   IMBFT=ft                                     IMBFT=SCRIPT           |
+ Win9x|   IMBFT=ext                                    IMBFT=scr              |
+ WinNT|   IMBFT=ext                                    IMBFT=scr              |
+   PC |   IMBFTEXT='YES|NO,case,fn=ext ...'            IMBFTEXT='NO,LC'       |
+   PC |   IMBPATH={ CLEAR | path1;...;pathx }          IMBPATH=''             |
+      |   IMGPATH='path'                               IMGPATH=''             |
+      |   OUTPUTFM={ A | disk }                        OUTPUTFM=A             |
+      |   OUTPUTL='logical-output-file'                See below              |
+      |   OUTPUTL83={ YES | NO }                       See below              |
+      |   OUTPUTLCASE={ ASIS | LC | UC }               See below              |
+      |   OUTPUTP='physical-output-file'               See below              |
+   MVS|   OUTPUTP=DD:ddname                            See below              |
+   MVS|   OUTPUTP=DD:ddname(member)                    See below              |
+      |   OUTPUTP83={ YES | NO }                       See below              |
+      |   OUTPUTPCASE={ ASIS | LC | UC }               See below              |
+      |   SPLITDIGITS=<'>num,<DEC|HEX|ALPHA|LALPHA><'>  SPLITDIGITS='2,DEC'   |
+      |   SPLITDIR<.x<-y>>='physical-file,logical-file' SPLITDIR=''           |
+      |   SPLITDIR.NEXT='physical-file,logical-file'    SPLITDIR.NEXT=''      |
+      |   SPLITNAME.x='physical-file,logical-file'      SPLITNAME.x=''        |
+      |   SPLITNAME.NEXT='physical-file,logical-file'   SPLITNAME.NEXT=''     |
+      |                                                                       |
+      |   Artwork & Graphics                           Default value:         |
+      |   ------------------                           --------------         |
+      |   ARTLINKIMG=image.ext                         ARTLINKIMG=B2HLINK.GIF |
+      |   ARTSHOW={ VIEW | LINK | NONE }               ARTSHOW=VIEW           |
+      |   ARTTYPE=imagetype                            ARTTYPE=GIF            |
+      |                                                                       |
+      |   Controlling DVCF sectioning                  Default value:         |
+      |   ---------------------------                  --------------         |
+      |   DVCF='cond1 cond2 ... condx'                 DVCF=''                |
+      |   SYSVAR='0 file'                              SYSVAR=''              |
+      |   SYSVAR='1 cond1 2 cond2 ... 9 cond9'         SYSVAR=''              |
+      |                                                                       |
+      |   Question & Answers                           Default value:         |
+      |   ------------------                           --------------         |
+      |   QRESET={ NO | 0 | 1 | ... | 19 | 20 }        QRESET=NO              |
+      |   QUESTION=TEXT                                QUESTION=TEXT          |
+      |   QUESTION='FORM,<method>,url-of-cgi,<answer-action>,<optdata>'       |
+      |                                                                       |
+      |   Miscellaneous                                Default value:         |
+      |   -------------                                --------------         |
+      |   ALARM={ YES | NO | number }                  ALARM=5                |
+      |   B2HREQ={ YES | NO }                          B2HREQ=YES             |
+      |   DOCDESC='file'                               DOCDESC=''             |
+      |   DOCDESC.id='file'                            DOCDESC.id=''          |
+      |   IMBEDID={ YES | NO }                         IMBEDID=NO             |
+      |   LOG='{ NO | YES | file },{CREATE|APPEND}'    LOG=NO                 |
+      |   LOG=STREAMx                                                         |
+      |   LTGT={ ASIS | CONVERT }                      LTGT=CONVERT           |
+      |   MAXWIDTH={ NOSPLIT | number }                MAXWIDTH=NOSPLIT       |
+      |   MSGLEVEL={ INFO | WARNING | ERROR }          MSGLEVEL=INFO          |
+      |   MSGNUM={ YES | NO }                          MSGNUM=YES             |
+      |   MVSALLOC.name='allocation-values'            See below              |
+      |   PROCACT='sit=action sit=action ...'          See below              |
+      |   PSC='process1 process2 ... processx'         PSC='CHAR HTML'        |
+      | { QUIET | NOISY }                              See below              |
+      |   SHOWLINES={ NO | x }                         See below              |
+      |   SYSVAR='W file'                              SYSVAR=''              |
+      |   TAGCHECK={ YES | NO }                        TAGCHECK=YES           |
+      |   USERPROF=file                                USERPROF=''            |
+      |   USERSYM=file                                 USERSYM=''             |
+      +-----------------------------------------------------------------------+
+
+
+   Specifying a file
+   -----------------
+   Many B2H options allow you to specify the name of a file.  The syntax of
+   the file must satisfy the naming convention of the platform for which the
+   option is applicable. For example, if specifying the name of the physical
+   output file and running B2H on OS/2, the filename must conform to OS/2
+   naming conventions.  Example: OUTPUTP=c:\pubs\abc.htm
+
+   Under VM/CMS: enclose the option's entire value with either single or
+   double-quotes.  Example: OUTPUTP='ABC HTML A'
+
+   Under MVS:
+   o  If specifying the dataset explicitly, normal TSO naming conventions
+      are followed.  If enclosed in single quotes, the dataset name is used
+      as-is.  Otherwise, the TSO prefix (normally your user ID) is added to
+      the beginning of the dataset name.  Example:
+         OUTPUTP=ABC.HTML         refers to 'userid.ABC.HTML'
+         OUTPUTP='ABC.HTML'       refers to 'ABC.HTML'
+   o  The dataset can also be specified as "DD:ddname" which refers to the
+      sequential dataset(s) allocated to "ddname", or "DD:ddname(member)"
+      which refers to member "member" within the partition dataset(s)
+      allocated to "ddname".  Example:
+         OUTPUTP=DD:FILEOUT
+         OUTPUTP=DD:FILEOUT(MEM1)
+
+
+   All B2H options (in alphabetical order)
+   ---------------------------------------
+
+   ABSTRACT='text'                         Default: ABSTRACT=''
+     A short abstract of the document.  If present, causes a "<META"-type
+     statement to be included in the HTML output. Also allows the server to
+     generate an HTTP response header if abstract information is requested.
+     e.g. ABSTRACT='Complete list of Murphy''s Laws'
+
+   ALARM={ YES | NO | number }             Default: ALARM=5
+     When running on a PC workstation, this controls the sounding of the
+     audible alarm when warning or error messages are displayed.
+       YES    - The audible alarm is always sounded
+       NO     - The audible alarm is never sounded
+       number - The audible alarm is sounded only this many times; warning
+                or error messages after this number are issued silently
+
+   ANNOT={ YES | NO }                      Default: ANNOT=NO
+     A 'short-hand' method for setting the SYSVAR "A" parameter for controlling
+     the processing of text marked up with the :ANNOT/:EANNOT tag.
+     ANNOT=YES is equivalent to SYSVAR='A YES'
+       YES    - Process annotations
+       NO     - Do not process annotations (default)
+
+   ARTLINKIMG=image.ext                    Default: ARTLINKIMG=B2HLINK.GIF
+     If ARTSHOW=LINK, this specifies the graphic image to display as a
+     hyperlink to the 'real' graphic image.
+     The B2HLINK.GIF file is supplied as part of the B2H package.
+
+   ARTSHOW={ VIEW | LINK | NONE }          Default: ARTSHOW=VIEW
+     Specifies how the :ARTWORK. tag should be handled
+     VIEW - The HTML "IMG SRC=" will be used to cause the image to be
+            loaded immediately at browse time
+     LINK - A link will be provided to the graphic, but user must select
+            it to see the image
+     NONE - Ignore the :ARTWORK tag.
+
+   ARTTYPE=imagetype                       Default: ARTTYPE=GIF
+     This specifies the file *extension* of an image at browse time.
+     The image file's *name* is defined by the :ARTWORK NAME= parameter.
+     Location of the image is specified by the IMGPATH= parameter.
+
+   AUTOSPLIT=NO                            Default: AUTOSPLIT=NO
+   AUTOSPLIT='{ YES | x | *x }
+              { LEN={ x | *x | SEP } }
+              { BYPASS={ 0 | x } }
+              { IMBED | NOIMBED  }
+              { SETUP | NOSETUP  }'
+     At conversion time, create a separate output file for each :Hx. tag.
+     If an asterisk precedes the number, then a separate output file is
+     also created for all headers "above" the :Hx. tag.
+     (Not available if B2H is running as a pipeline filter)
+     NO     Single output file, any ".*B2H SPLIT" statements in the source
+            are ignored
+     YES    Output split into multiple files ONLY when a ".*B2H SPLIT"
+            statement is encountered
+     x      Output split at each occurrence of an :Hx. tag
+            e.g. AUTOSPLIT=1   creates a separate HTML file for each :H1. tag
+     *x     Output split at each occurrence of an :Hx. or "higher" tag
+            e.g. AUTOSPLIT=*2  creates a separate HTML file for each :H0.,
+            :H1. and :H2. tag
+     LEN={ x | *x | SEP }
+            Specifies that a separate output file may also occur when a :LEN
+            tag is encountered
+            x    Output split at each occurrence of a :LEN tag where the
+                 LEHD= value is 'x', e.g. LEN=4 creates a separate HTML file
+                 for each :LEN LEHD=4.
+            *x   Output split at each occurrence of a :LEN tag where the
+                 LEHD= value is 'x' or "higher", e.g. LEN=*2 creates a
+                 separate HTML file for each :LEN LEHD=0., :LEN LEHD=1. and
+                 :LEN LEHD=2.
+            SEP  Output split at each occurrence of a :LEN tag (regardless of
+                 the LEHD= value) when encountered within a :LERS/:ELERS block
+                 when the :LERS SEP= value is neither "NORMAL" or "RULE"
+     BYPASS={ 0 | x }
+            If splitting the output by :Hx or :LEN LEHD=x, this attribute
+            allows you to specify how many :Hx or :LEN LEHD=x. tags to bypass
+            after a more significant header before splitting takes place.
+            If omitted, "BYPASS=0" is assumed.
+
+            For example, the amount of text occuring between an :H0 and it's
+            first :H1 is usually minimal, so it is often desirable to
+            include the first :H1 in the same file as the :H0.  Specifying
+            AUTOSPLIT="*1 BYPASS=1" allows you to split the file at each :H1
+            *unless* it is the *first* :H1 after an :H0.
+
+            A more general example: assume AUTOSPLIT="*2 BYPASS=1"
+               :H0
+                :H1
+                 :H2
+               (split)
+                 :H2
+               (split)
+                 :H2
+               (split)
+                :H1
+                 :H2
+               (split)
+                 :H2
+               (split)
+               :H0
+                :H1
+                 :H2
+               (split)
+                 :H2
+     IMBED  The output is split into multiple files with each break occuring
+            when a file is imbedded using the ".im" or ".'im" macro
+     SETUP  The output is split into multiple files with each break occuring
+            when a file is imbedded using the ".setup" or ".'setup" macro
+     If multiple values are specified, they must be enclosed in quotes.
+     For more information, see "Splitting the output HTML file into multiple
+     files" in the B2H User's Guide.
+
+   B2HREQ={ YES | NO }                     Default: B2HREQ=YES
+     B2H supports various options specified as a Script "comment" (first
+     two characters are ".*"), such as ".*B2H OPTION" and ".*B2H HTML".
+     This parameter specifies whether the "B2H" string is required or may
+     be omitted.  If B2HREQ=NO, then either the ".*OPTION" or the
+     ".*B2H OPTION" format may be used.  If B2HREQ=YES (the default), only
+     the ".*B2H OPTION" format is allowed and ".*OPTION" is ignored.
+
+   BODYHD0='text'                          Default: BODYHD0=''
+     Number each :H0. and give it this prefix label; also recognized on
+     BookMaster's :DOCPROF tag.
+     e.g. BODYHD0='Part' produces "Part 1.", etc.
+
+   BODYHD0X='text'                         Default: BODYHD0X=''
+     Use this suffix text on each :H0 tag; also recognized on BookMaster's
+     :DOCPROF tag; e.g. BODYHD0x='Part' produces "1. Part", etc.
+
+   BODYHD1='text'                          Default: BODYHD1=''
+     Number each :H1. and give it this prefix label; also recognized on
+     BookMaster's :DOCPROF tag.
+     e.g. BODYHD1='Chapter' produces "Chapter 1.", etc.
+
+   BODYHD1X='text'                         Default: BODYHD1X=''
+     Use this suffix text on each :H1 tag; also recognized on BookMaster's
+     :DOCPROF tag; e.g. BODYHD1x='Chapter' produces "1. Chapter", etc.
+
+   BODYTAG='tag'                           Default: BODYTAG='<BODY>'
+     Allows you to specify the HTML BODY tag to use at the document's beginning.
+     Useful if you want specialized parameters such as BGCOLOR= or TEXT=.
+     Defaults to "<BODY>".
+
+   CENTERTAG={ YES | NO }                  Default: See description
+     Specifies how B2H should handle centering of text.  If YES, then
+     "<CENTER> ... </CENTER>" HTML tags are used (not all Web browsers
+     support this tag).  If NO, a number of monospaced blanks are prefixed
+     to the text to approximate a centering effect.  If omitted, defaults
+     to "NO" if HTML=2 or "YES" if HTML=3 or higher.
+
+   CHARSET='xxx'
+     This option allows you to specify the coded character set used to encode
+     the document. If a value is specified, B2H generates the following:
+       <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=xxx">
+     If no value is specified (the default), no META statement is generated
+     and the normal World Wide Web default of ISO-8859-1 is assumed.
+     The B2H User's Guide has additional information and a table of
+     suggested values for various countries.
+     e.g. CHARSET='iso-8859-8'   (Hebrew)
+
+   COMMENT={ 'text' | CLEAR }              Default: COMMENT=''
+     Any text to include in the header section of the HTML output file as an
+     HTML comment.  Can be specified as many times as desired.  Any symbols
+     (e.g. &variables) in the text are substituted.  If COMMENT=CLEAR, any
+     previously-specified comments are discarded.
+     e.g.  COMMENT='This is part of the ACME Project documentation'
+
+   COMMENTHEAD='text'                      Default: See text
+     Text describing the operation of the B2H command. The text is inserted
+     into the header section of the HTML output as an HTML comment with the
+     intent of documenting the name of the input file, when the conversion
+     took place, who did the conversion (if the platform allows user
+     identification), etc.  Any symbols (e.g. &variables) in the text are
+     substituted (see the User's Guide for the list of B2H-specific &symbols
+     which are available). If omitted, the following text is assumed (shown
+     here on two lines):
+     COMMENTHEAD='&b2hiall converted by &b2hsig (&b2hplat) &b2huser
+                  on &date at &time'
+
+   CONTACT='text'                          Default: CONTACT=''
+     The contact person for the document.  If present, causes a "<META"-type
+     statement to be included in the HTML output. Also allows the server to
+     generate an HTTP response header if contact information is requested.
+     e.g. CONTACT='John Doe, johndoe@us.ibm.com'
+
+   DEFTEXT.name='...text...'
+   DEFTEXT.name='...text...',<width>     (for syntax diagram characters)
+     Some tags provide default text if not explicitly specified (e.g. "Index"
+     for :index); other parts of a document generate text which is not
+     explicitly specifiable (e.g. "Special Characters" header within the
+     index).  This option allows you to specify the text that B2H should use
+     in those situations, e.g. DEFTEXT.PREFACE='Vorwort'
+       Option                  Default Value
+       ---------------         ----------------------
+       DEFTEXT.ABBREV          'List of Abbreviations'
+       DEFTEXT.ABSTRACT        'Abstract'
+       DEFTEXT.APPENDIX        'Appendix'
+       DEFTEXT.ARTLABEL        'Figure name not displayed'
+       DEFTEXT.ARTLINK         'View figure.'
+       DEFTEXT.BIBLIOG         'Bibliography'
+       DEFTEXT.COPYR           '&copy; Copyright &b2hcopyr. &b2hcoprext'
+       DEFTEXT.DAYS            'Mon Tue Wed Thu Fri Sat Sun'
+       DEFTEXT.DIALSYS         'System'
+       DEFTEXT.DIALUSER        'User'
+       DEFTEXT.DOCNUM          'Document Number'
+       DEFTEXT.FIGLIST         'Figures'
+       DEFTEXT.FIGURE          'Figure'
+       DEFTEXT.FOOTNOTES       'Footnotes'
+       DEFTEXT.GLOSSARY        'Glossary'
+       DEFTEXT.HTMLCMTL        '<!-- '
+       DEFTEXT.HTMLCMTR        ' -->'
+       DEFTEXT.HTMLHEAD        '<!DOCTYPE HTML PUBLIC "-//... &b2hhtmlid//EN">'
+       DEFTEXT.IBMCOPYR        '<B>&copy; Copyright International ... '
+       DEFTEXT.IBMZALI         '<HR><B>IBM License Information</B><HR>'
+       DEFTEXT.IBMZALP         '<HR><B>IBM Licensed Program ... </B><HR>'
+       DEFTEXT.INDEX           'Index'
+|      DEFTEXT.INDEXENTRYL     '('
+|      DEFTEXT.INDEXENTRYR     ')'
+       DEFTEXT.INDEX0          'Special Characters'   (used within the index)
+       DEFTEXT.INDEX1          'Numerics'             (used within the index)
+       DEFTEXT.INDEX2          'See also'             (used within the index)
+       DEFTEXT.INDEX3          'See'                  (used within the index)
+       DEFTEXT.LEGEND          'Legend'
+       DEFTEXT.LERSAUTH        'Authorization'
+       DEFTEXT.LERSCOMMENTS    'Comments'
+       DEFTEXT.LERSCONTEXT     'Context'
+       DEFTEXT.LERSDEFAULTS    'Defaults'
+       DEFTEXT.LERSERRCOND     'Error Conditions'
+       DEFTEXT.LERSEXAMPLES    'Examples'
+       DEFTEXT.LERSFLAGS       'Flags'
+       DEFTEXT.LERSFORMAT      'Format'
+       DEFTEXT.LERSINTREP      'Internal Representation'
+       DEFTEXT.LERSMESSAGES    'Messages'
+       DEFTEXT.LERSOPTIONS     'Options'
+       DEFTEXT.LERSOTHE        ''
+       DEFTEXT.LERSPARMS       'Parameters'
+       DEFTEXT.LERSPREREQS     'Prerequisites'
+       DEFTEXT.LERSPROCESS     'Processing'
+       DEFTEXT.LERSPURPOSE     'Purpose'
+       DEFTEXT.LERSRELATED     'Related Information'
+       DEFTEXT.LERSRESTRICT    'Restrictions'
+       DEFTEXT.LERSRESULTS     'Results'
+       DEFTEXT.LERSRETCODES    'Return Codes'
+       DEFTEXT.LERSSYSENV      'System Environment'
+       DEFTEXT.LERSUSAGE       'Usage'
+       DEFTEXT.LERSVERSION     'Version'
+       DEFTEXT.MCDEST          'Destination'
+       DEFTEXT.MCMODULE        'Module'
+       DEFTEXT.MCNUMBYTES      'Number of Error Bytes'
+       DEFTEXT.MCORESP         'Operator Response'
+       DEFTEXT.MCPRESP         'Programmer Response'
+       DEFTEXT.MCPROBD         'Problem Determination'
+       DEFTEXT.MCSEVERITY      'Severity'
+       DEFTEXT.MCSPRESP        'System Programmer Response'
+       DEFTEXT.MCSYSACT        'System Action'
+       DEFTEXT.MCURESP         'User Response'
+       DEFTEXT.MCXPL           'Explanation'
+       DEFTEXT.MONTHS          'Jan Feb Mar Apr ... Oct Nov Dec'
+       DEFTEXT.NOTE            'Note'
+       DEFTEXT.NOTEL           'Notes'
+       DEFTEXT.NT              'Note'
+       DEFTEXT.PREFACE         'Preface'
+       DEFTEXT.PTOC            'Partial Table-of-Contents'
+       DEFTEXT.PTOCLT          '(Go to main Table-of-Contents)'
+       DEFTEXT.QANSREF         'the answer to question'
+       DEFTEXT.QQREF           'question'
+       DEFTEXT.SAFETY          'Safety'
+       DEFTEXT.SCHEDACTHD      'Activities'
+       DEFTEXT.SOA             'Summary of Amendments'
+       DEFTEXT.SPOT1           'Ref #'
+       DEFTEXT.SPOT2           ' reference #'
+       DEFTEXT.SYNNT           'Note:'
+       DEFTEXT.TABLE           'Table'
+       DEFTEXT.TLIST           'Tables'
+       DEFTEXT.TOC             'Table of Contents'
+       DEFTEXT.VOLNUM          'Volume'
+       DEFTEXT.WARRASIS        'This program is provided ... '
+       DEFTEXT.WARRFULL        'This program is warranted as ...'
+       DEFTEXT.WARRNODSLO      'This program is warranted as ...'
+       ----- Used for syntax diagrams -----
+       DEFTEXT._CROSS          '+',1
+       DEFTEXT._DASH           '-',1
+       DEFTEXT._END            '><',2
+|      DEFTEXT._FRAGMENT_END   '&#124;',1
+|      DEFTEXT._FRAGMENT_START '&#124;',1
+|      DEFTEXT._FRAGREF_END    '&#124;',1
+|      DEFTEXT._FRAGREF_START  '&#124;',1
+       DEFTEXT._LOWERLEFT      '+',1
+       DEFTEXT._LOWERRIGHT     '+',1
+       DEFTEXT._MIDDLE         '>',1
+|      DEFTEXT._MIDDLELEFT     '&#124;',1
+|      DEFTEXT._MIDDLERIGHT    '&#124;',1
+       DEFTEXT._REPSEPJOINL    'V',1
+       DEFTEXT._REPSEPJOINR    '+',1
+       DEFTEXT._REPSEPLEFT     '<-',2
+       DEFTEXT._REPSEPRIGHT    '--<',3
+       DEFTEXT._START          '>>',2
+       DEFTEXT._TEEDOWN        '+',1
+|      DEFTEXT._TEELEFT        '&#124;',1
+|      DEFTEXT._TEERIGHT       '&#124;',1
+       DEFTEXT._TEEUP          '+',1
+       DEFTEXT._UPPERLEFT      '+',1
+       DEFTEXT._UPPERRIGHT     '+',1
+
+   DESTSYS={ AIX | HPFS | LINUX | MVS | OS2 | VM | WIN95 | WINNT }
+     Specifies the system on which the HTML source will be browsed (e.g. the
+     system on which the Web server and/or browser will be run).  The default
+     is the platform and mode on which B2H is currently being run.
+
+   DIALOG='<LABEL> <FONT> <COLOR>'         Default: DIALOG='LABEL'
+     Specifies the dialog technique to be used with the :DIALOG. tag.
+     Also recognized on Bookmaster's :DOCPROF. tag.  None, one or multiple
+     of the following values may be specified:
+     LABEL  - Places 'System' and 'User' labels in front of system and
+              user text.
+     FONT   - User text is displayed using the HTML font-type tags specified
+              for the 'fs' and 'fe' values of the DIALOGTAG= option.
+     COLOR  - User text is displayed using the HTML color-type tags specified
+              for the 'cs' and 'ce' values of the DIALOGTAG= option.
+
+   DIALOGTAG.x='ts,te,fs,fe,cs,ce'
+     Allows you to specify the HTML tags B2H should generate for the
+     :USER and :SYS tags when processing an interactive dialog (:DIALOG).
+     x=0: HTML tags for the :SYS tag
+     x=1: HTML tags for the :USER tag
+     HTML tag values:
+       ts - "Normal" text start
+       te - "Normal" text end
+       fs - "Font" text start ("FONT" specified within DIALOG=)
+       fe - "Font" text end
+       cs - Colored text start ("COLOR" specified within DIALOG=)
+       ce - Colored text end
+     If omitted, defaults to:
+       DIALOGTAG.0='<TT>,</TT>,<B>,</B>,<FONT COLOR="BLUE">,</FONT>'
+       DIALOGTAG.1=''
+
+|  DLFMT={ DL | TABLE }
+     When a directory-list tag (:DL) is processed, do you want it mapped
+     to HTML's <DL> tag or to a two-column unframed table?
+       DL     - Map to HTML's standard directory-list tags (e.g. <DL>).
+       TABLE  - Map to a two-column unframed table.  Available only when
+|               generating HTML 3 (or higher) output.
+|    Defaults to DLFMT=DL if HTML=2, otherwise defaults to DLFMT=TABLE.
+
+   DLTAG.x='ls,le,ts,te,ds,de'
+     Allows you to specify the HTML tags B2H should generate when processing
+     a directory list (:DL) and it's associated tags.
+     x=0: HTML tags for a non-compact list when DLFMT=DL
+     x=1: HTML tags for a compact list (e.g. :DL COMPACT) when DLFMT=DL
+     x=2: HTML tags for a non-compact list when DLFMT=TABLE
+     x=3: HTML tags for a compact list (e.g. :DL COMPACT) when DLFMT=TABLE
+     HTML tag values:
+       ls - List start
+       le - List end
+       ts - Text start
+       te - Text end
+       ds - Definition start
+       de - Definition end
+     If omitted, defaults to:
+       DLTAG.0='<DL>,</DL>,<P><DT>,,<DD>,'
+       DLTAG.1='<DL COMPACT>,</DL>,<DT>,,<DD>,'
+       DLTAG.2='<TABLE CELLPADDING="3">,</TABLE>,<TR VALIGN="TOP"><TD><P>,
+                </TD>,<TD><P>,</TD></TR>'
+       DLTAG.3='<TABLE CELLPADDING="3">,</TABLE>,<TR VALIGN="TOP"><TD>,</TD>,
+                <TD>,</TD></TR>'
+
+   DOCDESC='file'                          Default: DOCDESC=''
+   DOCDESC.id='file'
+     In BookManager, the :DOCDESC. tag describes an external document for
+     creating interdocument links. This option performs the same function
+     for HTML files.  For more information, see the section on interdocument
+     linking in the User's Guide.
+        id   - The value specified for ID= on the :DOCDESC tag (optional)
+        file - The HTML file containing this document
+
+   DVCF='cond1 cond2 ... condx'
+     A 'short-hand' method for setting conditions used by BookMaster's .WHEN
+     macro.   This:      DVCF='sport wagon truck'
+     Is equivalent to:   SYSVAR='1 sport 2 wagon 3 truck'
+
+   EXPDATE=<yyyymmdd | {+|-}ddd | text>    Default: source file + 2 years
+     The date when this file should expire.
+     o  If a date in "yyyymmdd" format is specified, it is converted to
+        conform to RFC 822 (updated by RFC 1123)
+     o  If a plus or minus sign precedes a numeric value, then today's date
+        plus or minus the specified number of days is used, then converted
+        to conform to the above RFC format
+     o  If no value is specified, the source file's date + 2 years is assumed,
+        then converted to conform to the above RFC format
+     o  Otherwise the option's text value is included verbatim
+     Example: An input file with a date/time stamp of "1996-05-03 12:34:56"
+     and "EXPDATE=19960727", the following is generated:
+       <META HTTP-EQUIV="expires"  CONTENT="Sat, 27 Jul 1996 12:34:56">
+
+   FBC={ YES | NO }                        Default: FBC=NO
+     Want Folio-By-Chapter?  If YES, same as specifying BODYHD0='Part'
+     and BODYHD1='Chapter'.
+
+   FIGCAPLOC={ BEFORE | AFTER }            Default: FIGCAPLOC=BEFORE
+      Should a figure's caption (:FIGCAP) and description (:FIGDESC) be placed
+      before or after the figure itself?
+      BEFORE - The figure's caption (and any description) is placed before the
+               figure.  Since the caption is the "anchor" for any hyperlinks
+               to the figure, this is the preferred location.
+      AFTER  - The figure's caption (and any description) is placed after the
+               figure.  This is how GML and BookMaster work, but causes
+               hyperlinks to jump to the bottom of the figure.
+
+   FNLINK={ NO | TO | FROM | BOTH }        Default: FNLINK=BOTH
+     Want hyperlinks between footnote reference and definition?
+     NO   - Do not generate hyperlinks
+     TO   - Generate hyperlink from footnote usage to definition
+     FROM - Generate hyperlink from footnote definition to it's usage
+     BOTH - Generate hyperlinks both ways
+
+   FNTAG='cs,ce,ls,le,lcs,lce,lts,lte,ts,te'
+     Allows you to specify the HTML tags B2H should generate when processing
+     an individual footnote and generating the list of footnotes.
+     HTML tag values:
+       cs  - Start of footnote's callout
+       ce  - End of footnote's callout
+       ls  - Footnote list start
+       le  - Footnote list end
+       lcs - Start of footnote's callout in the footnote list
+       lce - End of footnote's callout in the footnote list
+       lts - Start of a footnote's text in the footnote list
+       lte - End of a footnote's text in the footnote list
+       ts  - Tag to start the list of footnotes
+       te  - Tag to end the list of footnotes
+     If omitted, defaults to:
+       FNTAG='<SUP>,</SUP>,<DL COMPACT>,</DL>,<P><DT><SUP>,
+              </SUP></DT>,<DD>,</DD>,<HR>,'
+
+|  FONTTAG='fonttext,efonttext,<PROP|NOPROP>'       Default: FONTTAG=''
+|  FONTTAG.name='fonttext,efonttext,<PROP|NOPROP>'
+|    Documents written using Script/VS control words use .DF (Define Font)
+|    to define a font's characteristics and then use .BF (Begin Font) to
+|    start using the font and .PF (Previous Font) to restore the previous
+|    font. The FONTTAG option effectively replaces the .DF control word and
+|    allows you to specify the text to use when a specified font is started
+|    or stopped.
+|
+|    FONTTAG can be specified with or without the "name" qualifier.
+|    If "name" is omitted, the text is used to start/stop *any* font.
+|    If "name" is specified, the text is used only when the specified
+|    font is started or stopped.
+|
+|    When displaying an HTML table, many web browsers reset any font
+|    characteristics and display a cell's text in a default font.
+|    PROP   - Specifies that if B2H generates an HTML table, all active
+|             font definition text should be "propagated" into each table
+|             cell.  This is the default value if omitted.
+|    NOPROP - Specifies that all active font definition text should
+|             NOT be "propagated" into each table cell.
+
+   FOOTER={ NO | file }                    Default: FOOTER=NO
+   FOOTER={ NO | file | DD:ddname | DD:ddname(member) }    (MVS only)
+     If other than NO, any records in the specified file are appended to the
+     end of all HTML output files.  This parameter may be specified as many
+     times are there are footer files to process.  FOOTER=NO resets to zero
+     the number of footer files to process.
+
+   FTLINK={ YES | NO }                     Default: YES
+     If a Figure List and/or Table List is created, each entry in the list
+     is a hyperlink to the respective figure or table.  This option specifies
+     whether the figure or table caption should also be a link *back* to the
+     appropriate list.  If omitted, "YES" is assumed.
+
+   FTSEP={ YES | NO }                      Default: FTSEP=YES
+     Should the figures and tables be listed separately or together? If YES,
+     a list of figures is generated when the :FIGLIST. tag is encountered and
+     a separate list of tables is generated when the :TLIST. tag is encountered.
+     If FTSEP=NO, then a combined list of both figures and tables is generated
+     when the :FIGLIST. tag is encountered (the :TLIST. tag is then ignored).
+     This parameter is also recognized on BookMaster's :DOCPROF. tag.
+
+|  GLFMT={ DL | TABLE }
+     When a glossary-list tag (:GL) is processed, do you want it mapped
+     to HTML's <DL> tag or to a two-column unframed table?
+       DL     - Map to HTML's standard directory-list tags (e.g. <DL>).
+       TABLE  - Map to a two-column unframed table.  Available only when
+|               generating HTML 3 (or higher) output.
+|    Defaults to GLFMT=DL if HTML=2, otherwise defaults to GLFMT=TABLE.
+
+   GLTAG.x='ls,le,ts,te,ds,ds2,de,gs,ge'
+     Allows you to specify the HTML tags B2H should generate when processing
+     a glossary list (:GL) and it's associated tags.
+     x=0: HTML tags for a non-compact list when GLFMT=DL
+     x=1: HTML tags for a compact list (e.g. :GL COMPACT) when GLFMT=DL
+     x=2: HTML tags for a non-compact list when GLFMT=TABLE
+     x=3: HTML tags for a compact list (e.g. :DL COMPACT) when GLFMT=TABLE
+     HTML tag values:
+       ls  - List start
+       le  - List end
+       ts  - Glossary Term start
+       te  - Glossary Term end
+       ds  - Glossary Definition start (first :GD after a :GT)
+       ds2 - Glossary Definition start
+             (subsequent :GDs after a :GT, e.g. when using :GDG)
+       de  - Glossary Definition end
+       gs  - Group Separator (:GRPSEP) start
+       ge  - Group Separator (:GRPSEP) end
+     If omitted, defaults to:
+       GLTAG.0='<DL>,</DL>,<P><DT>,,<DD>,<DD>,,
+                <P><DT><FONT SIZE="+2"><STRONG>,</STRONG></FONT><P>'
+       GLTAG.1='<DL COMPACT>,</DL>,<DT>,,<DD>,<DD>,,
+                <P><DT><FONT SIZE="+2"><STRONG>,</STRONG></FONT><P>'
+       GLTAG.2='<TABLE CELLPADDING="3">,</TABLE>,<TR VALIGN="TOP"><TD><P>,
+                </TD>,<TD><P>,<P>,</TD></TR>,
+                <TR><TD COLSPAN="2"><FONT SIZE="+2"><STRONG><P>,
+                <P></STRONG></FONT><P></TD></TR>'
+       GLTAG.3='<TABLE CELLPADDING="3">,</TABLE>,<TR VALIGN="TOP"><TD>,</TD>,
+                <TD>,<BR>,</TD></TR>,
+                <TR><TD COLSPAN="2"><FONT SIZE="+2"><STRONG>,
+                </STRONG></FONT></TD></TR>'
+
+   HEADER={ NO | file }                    Default: HEADER=NO
+   HEADER={ NO | file | DD:ddname | DD:ddname(member) }    (MVS only)
+     If other than NO, any records in the specified file are included at the
+     beginning of all HTML output file(s).  This parameter may be specified
+     as many times are there are header files to process.  HEADER=NO resets
+     to zero the number of header files to process.
+
+   HEADNUM={ YES | NO | xyz | *x }         Default: HEADNUM=NO
+     Number :Hx. headings with section numbers (e.g. 1.2.1)?  If *not*
+     NO, number which :Hx. headers?  '12' means number :H1. and :H2.,
+     '*3' means number :H1., :H2 and :H3..  YES is equivalent to '*6'.
+
+   HEADREC=CLEAR
+   HEADREC.FILE=file
+   HEADREC.TEXT='text'
+     Inserts record(s) into the header section of all HTML output file(s).
+     HEADREC.FILE specifies that the contents of referenced file should be
+     included and HEADREC.TEXT specifies the contents of an individual
+     record.  Either of these parameters may be specified as many times
+     as desired and may be intermixed with each other.  HEADREC=CLEAR resets
+     to zero the records to insert.
+
+     This option is typically used to insert JavaScript code into the
+     header portion of an HTML file.
+
+   HRTAG='tag'                             Default: HRTAG='<HR>' and
+   HRTAG.x='tag'                                    HRTAG.8=''
+     These specify the horizontal-rule tag to use for various items.
+     This option can be specified with or without the "x" qualifier.
+     If "x" is omitted, the value applies to all usages.
+     Otherwise, 'x' is a numeric value from 1 to 10 defined as:
+        1 = Tag used for :ARTWORK RULE
+        2 = Tag used for :FIG when FRAME= value is *not* NONE
+        3 = (No longer used, see "HTAG=" option)
+        4 = Tag used for :MSGL and :CODEL when STYLE=RULE specified
+        5 = Tag used to precede and follow a syntax diagram defined
+            using :SYNTAX STYLE=RULES
+        6 = (No longer used, see "TOCTAG=" option)
+        7 = Tag used to precede an :H0 in the Table-of-Contents
+        8 = (No longer used, see "TOCTAG=" option)
+        9 = (No longer used, see "FNTAG=" option)
+       10 = Tag used for preceding a language element (:LEN) when
+            SEP=RULE specified for :LERS
+
+   HTAG='hs,he,ss,sr'
+   HTAG.x='hs,he,ss,sr'
+     When a ":Hx." tag is encountered, this option specifies the HTML to
+     generate. It also specifies whether the next line of source text is
+     to be inspected and optionally modified.  This option can be specified
+     with or without the "x" qualifier.  If "x" is omitted, the text is
+     used for ALL ":Hx" tags.  If "x" is specified, the text is used only
+     for those header tags of the same number.
+       hs - Header start
+       he - Header end
+       ss - If specified, the next source text record is inspected and if
+            the left-most text matches this value (case is ignored), then
+            the text is replaced by the value specified for "sr"
+       sr - The text to replace "ss"
+     Default values:
+       HTAG='<P><I><B>,:&nbsp;</B></I>&nbsp;,:P.,'
+       HTAG.0='<HR><H1>,</H1>'
+       HTAG.1='<HR><H1>,</H1>'
+       HTAG.2='<HR><H2>,</H2>'
+       HTAG.3='<P><H3>,</H3>'
+       HTAG.4='<P><H4>,</H4>'
+
+   HTML={ 2 | 3 | 4 }                      Default: HTML=3
+     This specifies the release level of HTML source to be generated.
+     The primary difference is in table support. When HTML=3 or HTML=4,
+     tables are supported by generating native HTML 3 tags. When HTML=2,
+     B2H supports tables by manually generating them itself using a
+     monospaced font.
+
+   HTMLATT.name='attributes'
+     This option allows you to specify custom attributes for the indicated
+     HTML tag whenever the HTML tag is generated.  If omitted for a particular
+     HTML tag, no additional attributes are generated.  The following values
+     for "name" are available:
+
+     HTMLATT.TABLE='attributes'
+       Defines the attributes to be associated with all generated <TABLE>
+       tags.  For example, if you want all HTML tables be generated with a
+       cell padding of 6 and a cell spacing of 4, then specify:
+       HTMLATT.TABLE='cellpadding=6 cellspacing=4'
+
+     HTMLATT.TD='attributes'
+     HTMLATT.TH='attributes'
+     HTMLATT.TR='attributes'
+       Defines the attributes to be associated with all generated <TD>,
+       <TH> and <TR> tags within an HTML table.
+
+   HTMLDOCID.htmlrel='text'
+     This allows you to specify the Document Type Definition (DTD) value
+     for the first record of the HTML output -- the 'xxx' in the following:
+       <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML xxx//EN">
+     If HTML=2, then the value of HTMLDOCID.2 is used, if HTML=3, then the
+     value of HTMLDOCID.3 is used, etc.
+
+     Example: HTML=3 HTMLDOCID.3='3.1'
+     causes the following DTD to be generated::
+       <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.1//EN">
+
+     If omitted, defaults to:
+       HTMLDOCID.2='2'
+       HTMLDOCID.3='3.2'
+       HTMLDOCID.4='4'
+
+   HTMLEXT=ext                  (AIX)      Default: HTMLEXT=html
+   HTMLEXT=ext                  (HPFS)     Default: HTMLEXT=html
+   HTMLEXT=ext                  (Linux)    Default: HTMLEXT=html
+   HTMLEXT=ext                  (OS/2)     Default: HTMLEXT=htm
+   HTMLEXT=ft                   (VM)       Default: HTMLEXT=htm
+   HTMLEXT=ext                  (Win9x)    Default: HTMLEXT=htm
+   HTMLEXT=ext                  (WinNT)    Default: HTMLEXT=htm
+     What should be the file extension of the *logical* output file?
+     This value is used to construct the default value for "OUTPUTL" and
+     is also used when creating multiple output files when AUTOSPLIT is
+     specified. (This parameter is usually specified only when converting
+     documents on VM *and* using a VM-based WEB browser. In which case,
+     the values for HTMLEXT and HTMPEXT should be the same.)
+     Note: In most cases, it is recommended that the DESTSYS= parameter
+     be used, since it will set this parameter appropriately.
+
+   HTMPEXT=ext                  (AIX)      Default: HTMPEXT=html
+   HTMPEXT=ext                  (HPFS)     Default: HTMPEXT=html
+   HTMPEXT=ext                  (Linux)    Default: HTMPEXT=html
+   HTMPEXT=ext                  (OS/2)     Default: HTMPEXT=htm
+   HTMPEXT=ft                   (VM)       Default: HTMPEXT=HTM
+   HTMPEXT=ext                  (Win9x)    Default: HTMPEXT=htm
+   HTMPEXT=ext                  (WinNT)    Default: HTMPEXT=htm
+     What should be the file extension of the *physical* output file?
+     This value is used to construct the default value for "OUTPUTP" and
+     is also used when creating multiple output files when AUTOSPLIT is
+     specified. (This parameter is usually specified only when converting
+     documents on VM *and* using a VM-based WEB browser. In which case,
+     the values for HTMLEXT and HTMPEXT should be the same.)
+     Note: In most cases, it is recommended that the DESTSYS= parameter
+     be used, since it will set this parameter appropriately.
+
+   IMBEDID={ YES | NO }                    Default: IMBEDID=NO
+     Should B2H insert HTML comment records into the output identifying the
+     the imbed structure of the input file?  Useful when trying to identify
+     certain script source and working with numerous imbedded files.
+       YES    - Insert comment records
+       NO     - Do not insert comment records (default)
+
+   IMBFT=ext                    (AIX)      Default: IMBFT='.script'
+   IMBFT=ext                    (HPFS)     Default: IMBFT=script
+   IMBFT=ext                    (Linux)    Default: IMBFT='.script'
+   IMBFT=ext                    (OS/2)     Default: IMBFT=scr
+   IMBFT=fn                     (VM)       Default: IMBFT=SCRIPT
+   IMBFT=ext                    (Win9x)    Default: IMBFT=scr
+   IMBFT=ext                    (WinNT)    Default: IMBFT=scr
+     At B2H execution time: if a file is to be imbedded, but the filetype
+     or extension of the imbedded file is omitted (as would be the case for
+     ".im abc"), this parameter specifies the default filetype or extension
+     to use.  Using the above defaults, if ".im abc" were encountered, then
+     the file imbedded would be:
+     o  On AIX:   abc.script
+     o  On HPFS:  abc.script
+     o  On Linux: abc.script
+     o  On OS/2:  abc.scr
+     o  On VM:    ABC SCRIPT
+     o  On Win9x: abc.scr
+     o  On WinNT: abc.scr
+     This option is not applicable on MVS as there are specific rules on
+     how files are imbedded and where they can reside.
+
+   IMBFTEXT=NO                             Default: IMBFTEXT='NO,LC'
+   IMBFTEXT='YES,case,ft=ext ...'
+     When B2H is run on a PC workstation and an imbed statement explicitly
+     specifying a VM-type filetype is encountered, this parameter specifies
+     if "extended" filetype processing should be performed. If this parameter
+     is omitted or "NO" specified, then the VM filetype is ignored and the
+     value defined for the "IMBFT=" option is used as the PC file's extension.
+     If "YES", then the "ft" value is used as the extension, either spelled
+     the same or "mapped" to another value.
+     Markup supported by this option:
+     o   .im (fn ft)
+     o   .namefile name=nid cms='fn ft'
+         .im nid
+     o   .dd abc fn ft
+         .im abc
+     IMBFTEXT= parameters:
+       YES | NO - Whether extended filetype processing should be done.
+                  NO assumed if omitted.
+       case     - How should the "case" of the resultant file be handled?
+                  If omitted, "LC" is assumed.
+                  ASIS - Leave the case "as-is"
+                  LC   - Explicitly lower-case the file
+                  UC   - Explicitly upper-case the file
+       ft=ext   - This allows you to "map" a specific filetype to a specific
+                  extension.  This is almost always required if you are running
+                  on an OS/2 FAT system since a filetype can be up to eight
+                  characters, but the extension is limited to three characters.
+                  Multiple mappings can be defined, each specified as "ft=ext",
+                  such as "manual=man", "report=rpt", "listing=lst", etc.
+                  Example:  IMBFTEXT='YES,LC,REPORT1=RP1 REPORT2=RP2'
+                  Then:     .im (abc report1)      maps to: .im abc.rp1
+                            .im (abc report2)      maps to: .im abc.rp2
+                            .im (abc sample)       maps to: .im abc.sample
+
+   IMBPATH={ CLEAR | path1<;path2;path3; ... ;pathx> }  Default: IMBPATH=''
+     At B2H execution time, if an imbedded file can not be found,
+     look in these directory(ies)  (applicable only on a PC workstation).
+     If multiple directories should be searched, this option can be specified
+     as many times as desired and/or multiple directories can be specified
+     (each separated by a semi-colon).  Specify IMBPATH=CLEAR to clear any
+     previously-specified directories.
+     e.g. IMBPATH=/afs/btv.ibm.com/u/        (AIX)
+     e.g. IMBPATH=c:\pubs\;d:\project\abc    (OS/2)
+
+   IMGPATH='path'                          Default: IMGPATH=''
+     The default path where the GIF and other image files are
+     stored in the WEB server at browse time.
+     e.g. IMGPATH='../images/'
+
+   INDEX={YES|NO}                          Default: INDEX=NO
+   { INDEX | NOINDEX }
+     Whether B2H should generate an index if the :INDEX tag is encountered.
+     INDEX=YES is equivalent to INDEX and INDEX=NO is equivalent to NOINDEX.
+
+|  INDEXREFLINK={YES|NO}                   Default: INDEXREFLINK=NO
+|    Specifies if hyperlinks should be generated for index entries
+|    that provide their own reference text.
+|
+|    The markup for an index entry is usually coded by the author such
+|    that the index points to the "location" of the index entry markup
+|    within the source document.  This causes B2H to generate a hyperlink
+|    from the index to the location of the index entry markup.
+|
+|    However, if the author specifies the "PG='text'" attribute on the
+|    :Ix tag (or if the fourth term of the index entry is specified on
+|    the .PI control word), then the index simply displays the provided
+|    reference text and, by default, B2H will NOT generate a hyperlink
+|    since the location of the index entry markup is irrelevant.
+|    But if you want B2H to generate a hyperlink even when reference
+|    text is provided, specify INDEXREFLINK=YES
+
+   INDEXSORT.SPEC='x<-y> < x2<-y2> ... xx<-yx> >'
+   INDEXSORT.NUM='x<-y> < x2<-y2> ... xx<-yx> >'
+   INDEXSORT.LETTER='x<-y> < x2<-y2> ... xx<-yx> >'
+     Update the translate table used to identify which characters "belong"
+     in each section within a document's index. "INDEXSORT.SPEC" specifies
+     the characters to be listed in the "Special Characters" section of the
+     index, "INDEXSORT.NUM" specifies the characters for the "Numerics"
+     section, and "INDEXSORT.LETTER" specifies those characters to have
+     their own section.
+       x - A single character or a 2-digit hexadecimal code
+       y - Specifies that a "range" of characters is being defined.
+           If specified, the hex value of "y" must exceed that of "x".
+           If omitted, only the "x" character is defined.
+     Notes:
+     1. If no INDEXSORT statements are defined, the following is assumed:
+          INDEXSORT.SPEC='00-FF'
+          INDEXSORT.NUM='0-9'
+          INDEXSORT.LETTER='A-Z'
+     2. INDEXSORT statements are cumulative. This means each INDEXSORT
+        statement updates the translate table as it existed after the
+        previous INDEXSORT statement was processed. Therefore, to define
+        a completely new table, the first statement should be
+        INDEXSORT.SPEC='00-FF' to reset the entire table (note the
+        sequence of statements in item #1).
+     3. If defining a range of characters, "wrapping" is not allowed:
+          INDEXSORT.SPEC='F5-05'           (not allowed)
+          INDEXSORT.SPEC='F5-FF 00-05'     (OK)
+     4. When specifying a character using hex notation, remember that the
+        hex value for a specific character may be different on a mainframe
+        (EBCDIC coding) than on a PC workstation (ASCII coding)
+
+   INDEXTAG='ls,le,ts,te,is,ie'
+     Allows you to specify the HTML tags B2H should use when generating the
+     index.
+       ls  - Start tag for a common level of indices
+       le  - End tag for a common level of indices
+       ts  - Start tag for a specific reference within a level
+       te  - End tag for a specific reference within a level
+       ie  - Start tag for identifying the first letter of a block of indices
+       ie  - End tag for identifying the first letter of a block of indices
+     If omitted, defaults to:
+       INDEXTAG='<MENU>,</MENU>,<LI>,</LI>,<STRONG>,</STRONG>'
+
+   INDEXTOC={ YES | NO | number }          Default: INDEXTOC=50
+     If an index is generated, should B2H also create a Table-Of-Contents
+     for the index itself?  Useful for navigating a large index, the TOC
+     has an entry for each section (e.g. "Special Characters", "Numerics",
+     "A", "B"...) that links to the beginning of that section, and each
+     index section is a link back to the index TOC. (see also INDEXTOCTAG=)
+       YES    - Always generate an index TOC if an index is created
+       NO     - Never generate an index TOC
+       number - If the number of entries in the index equals or exceeds this
+                value, then build an index TOC.  Otherwise, do not build an
+                index TOC.
+     If omitted, defaults to:
+       INDEXTOC=50
+
+   INDEXTOCTAG='ts,te,ss,se,ns,ne,as,ae'
+     Allows you to specify the HTML tags to use when generating the index
+     table-of-contents (see also INDEXTOC=)
+       ts  - Tag for the beginning of the index TOC
+       te  - Tag for the end of the index TOC
+       ss  - Start tag for the "Special Characters" index TOC entry
+       se  - End tag for the "Special Characters" index TOC entry
+       ns  - Start tag for the "Numerics" index TOC entry
+       ne  - End tag for the "Numerics" index TOC entry
+       as  - Start tag for an alphabetic-letter index TOC entry
+       ae  - End tag for an alphabetic-letter index TOC entry
+     If omitted, defaults to:
+       INDEXTOCTAG=',<HR>,,<BR>,,<BR>,,'
+
+|  LINENUM={ NO | BEGIN | END | scol-ecol }    Default: LINENUM=NO
+|    Should B2H check the input source records for line numbers?
+|    NO        - The source lines do not contain line numbers (default)
+|    BEGIN     - The first "word" of each source line is checked and if the
+|                value is numeric, the word is discarded
+|    END       - The last "word" of each source line is checked and if the
+|                value is numeric, the word is discarded
+|    scol-ecol - The specified starting and ending columns of each source
+|                line is checked and if the value is numeric (blanks are
+|                allowed), the columns are removed
+|    Example: LINENUM=73-80
+|    If omitted, defaults to: LINENUM=NO
+
+   LINES={ PRE | BR }                      Default: LINES=PRE
+     How should Bookmaster's :LINES/:ELINES tags be handled?
+     PRE - The text should be displayed using a monospaced font by generating
+           HTML "<PRE>" and "</PRE>" tags.  Any tab characters within the text
+           will be displayed correctly.  This is the default.
+     BR  - The text should be displayed using the current font (normally a
+           proportional font) and a new line forced using HTML's "<BR>" tag
+           at the end of each record.  Any tab characters within the text will
+           generally be lost since the user's browser will reformat the text.
+
+   LINEWIDTH=number                        Default: LINEWIDTH=78
+     The maximum width of the output line when using a monospaced font
+     or for tags which require certain types of spacing.  Affects the
+     following: .CE (if CENTERTAG=NO), .SX, .TABRACK, :LBLBOX, :QUALIF,
+     :SCREEN (if WIDTH= not specified) and :TABLE (if HTML=2).
+     A numeric value of 40 or larger can be specified.
+     e.g. LINEWIDTH=80
+
+   LIREF={ NO | ID | ACTUAL }              Default: LIREF=ACTUAL
+      Handle :LIREF references to a list item?
+      NO     - All list-item references are ignored
+      ID     - The ID name for ":LI ID=name" is italicized and inserted at
+               both the beginning of the list item and also when referenced
+               using ":LIREF REFID=name"
+      ACTUAL - Same as above, except that for ordered lists (:OL), the item's
+               *indice* is used at the reference point (this is how DCF works).
+               If the user's web browser generates only numeric indices for an
+               ordered list, you will need to specify either: OLSEQ=N to force
+               B2H to generate only numeric indices, or LIREF=ID to use the
+               reference name as the indice.
+               NOTE: For backwards compatability with previous releases of
+               B2H, LIREF=NUM is accepted as a synonym of LIREF=ACTUAL.
+
+   LOG='{ NO | YES | file },{ CREATE | APPEND }'  Default: LOG=NO
+   LOG=STREAMx
+     Whether a copy of all messages displayed on the terminal should be
+     saved, and if so, whether the records should be written to either
+     a disk file or a pipeline output stream.   No records are saved if
+     LOG=NO (this is the default).
+
+     To save log records to a disk file:
+        YES     Log records are saved to "b2h.log" if on MVS or a PC, or
+                "B2H LOG" if on VM.
+        file    Log records are saved to the specified file.
+                Example:  LOG='mydoc.b2h'
+                          LOG='MYDOC B2HLOG A'
+                If the name contains an asterisk (*), the asterisk is
+                dynamically replaced with the filename of the input file.
+                Example:  B2H timecard.sct ( LOG='*.b2h'             (PC)
+                Result:   the log is written to 'timecard.b2h'
+                Example:  B2H project script ( LOG='* B2HLOG A'      (VM/CMS)
+                Result:   the log is written to 'PROJECT B2HLOG A'
+
+        The second parameter specifies what to do if the specified disk file
+        already exists.  'CREATE' (the default) means to erase the existing
+        log file and create a new one; 'APPEND' means to append the log
+        records to the existing file.
+        e.g. LOG='monday.log'      LOG='batch.log,append'
+
+     If B2H is running as a Pipeline filter, you can specify LOG=STREAMx
+     which means that the log records should be written to the pipeline
+     output stream 'x'.
+     e.g. LOG=STREAM1
+
+   LTGT={ ASIS | CONVERT }                 Default: LTGT=CONVERT
+     If the input file contains "<" and ">" characters, this specifies if
+     they should be converted automatically to the HTML symbols "&#60;" and
+     "&#62;", respectively.  Without conversion, some browsers may treat the
+     text within the "<" and ">" as unknown HTML tags and ignore the text
+     completely.  If LTGT=CONVERT, all records in a "flat" file are checked;
+     and for non-"flat" files, all non-comment records are checked.
+
+   MASTALT='alternate text'                Default: MASTALT=''
+     This and MASTIMG= allow a default masthead for all HTML output
+     files.  This is the HTML ALT= text for users not loading graphics.
+
+   MASTIMG='file.ext,{ALL|FIRST}'          Default: MASTIMG=''
+     This and MASTALT= allow a default masthead for the HTML output
+     files.  This specifies the masthead image file to be used
+     (located in the path specified by IMGPATH= parameter).
+     If the HTML output is being split (see the AUTOSPLIT= option), the
+     second parameter specifies whether the masthead image should be
+     included in all output HTML files (the default) or just the first
+     HTML file.
+
+   MAXWIDTH={ NOSPLIT | number }           Default: MAXWIDTH=NOSPLIT
+     Depending on how the source is marked up and a variety of other
+     factors, it is possible for an output HTML record to be quite "wide".
+     A MAXWIDTH= value larger than zero (0) specifies that any output record
+     exceeding this width be split at the first blank prior to this limit.
+     (Exception: lines within a "<PRE>" and "</PRE>" are never split.)
+     MAXWIDTH=NOSPLIT (the default) means that output records are never split.
+
+   META={ NO | x }                         Default: META=YES
+     Should "<META ...>' statements be included in the output HTML file?
+     e.g.  META=NO
+
+   METAKEYS='key1 key2 ... keyx'           Default: METAKEYS=''
+     List of keywords to 'attach' to the document to allow users
+     to search for the file
+
+   MSGLEVEL={ INFO | WARNING | ERROR }     Default: MSGLEVEL=INFO
+     Which processing messages should be shown?  Messages 'below'
+     the 'importance' of this value are suppressed.
+
+   MSGNUM={ YES | NO }                     Default: MSGNUM=YES
+     Should message numbers be displayed in B2H's console and log output?
+
+   MVSALLOC.name='ALLOC-command-operands'
+     When running on MVS, if the named dataset needs to be created, these
+     are the operands to use on the TSO/E "ALLOC" command.  "name" is:
+       ANSFILE  - The answer file for Question/Answers (if requested)
+       LOG      - Disk copy of the console log
+       OUTPUTPO - The output HTML file if creating a partitioned data set
+       OUTPUTPS - The output HTML file if creating a sequential data set;
+                  if multiple sequential output files are created, this
+                  applies to each output file
+       SYSVARW  - The output file written if SYSVAR="W filespec" specified
+       TEMP     - B2H's temporary work file
+       TRACE    - B2H's internal trace file (for system support use)
+     Default value for all, except OUTPUTPO, is:
+       'DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE'
+     Default value for OUTPUTPO, is:
+       'DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE DIR(10)'
+
+   NOTELTAG.x='ls,le,is,ie'
+     Allows you to specify the HTML tags B2H should generate when processing
+     a NOTE list (:NOTEL) and it's associated tags.
+     x=0: HTML tags for a non-compact list
+     x=1: HTML tags for a compact list (e.g. :NOTEL COMPACT)
+     HTML tag values:
+       ls  - List start
+       le  - List end
+       is  - Item start
+       ie  - Item end
+     If omitted, defaults to:
+       NOTELTAG.0='<OL>,</OL>,<P><LI>,'
+       NOTELTAG.1='<OL COMPACT>,</OL>,<LI>,'
+
+   OLSEQ='sequence codes'                  Default: OLSEQ='Nar'
+     Specifies the sequence to use for each nested level of ordered lists;
+     also recognized on BookMaster's :DOCPROF tag.
+     Value    Script creates             HTML creates
+     -----    -------------------        -----------------------------
+       N      1. 2. 3. 4. ...            TYPE=1    1. 2. 3. 4. ...
+       n      1) 2) 3) 4) ...            TYPE=1    1. 2. 3. 4. ...
+       A      A. B. C. D. ...            TYPE=A    A. B. C. D. ...
+       a      a) b) c) d) ...            TYPE=a    a. b. c. d. ...
+       x      a. b. c. d. ...            TYPE=a    a. b. c. d. ...
+       R      I. II. III. IV. ...        TYPE=I    I. II. III. IV. ...
+       r      i) ii) iii) iv) ...        TYPE=i    i. ii. iii. iv. ...
+       y      i. ii. iii. iv. ...        TYPE=i    i. ii. iii. iv. ...
+
+   OLTAG.x='ls,le,is,ie'
+     Allows you to specify the HTML tags B2H should generate when processing
+     an ordered list (:OL) and it's associated tags.
+     x=0: HTML tags for a non-compact list
+     x=1: HTML tags for a compact list (e.g. :OL COMPACT)
+     HTML tag values:
+       ls  - List start
+       le  - List end
+       is  - Item start
+       ie  - Item end
+     If omitted, defaults to:
+       OLTAG.0='<OL>,</OL>,<P><LI>,'
+       OLTAG.1='<OL COMPACT>,</OL>,<LI>,'
+
+   OUTPUTFM={ A | disk }                   Default: OUTPUTFM=A
+      When B2H is run on VM/ESA, this specifies the default disk where the
+      output HTML files are to be written.  If omitted, the output files are
+      written to the A-disk.  If a disk letter is specified for the OUTPUTP=
+      option, it's value overrides this option.
+
+   OUTPUTL='logical-output-file'
+     What should be the *logical* name of the output file (the name
+     it will have on the WEB server)?  If omitted, defaults to
+     "physical-output-filename.value-of-HTMLEXT-parameter'
+
+   OUTPUTL83={ YES | NO }          Applicable on all platforms
+     When splitting the HTML file using AUTOSPLIT=, should the *logical* files
+     honor the 8.3 naming convention?  On AIX, Linux or HPFS, if the
+     *destination* is the same as the current system, then "NO" is assumed.
+     In all other cases, "YES" is the default.
+       YES    - Files must honor 8.3 names (e.g. CMS, OS/2 with FAT)
+       NO     - Not necessary to honor 8.3 names (e.g. AIX, OS/2 with HPFS)
+
+   OUTPUTLCASE={ ASIS | LC | UC }  Applicable on all platforms
+     How should the "case" of the *logical* output files be handled?
+       ASIS   - Leave the file names "as-is"
+       LC     - Explicitly lower-case the file names
+       UC     - Explicitly upper-case the file names
+     If omitted, "ASIS" is assumed unless running on VM/ESA or DESTSYS=CMS,
+     in which case "LC" is assumed.
+
+   OUTPUTP='physical-output-file'
+   OUTPUTP={ 'physical-output-file' | DD:name | DD:name(member) }  (MVS only)
+     What should be the *physical* name of the output file that
+     B2H should create?  If omitted, defaults to:
+     o  If on MVS or a PC: "input-filename.value-of-HTMPEXT-parameter"
+     o  If on VM:          "input-filename value-of-HTMPEXT-parameter A"
+     When running on MVS, the dataset may be referenced by dataset name
+     or by DD name.
+
+   OUTPUTP83={ YES | NO }          Applicable only on AIX, Linux and OS/2
+     When splitting the HTML file using AUTOSPLIT=, should the *physical* files
+     honor the 8.3 naming convention?  On OS/2 and CMS, "YES" is assumed.
+     On AIX or Linux, if the *destination* system is also AIX or Linx, "NO"
+     is assumed; else "YES" is assumed.
+       YES    - Files must honor 8.3 names (e.g. OS/2 with FAT)
+       NO     - Not necessary to honor 8.3 names (e.g. AIX, OS/2 with HPFS)
+
+   OUTPUTPCASE={ ASIS | LC | UC }  Applicable on all platforms
+     How should the "case" of the *physical* output files be handled?
+       ASIS   - Leave the file names "as-is"
+       LC     - Explicitly lower-case the file names
+       UC     - Explicitly upper-case the file names
+     If omitted, "ASIS" is assumed on AIX, Linux and OS/2, and "UC" is
+     assumed on MVS and VM.
+
+   OWNER='text'                            Default: OWNER=''
+     The owner of the document.  If present, causes a "<META"-type
+     statement to be included in the HTML output. Also allows the server to
+     generate an HTTP response header if owner information is requested.
+     e.g. OWNER='John Doe, johndoe@us.ibm.com'
+
+   PROCACT='sit=action sit=action ...'
+     What type of action should B2H take when certain situations occur during
+     processing?  This allows you to control whether B2H should ignore some
+     situations, show an error message, stop execution immediately, etc.
+     The situations you can control:
+       NOENDTAG - The end-tag for certain tags were not found
+                  (e.g. :TITLE with no :ETITLE, :TABLE with no :ETABLE)
+       NOIMBED  - A file being imbedded can not be found
+       NOINDEX  - The INDEX or INDEX=YES option was specified, but the
+                  :INDEX tag was not encountered in the source
+       NOPER    - A BookMaster/GML tag is missing it's terminating period
+       NOXREF   - The target of a cross-reference tag can not be found
+                  (e.g. :FIG ID=abc. not found for a :FIGREF REFID=abc.)
+       UNKOPT   - An unknown B2H option (or BookMaster option on the :DOCPROF
+                  tag) was encountered
+       UNKTAG   - An unknown BookMaster/GML tag was encountered
+     The actions you can specify:
+       IGNORE   - Ignore the situation completely, no message issued, RC not
+                  updated
+       INFO     - Issue an info-only type message, RC not updated
+       WARNING  - Issue a warning message (RC set to 4 if not already higher)
+       ERROR    - Issue an error message  (RC set to 8 if not already higher),
+                  continue execution
+       TERM     - Terminate B2H immediately (RC set to 8)
+     Initial settings:
+       PROCACT='NOENDTAG=WARNING NOIMBED=ERROR NOINDEX=WARNING'
+       PROCACT='NOPER=WARNING NOXREF=ERROR UNKOPT=TERM UNKTAG=WARNING'
+
+   PSC='process1 process2 ... processx'    Default: PSC='CHAR HTML'
+     Specifies the processes B2H should accept for the :PSC. tag.
+     A special process of "1ST" is available which, if specified, means
+     B2H should always process the statements for the *first* :PSC group.
+     In addition to the processes specified here, B2H also provides the
+     "HTML2", "HTML3", "HTML3+", "HTML4" and "HTML4+" processes depending
+     on the HTML release being generated.  See the section titled
+     "Including/excluding HTML-oriented text" in the B2H User's Guide for
+     more information.
+
+   PTOC={ NO | num | *num | 4 }            Default: PTOC=4
+     What "depth" of heading levels should be included in a partial
+     table-of-contents? This option allows you to specify a default value for
+     :DOCPROF PTOC=.  Defaults to heading level 4 if omitted.
+     If "NO" specified, :PTOC tags are ignored.
+
+   QRESET={ NO | 0 | 1 | ... | 19 | 20 }      Default: QRESET=NO
+     Questions created with the :QUESTION tag are numbered automatically.
+     This option specifies if and when the question number should be reset.
+     QRESET= is also recognized as an attribute on the :DOCPROF tag.
+     Note: QRESET=1 is assumed if "FBC=YES" is specified.
+       NO - Questions are numbered sequentially from the beginning of the
+            document to the end
+        0 - Reset question numbering at each head level 0 (:H0)
+        1 - Reset question numbering at head levels 0 and 1 (:H0 and :H1)
+        2 - Reset question numbering at head levels 0 through 2
+        "   "
+       20 - Reset question numbering at head levels 0 through 20
+
+   QUESTION=TEXT                           Default: QUESTION=TEXT
+   QUESTION='FORM,<method>,url-of-cgi,<answer-action>,<optdata>'
+     <TEXT | FORM>
+        Controls whether Question & Answer tags are converted to blocks of
+        text (which is what BookMaster does) or HTML FORMs
+        TEXT  Generate text for Question & Answer tags
+        FORM  Generate HTML FORMs for Question & Answer tags
+        Default: TEXT
+     method
+        If generating HTML forms, this defines the HTTP method for form input,
+        e.g.  <FORM METHOD=xxx>.
+        GET   Use GET method for FORM input
+        POST  Use POST method for FORM input
+        Default: GET
+     url-of-CGI
+        If generating HTML forms, this defines the URL for the CGI program to
+        verify the answers, e.g. <FORM ACTION="url-of-CGI">.
+        Default: ''  (none)
+     answer-action
+        If generating HTML forms, this defines how the answers are handled
+        (obtained from the ANS= or ANSID= attributes on the :QUESTION,
+        :BLANK, :MATCH or :QITEM tags).
+        HIDDEN  A hidden input field (name=ans) containing the answer data
+                is added to the form created for each question.
+                e.g. <INPUT TYPE=HIDDEN NAME=ANS VALUE="....">
+        file    An answer file of this name is generated with each record
+                containing the answer to a specific question.  It is assumed
+                that this file will be transferred to the server where it will
+                be used by the CGI program to verify the user's answer.
+                See the User's Guide for more information.
+        NONE    No answer data will be written anyplace.  The CGI program
+                must define an alternative method of verifying the user input.
+        Default: HIDDEN
+     optdata
+        If generating HTML forms, this specifies any optional data to insert
+        into a hidden field for each question, like:
+          <INPUT TYPE=HIDDEN NAME=OPTDATA VALUE="....">
+        Often used to pass information to the CGI about where to find a
+        question's answer, such as the name of the answer file or database.
+        Default: ''  (none)
+
+  { QUIET | NOISY }
+     Specifies whether messages issued during the conversion should be
+     displayed on the terminal.
+       NOISY - Display messages on the terminal
+       QUIET - Do not display messages on the terminal
+     Default is "QUIET" if B2H is running as a pipeline filter, else
+     "NOISY" is assumed.
+
+   REVDATE=<yyyymmdd | {+|-}ddd | text>    Default: source file + 1 year
+     The date when this file should be reviewed for currency.
+     o  If a date in "yyyymmdd" format is specified, it is converted to
+        conform to RFC 822 (updated by RFC 1123)
+     o  If a plus or minus sign precedes a numeric value, then today's date
+        plus or minus the specified number of days is used, then converted
+        to conform to the above RFC format
+     o  If no value is specified, the source file's date + 1 year is assumed,
+        then converted to conform to the above RFC format
+     o  Otherwise the option's text value is included verbatim
+     Example: An input file with a date/time stamp of "1996-05-03 12:34:56"
+     and "REVDATE=19960727", the following is generated:
+       <META HTTP-EQUIV="review"  CONTENT="Sat, 27 Jul 1996 12:34:56">
+
+   REVTAG='revtext,erevtext,<PROP|NOPROP>'       Default: REVTAG=''
+   REVTAG.id='revtext,erevtext,<PROP|NOPROP>'
+     Documents use the :REVISION tag or .RC command to activate revision
+     identifiers (e.g. ":revision id=abc run=yes", ".rc 1 !"). This option
+     allows you to specify the text to insert when the active :REV and :EREV
+     tags or the .RC control word are encountered
+     (e.g. ":rev refid=abc.", ":erev refid=abc.", ".rc 1 on", ".rc 1 off")
+
+     The REVTAG option can be specified with or without the "id" qualifier.
+     If "id" is omitted, the text is used for ALL active :REV/:EREV tags and
+     .RC x ON/OFF commands.  If "id" is specified, the text is used only for
+     those active :REV/:EREV tags whose REFID= matches "id", or .RC x ON/OFF
+     whose "x" matches "id".
+
+     When displaying an HTML table, many web browsers reset any font
+     characteristics (including color) and display a cell's text in a
+     default font.
+     PROP   - Specifies that if B2H generates an HTML table, all active
+              start-revision/end-revision text should be "propagated"
+              into each table cell. This is the default value if omitted.
+     NOPROP - Specifies that active start-revision/end-revision text should
+              NOT be "propagated" into each table cell.
+
+   SECURITY='text'
+     The security of the document.  If present, causes a "<META"-type
+     statement to be included in the HTML output. Also allows the server to
+     generate an HTTP response header if security information is requested.
+     e.g. SECURITY='None'
+     If omitted, defaults to the value of the SEC= option on the :GDOC,
+     :USERDOC or :DOCPROF tags, else defaults to SECURITY=''
+
+   SETUPTAG.tagname='beforetext','aftertext'
+     Allows you to specify HTML text for B2H to insert before and after the
+     specified GML/Bookmaster tag. Any text specified for 'beforetext' will
+     be inserted BEFORE any HTML generated for the referenced tag; and any
+     text specified for 'aftertext' will be inserted AFTER any HTML
+     generated for the referenced tag.
+
+     Option              Description
+     ----------------    -----------------------------------------------
+     SETUPTAG.ADDRESS    Text to precede/follow the :ADDRESS/:EADDRESS tag
+                         (used within the title page)
+     SETUPTAG.ANNOT      Text to precede/follow the :ANNOT/:EANNOT tag
+     SETUPTAG.APPENDIX   Text to precede/follow the :APPENDIX tag
+     SETUPTAG.CIT        Text to precede/follow the :CIT/:ECIT tag
+     SETUPTAG.CODEL      Text to precede/follow the :CODEL/:ECODEL tag
+     SETUPTAG.DIALOG     Text to precede/follow the :DIALOG/:EDIALOG tag
+     SETUPTAG.DIRECT     Text to precede/follow the :DIRECT/:EDIRECT tag
+     SETUPTAG.FIG        Text to precede/follow the :FIG/:EFIG tag
+     SETUPTAG.FIGLIST    Text to precede and follow the :FIGLIST tag
+                         (which generates the list of figures)
+     SETUPTAG.FN         Text to precede and follow the list of footnotes
+                         generated at the end of each HTML output file
+     SETUPTAG.Hx         Text to precede/follow the appropriate :Hx tag
+     SETUPTAG.LBLBOX     Text to precede/follow the :LBLBOX/:ELBLBOX tag
+     SETUPTAG.LERS       Text to precede/follow the :LERS/:ELERS tag
+     SETUPTAG.LINES      Text to precede/follow the :LINES/:ELINES tag
+     SETUPTAG.LITDATA    Text to precede/follow the :LITDATA/:ELITDATA tag
+     SETUPTAG.MSGL       Text to precede/follow the :MSGL/:EMSGL tag
+     SETUPTAG.NOTEL      Text to precede/follow the :NOTEL/:ENOTEL tag
+     SETUPTAG.NT         Text to precede/follow the :NT/:ENT tag
+     SETUPTAG.PK         Text to precede/follow the :PK/:EPK tag
+     SETUPTAG.PTOC       Text to precede and follow the :PTOC tag
+                         (which generates a partial table of contents)
+     SETUPTAG.QUALIF     Text to precede/follow the :QUALIF/:EQUALIF tag
+     SETUPTAG.QUESTION   Text to precede/follow the :QUESTION/:EQUESTION tag
+     SETUPTAG.SCHDATE    Text to precede and follow the :SCHDATE tag
+                         (which generates a schedule chart)
+     SETUPTAG.SCREEN     Text to precede/follow the :SCREEN/:ESCREEN tag
+     SETUPTAG.SYNTAX     Text to precede/follow the :SYNTAX/:ESYNTAX tag
+     SETUPTAG.TABDATA    Text to precede/follow the :TABDATA/:ETABDATA tag
+     SETUPTAG.TABLE      Text to precede/follow the :TABLE/:ETABLE. tag.
+                         The before/after text is also propagated into each
+                         table cell.
+     SETUPTAG.TIPAGE     Text to precede and follow the :TPAGE tag
+                         (which generates the title page)
+     SETUPTAG.TLIST      Text to precede and follow the :TLIST tag
+                         (which generates the list of tables)
+     SETUPTAG.TOC        Text to precede and follow the :TOC tag
+                         (which generates the table of contents)
+     SETUPTAG.XMP        Text to precede/follow the :XMP/:EXMP tag
+
+   SHADE.name=rrggbb
+     The color values to be associated with the different SHADE= attributes
+     on the :FIG, :FIGDEF, :TABLE and :TDEF tags.  The "rrggbb" values are
+     hexadecimal digits representing the red, green and blue ingredients of
+     the desired shade. "name" is one of the allowable SHADE= settings.
+     Default values:
+       Option specified:       HTML generated:     Shows as:
+       -------------------     ---------------     ----------------
+       SHADE.XLIGHT=DADADA     BGCOLOR=#DADADA     Extra-Light Gray
+       SHADE.LIGHT=B0B0B0      BGCOLOR=#B0B0B0     Light Gray
+       SHADE.MEDIUM=8C8C8C     BGCOLOR=#8C8C8C     Medium Gray
+       SHADE.DARK=6E6E6E       BGCOLOR=#6E6E6E     Dark Gray
+       SHADE.XDARK=585858      BGCOLOR=#585858     Extra-Dark Gray
+       SHADE.YES=B0B0B0        BGCOLOR=#B0B0B0     Light Gray
+       SHADE.SCREEN=B0B0B0     BGCOLOR=#B0B0B0     Light Gray
+     Note: 'SHADE.SCREEN' specifies the shading to use for the :SCREEN tag
+     if SHADE=SCREEN is specified on the :DOCPROF tag.)
+
+   SHOWLINES={ NO | x }
+     Should 'processing line x of y' messages be shown?  How often?
+     Default is SHOWLINES=NO on MVS and VM, SHOWLINES=100 on all other
+     platforms.
+
+   SLTAG.x='ls,le,is,ie'
+     Allows you to specify the HTML tags B2H should generate when processing
+     a simple list (:SL) and it's associated tags.
+     x=0: HTML tags for a non-compact list
+     x=1: HTML tags for a compact list (e.g. :SL COMPACT)
+     HTML tag values:
+       ls  - List start
+       le  - List end
+       is  - Item start
+       ie  - Item end
+     If omitted, defaults to:
+       SLTAG.0='<DL>,</DL>,<DD><P>,'
+       SLTAG.1='<DL COMPACT>,</DL>,<DD>,'
+
+   SOURCE=SCRIPT                           Default: SOURCE=SCRIPT
+   SOURCE=SCRIPTONLY
+   SOURCE=FLAT
+   SOURCE='FLAT,pre,blanksub'
+     This specifies the format of the input file.  If the input is a script
+     document (e.g. BookMaster or GML), specify:  SOURCE=SCRIPT
+
+     If the input file should be processed using the rules of Script/VS and
+     not GML or BookMaster, specify:  SOURCE=SCRIPTONLY
+     Refer to the section "Converting Script/VS Files" in the User's Guide
+     for more information.
+
+     If the input is a "flat" file, additional processing options are available.
+       pre - Specifies when and if any text should be enclosed in the HTML
+             <PRE> and </PRE> tags.
+                PRE   - The entire file is enclosed in <PRE></PRE>.
+                        (This is the default)
+                NOPRE - No <PRE> and </PRE> tags are inserted into the text
+                num   - If this many columns at the start of an input record
+                        are blank, the record is enclosed in <PRE></PRE>,
+                        otherwise no additional <PRE></PRE> tags are inserted
+       blanksub - Should an HTML paragraph tag replace blank records?
+                NO    - Blank records are to be written as-is (default)
+                YES   - A "<P>" tag is substituted for blank records
+                text  - Replace a blank record with this text
+
+   SPLITDIGITS=<'>num,<DEC|HEX|ALPHA|LALPHA><'> Default: SPLITDIGITS='2,DEC'
+     If you are creating separate output files (see the AUTOSPLIT= option),
+     this specifies how many digits will be appended to the end of the
+     filename to ensure unique files. e.g. SPLITDIGITS=2   might create
+     'abc.htm, abc02.htm, abc03.htm ...'
+
+     The second parameter specifies the type of numbering to use:
+       DEC    - Decimal (base 10) numbering using the digits 0-9
+                (this is the default)
+       HEX    - Hexadecimal (base 16) numbering using the digits 0-9,A-F
+       ALPHA  - Alphanumeric (base 36) numbering using the digits 0-9,A-Z
+       LALPHA - Alphanumeric (base 36) numbering using the digits 0-9,a-z
+
+   SPLITDIR<.x<-y>>='physical-directory,logical-directory'
+   SPLITDIR.NEXT='physical-directory,logical-directory'
+     When you use the AUTOSPLIT= option to split the output HTML file, the
+     physical and logical locations for the split files are normally
+     derived using the physical and logical destination of the main file.
+     "SPLITDIR=" allows you to pre-specify the physical and logical
+     *directory* for each split file.  (The main output file is always
+     placed in the location specified by the OUTPUTP= and OUTPUTL= options.)
+     The following syntaxes are accepted:
+       SPLITDIR='physicaldir,logicaldir'
+          All split files are directed to the specified directories
+       SPLITDIR.3='physicaldir,logicaldir'
+          The third split file is directed to the specified directories
+       SPLITDIR.5-8='physicaldir,logicaldir'
+          The fifth through eighth split files are directed to the
+          specified directories
+       SPLITDIR.NEXT='physicaldir,logicaldir'
+          The next split file (wherever and whenever it occurs) is
+          directed to the specified directories
+     See the section on splitting the output file in the B2H User's Guide for
+     more information.
+
+   SPLITLINK={ YES | NO }                   Default: SPLITLINK=YES
+     Specifies whether you want B2H to automatically include Next/Previous
+     hyperlinks when splitting the output HTML file using AUTOSPLIT= or the
+     ".*B2H SPLIT" command.  If SPLITLINK=YES (the default), the linkage text
+     defined for the SPLITLINK.x= options are used.
+
+   SPLITLINK.x='text'
+     If SPLITLINK=YES and the output HTML file is being split, these specify
+     any text to be inserted at the top/bottom of each physical file.
+     Normally used to insert Next/Previous/TOC-type hyperlinks.
+     'x' is a numeric value from 1 to 6 or 11 to 16.
+     Entries 1-6 are used if an index is NOT being generated:
+     SPLITLINK.1  - Text for the top of the first HTML output file
+     SPLITLINK.2  - Text for the bottom of the first HTML output file
+     SPLITLINK.3  - Text for the top of the middle HTML output files
+     SPLITLINK.4  - Text for the bottom of the middle HTML output files
+     SPLITLINK.5  - Text for the top of the last HTML output file
+     SPLITLINK.6  - Text for the bottom of the last HTML output file
+     Entries 11-16 are used if an index IS being generated:
+     SPLITLINK.11 - Text for the top of the first HTML output file
+     SPLITLINK.12 - Text for the bottom of the first HTML output file
+     SPLITLINK.13 - Text for the top of the middle HTML output files
+     SPLITLINK.14 - Text for the bottom of the middle HTML output files
+     SPLITLINK.15 - Text for the top of the last HTML output file
+     SPLITLINK.16 - Text for the bottom of the last HTML output file
+     To facilitate entering long strings of text, you can specify each
+     option as many times as desired, the values are accumulated.
+     Specify a value of "CLEAR" to erase the text for a given option.
+
+     By default, hyperlink text is provided for the bottom of the HTML files
+     for linking to the previous page, next page and the table-of-contents.
+     No default hyperlink text is provided for the top of the HTML files.
+
+   SPLITNAME.x='physical-file-name,logical-file-name'
+   SPLITNAME.NEXT='physical-file-name,logical-file-name'
+     When you use the AUTOSPLIT= option to split the output HTML file, B2H
+     normally generates unique file names by appending a counter to the
+     output filename. "SPLITNAME.x=" allows you to pre-specify the file names,
+     overriding B2H's automatically-generated names.  Each "SPLITNAME.x="
+     option designates both the physical and logical file name for the
+     specific output file indicated by the "x" value.  For example:
+       SPLITNAME.4='PROJDEF HTML A,projdef.htm'
+     This specifies that the fourth output file should be physically created
+     as "PROJDEF HTML A" and logically known as "projdef.htm".
+       SPLITNAME.NEXT='DOITNOW HTML A,doitnow.htm'
+     The next split file (wherever and whenever it occurs) should be
+     physically created as "DOITNOW HTML A" and logically known as
+     "doitnow.htm"
+
+     See the section on splitting the output file in the B2H User's Guide for
+     more information.
+
+   SYMCHARS='ccc...ccc'                    Default: SYMCHAR=''
+     Allows additional characters to be recognized within a &symbol name.
+     Unless specified, only the standard characters ($,A-Z,a-z,0-9) are
+     recognized
+
+   SYNFONT={ YES | NO }    Default: NO
+     Use fonts within syntax diagrams (e.g. keywords in bold, variables in
+     italics)?  Some browsers use a different character width for bold/italic
+     text than for regular text which causes alignment problems within the
+     diagram.  If all your users are using browsers that do not exhibit this
+     behavior, specify SYNFONT=YES, otherwise stay with the default SYNFONT=NO.
+
+   SYSVAR='char value char value ...'
+     Provides a means of providing options to B2H in a manner similar to how
+     system variables are specified to BookMaster, where 'char' is a single
+     character of the option you are specifying and 'value' is the vaue you
+     are assigning to it.
+     CHAR   Value and Meaning
+      A     Controls the processing of annotation text marked up using the
+            :ANNOT and :EANNOT tags.  See also the ANNOT= option.
+              NO     - Do not process annotations (default value)
+              YES    - Process annotations
+      W     Specifies the file where extended cross-reference information
+            should be written. If specified, this should be the LAST parameter
+            for this SYSVAR option.  If a filetype or extension is specified,
+            it is ignored.  When SYSVAR='W book1' is specified, the file
+            created is:
+              book1.b2hxrefs         (AIX, Linux)
+              userid.book1.b2hxrefs  (MVS)
+              BOOK1.B2X              (OS/2, Win9x, WinNT)
+              BOOK1 B2HXREFS         (VM, written to the disk for OUTPUTFM=)
+      0     DVCF conditions file; can be set to the name of a file that
+            contains symbols definitions for DVCF conditions.  If specified,
+            this should be the LAST parameter specified for this SYSVAR option.
+              file                   (AIX, Linux)
+              filespec               (MVS)
+              file.ext               (OS/2, Win9x, WinNT)
+              fn ft fm               (VM)
+      1-9   DVCF conditions.  Each of the nine variables be set to an
+            individual condition name.  If you want to set the 'WAGON' and
+            'SPORT' conditions to true:
+              SYSVAR='1 WAGON 2 SPORT'
+            See also the DVCF= option
+
+   TABLE2='fl,fm,fr,fv,fhn,fhh,gutl,gutr'
+     Allows you to specify the characters used to create, draw and format
+     a table generated for HTML 2.
+       fl   - Frame: left edge character
+       fm   - Frame: middle junction character
+       fr   - Frame: right edge character
+       fv   - Frame: Vertical character
+       fhn  - Frame: Horizontal character - normal data cell
+       fhh  - Frame: Horizontal character - header/footer cell
+       gutl - Cell gutter string - left
+       gutr - Cell gutter string - right
+     If omitted, defaults to:
+       TABLE2='+,+,+,|,-,=, , '
+
+   TAGCHECK={ YES | NO }                   Default: TAGCHECK=YES
+     Should B2H check the document for logical consistency in it's
+     Script/GML/Bookie tags?  If YES, the following is checked:
+     -  Start-tag encountered, but no end-tag (e.g. :xmp missing it's :exmp,
+        :hp1 missing it's :ehp1)
+     -  End-tag encountered without a previous start-tag
+        (e.g. an "orphan" :erev)
+     -  Illegal nesting (e.g. :fig inside a :fig)
+     -  Tags found outside of where they should be, e.g. :LI outside of a
+        list, :ROW outside of a table
+     -  INDEX=YES specified, but no :INDEX tag encountered
+     -  A title-type tag encountered (e.g. :TITLE, :LIBRARY, :TOPIC), but
+        no :ETITLE/:ETITLEP tag
+
+   TFIGLISTTAG.x='ls,le,is,ie'
+     Allows you to specify the HTML tags B2H should use when creating the
+     figure list (:FIGLIST) and the table list (:TLIST)
+     x=0: HTML tags when Folio-By-Chapter is *not* in effect (FBC=NO)
+     x=1: HTML tags when Folio-By-Chapter *is* in effect (FBC=YES)
+     HTML tag values:
+       ls  - List start
+       le  - List end
+       is  - Item start
+       ie  - Item end
+     If omitted, defaults to:
+       TFIGLISTTAG.0='<OL>,</OL>,<LI>,</LI>'
+       TFIGLISTTAG.1='<P>,<P>,,<BR>'
+
+   TITLE='text'
+     This specifies the title for the HTML document. If omitted, the title is
+     taken from either the :TITLE. or :TITLEP. tags.  If none of those tags
+     are present (or no text is provided), then the text from the first :Hx.
+     header tag is used as the title.  This parameter should always be
+     specified when processing a 'flat' file (SOURCE=FLAT specified).
+
+   TLIST={ YES | NO }                      Default: TLIST=YES
+     Do you want to generate a list of tables when the :TLIST. statement
+     is encountered?  Some people do not want a table list in an HTML file
+     and this option allows you to prevent one from being generated.
+     If FTSEP=NO, the default is NO; otherwise the default is YES.
+
+   TOC={ NO | xyz | *x }                   Default: TOC=*3
+     Generate a Table-Of-Contents with hyperlinks to each section?
+     If *not* NO, include which :Hx. headers in it?
+     '12' means include :H1. and :H2., '*3' means include
+     :H1., :H2 and :H3.
+
+   TOCC={ YES | NO }                       Default: TOCC=YES
+     Generate "compressed" Table-Of-Contents instead of a Table-Of_Contents
+     with blank lines between certain sections?
+
+   TOCINDENT={ YES | NO }                  Default: TOCINDENT=YES
+     Should individual lines in the Table-Of-Contents be indented
+     according to their header number (:Hx.)?
+
+
+   TOCRET={ NO | TOC | PTOC | PTOCx }      Default: TOCRET=PTOC
+     If a Table-Of-Contents is being generated with links to each section
+     (TOC= parameter is *not* NO), should the section header itself be a
+     hyperlink back to a Table-Of-Contents? And if so, should the link be
+     back to the main Table-Of-Contents (TOC) or to the most-recent
+     Partial-Table-Of-Contents (PTOC)?
+
+     TOCRET=NO     (assumed if TOC=NO)
+        The section header is not a hyperlink.
+
+     TOCRET=TOC
+        The section header always links back to the main TOC, even if PTOCs
+        are being generated.
+
+     TOCRET=PTOCx
+        The section header is a hyperlink back to the most-recent PTOC.
+        If a :PTOC tag has not yet been encountered or PTOC processing has
+        been disabled by PTOC=NO, the section's hyperlink is back to the
+        main TOC.  (For compatibility, TOCRET=YES is equivalent to
+        TOCRET=PTOC.)
+
+        The different PTOCx values specify whether a PTOC should also
+        contain a hyperlink back to the main TOC, and if so, the appearance
+        and position of the hyperlink
+
+        TOCRET=PTOC    (this is the default)
+           The PTOC's title is itself a hyperlink back to the main TOC
+
+        TOCRET=PTOC0
+           The PTOC will NOT contain a hyperlink back to the main TOC
+
+        TOCRET=PTOC1
+           The hyperlink back to the main TOC is appended to the end
+           of the PTOC's title. The hyperlink's text is taken from the
+           DEFTEXT.PTOCLT option (defaults to '(Go to main
+           Table-of-Contents)').
+
+        TOCRET=PTOC2
+           The hyperlink back to the main TOC is placed on the line
+           immediately following the PTOC's title. The hyperlink's text
+           taken from the DEFTEXT.PTOCLT option (defaults to
+           '(Go to main Table-of-Contents)').
+
+        TOCRET=PTOC3
+           The hyperlink back to the main TOC is placed on a separate
+           line at the end of the PTOC. The hyperlink's text is taken
+           from the DEFTEXT.PTOCLT option (defaults to '(Go to
+           main Table-of-Contents)').
+
+   TOCSUPPRESS={ 0 | number }              Default: TOCSUPPRESS=0
+     If you request a Table-of-Contents (TOC= is *not* NO), this allows
+     you to dynamically suppress it unless there are MORE than the
+     specified number of TOC entries. Can be used to prevent a TOC from
+     being generated with only one or two entries.  If omitted, zero is
+     assumed meaning that a TOC will be generated if requested and it
+     contains at least one entry.
+
+   TOCTAG='ls,le,is,ie,ts,te'
+     Allows you to specify the HTML tags B2H should use when generating a
+     Table-Of-Contents.
+       ls  - Start tag for a common level of headers (e.g. :H1.)
+       le  - End tag for a common level of headers (e.g. :H1.)
+       is  - Start tag for a specific header in the list
+       ie  - End tag for a specific header in the list
+       ts  - Tag to start the Table-Of-Contents
+       te  - Tag to end the Table-Of-Contents
+     If omitted, defaults to:
+       TOCTAG='<MENU>,</MENU>,<LI>,,<HR>,'
+
+   TOPHEAD={1|2|3|4|5|6|NO}                Default: TOPHEAD=1
+     Should an initial <Hx>...</Hx> should be inserted at the top of the
+     HTML output containing the title of the document?  If a value from 1 to
+     6 is specified, a header tag (<Hx>) of the specified level is used.
+     If TOPHEAD=NO is specified, no initial header is inserted.
+
+   ULTAG.x='ls,le,is,ie'
+     Allows you to specify the HTML tags B2H should generate when processing
+     an unordered list (:UL) and it's associated tags.
+     x=0: HTML tags for a non-compact list
+     x=1: HTML tags for a compact list (e.g. :UL COMPACT)
+     HTML tag values:
+       ls  - List start
+       le  - List end
+       is  - Item start
+       ie  - Item end
+     If omitted, defaults to:
+       ULTAG.0='<UL>,</UL>,<P><LI>,'
+       ULTAG.1='<UL COMPACT>,</UL>,<LI>,'
+
+   USERPROF=file                           Default: USERPROF=''
+     Specifies the location of a user profile to be used at B2H execution
+     time in addition to the system profile.  This parameter may be
+     specified as many times are there are user profiles to process.
+
+   USERSYM=file                            Default: USERSYM=''
+     Specifies the location of a user symbol file to be used at B2H
+     execution time in addition to the system symbol file.
+     This parameter may be specified as many times are there are user
+     symbol tables to process.
+
+   XEDITG={ YES | NO }                     Default: XEDITG=YES
+     Specifies if B2H should recognize an imbed statement referencing XEDITG
+     and turn formatting off or on as appropriate.
+       YES  If an imbed statement is encountered referencing a file whose
+            first six letters of the filename is "XEDITG", the imbed
+            statement is replaced by either the ":XMP." or ":EXMP." tag,
+            as appropriate  (this is the default)
+       NO   The imbed statement is handled normally
+
+
+-- Gary L. Richtmeyer, 24 May 2000

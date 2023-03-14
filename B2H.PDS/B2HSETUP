@@ -1,0 +1,175 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HSETUP: Setup file imbedded by all others
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.se docdate = '20 May 2002'
+.se release = 'Release 4.7'
+.*---------------------------------------------------------------
+.*options bookie fpasses(3) continue replace
+.nameit symbol=authname   text='Gary Richtmeyer'
+.nameit symbol=authemail  text='grichtmeyer@att.com'
+.*B2H option title="&sysname. User's Guide (HTML &b2hhtml version)"
+.*B2H option liref=num imbedid=yes
+.*B2H option security='COPYRIGHT (c) Copyright 2001-2002 AT&T'
+.*B2H option revtag.r42='<font color="#CC0066">,</font>'
+.*B2H option revtag.r43='<font color="#CC0066">,</font>'
+.*B2H option revtag.r44='<font color="darkred">,</font>'
+.*B2H option revtag.r45='<font color="darkred">,</font>'
+.*B2H option revtag.r46='<font color="darkred">,</font>'
+.*B2H option revtag.r47='<font color="red">,</font>'
+.*B2H option bodytag='<BODY BGCOLOR="#FFFFFF">'
+.*B2H option owner='&authname., &authemail'
+.* b2h option headrec.text='<style stype="text/css"><!--'
+.* b2h option headrec.text='body  { font-family: Arial, Helvetica ; }'
+.* b2h option headrec.text='td    { font-family: Arial, Helvetica ; }'
+.* b2h option headrec.text='-->'
+.* b2h option headrec.text='</style>'
+.*---------------------------------------------------------------
+:prolog.
+:docprof eptoc=page
+         fbc=yes
+         ftsep=no
+         headnum=*6
+         ldrdots=yes
+         screen=shade
+         toc=*4.
+.*----- pre-set definitions
+:figdef  frame=box place=inline width=page concat=no.
+:tdef    split=yes.
+:tdef    id=tsup
+         cols='1i .3i *'
+         align='l c l'
+         split=yes.
+:tdef    id=tsup4
+         cols='1i .3i 3* 2*'
+         align='l c l'
+         split=yes.
+.*----- following used by the examples
+:mcdef id=mcsp    style=space.
+:mcdef id=mcru    style=rule.
+:tdef  id=alliasi width=page    cols='* * * 2* 4*'.
+:tdef  id=adrc    refid=alliasi cols='*'           align=center.
+:tdef  id=adrcl   refid=alliasi cols='*'           align=left.
+:tdef  id=adrcr   refid=alliasi cols='*'           align=right.
+:tdef  id=adrcb   refid=alliasi cols='* *'         align=center.
+:tdef  id=adrcc   refid=alliasi cols='* * *'       align=center.
+:tdef  id=arr1 cols='* * 2* 2*' align='c c l c' valign='c c t'
+       arrange='1 2 3 3 / 1 2 4 5'.
+:tdef  id=arr2 refid=arr1 align=c valign=t.
+.*
+.*----- Miscellaneous definitions
+.nameit symbol=bm         text='BookMaster'
+.nameit symbol=bmgr       text='BookManager'
+.nameit symbol=flat       text='''flat'''
+.nameit symbol=HTML       text='HyperText Markup Language (HTML)'
+.nameit symbol=html       text='HTML'
+.nameit symbol=htmlcmd    text='&period.*HTML'       gmltype=xmp
+.nameit symbol=htmlcmd2   text='&period.*B2H&rbl.HTML'   gmltype=xmp
+.nameit symbol=mvsheldd   text='B2HHELP'
+.nameit symbol=mvsheldsn  text='''B2H.HELP'''
+.nameit symbol=mvsprodd   text='B2HPRO'
+.nameit symbol=mvsprodsn  text='''B2H.PROFILE'''
+.nameit symbol=mvssymdd   text='B2HSYM'
+.nameit symbol=mvssymdsn  text='''B2H.SYMBOLS'''
+.nameit symbol=optioncmd  text='&period.*OPTION'     gmltype=xmp
+.nameit symbol=optioncmd2 text='&period.*B2H&rbl.OPTION' gmltype=xmp
+.nameit symbol=optionsym2 text='&period.*B2H&rbl.SYMBOL' gmltype=xmp
+.nameit symbol=PGMCMD     text='B2H'                 gmltype=xmp
+.nameit symbol=PGMCMDW    text='REXX B2H'            gmltype=xmp
+.nameit symbol=pgmcmd     text='b2h'                 gmltype=xmp
+.nameit symbol=pre        text='&lt.PRE&gt.'         gmltype=xmp
+.nameit symbol=epre       text='&lt./PRE&gt.'        gmltype=xmp
+.nameit symbol=rexaix     text='Object REXX for AIX'
+.nameit symbol=rexlinx    text='Object REXX for Linux'
+.nameit symbol=rexos2     text='Object REXX for OS/2'
+.nameit symbol=rexwin     text='Object REXX for Windows 95/NT'
+.nameit symbol=rexregina  text='Regina REXX'
+.nameit symbol=script     text='Script/VS'
+.nameit symbol=splitcmd   text='&period.*SPLIT'      gmltype=xmp
+.nameit symbol=splitcmd2  text='&period.*B2H&rbl.SPLIT'  gmltype=xmp
+.nameit symbol=sysname    text='B2H'
+.nameit symbol=URLdl      text='www.vm.ibm.com/download'
+.nameit symbol=URLrexibm  text='www2.hursley.ibm.com/orexx'
+.nameit symbol=URLrexreg  text='regina-rexx.sourceforge.net'
+.nameit symbol=win9x      text='Windows 95/98/ME'
+.nameit symbol=winnt      text='Windows NT/2000/XP'
+.nameit symbol=zipvm      text='B2H&rbl.ZIP'         gmltype=xmp
+.nameit symbol=zippc      text='B2H.ZIP'             gmltype=xmp
+.*----- month/days
+.nameit symbol=day1       text='Sunday'
+.nameit symbol=day2       text='Monday'
+.nameit symbol=day3       text='Tuesday'
+.nameit symbol=day4       text='Wednesday'
+.nameit symbol=day5       text='Thursday'
+.nameit symbol=day6       text='Friday'
+.nameit symbol=day7       text='Saturday'
+.nameit symbol=mo01       text='January'
+.nameit symbol=mo02       text='February'
+.nameit symbol=mo03       text='March'
+.nameit symbol=mo04       text='April'
+.nameit symbol=mo05       text='May'
+.nameit symbol=mo06       text='June'
+.nameit symbol=mo07       text='July'
+.nameit symbol=mo08       text='August'
+.nameit symbol=mo09       text='September'
+.nameit symbol=mo10       text='October'
+.nameit symbol=mo11       text='November'
+.nameit symbol=mo12       text='December'
+.nameit symbol=SYSDAY     text=&day&SYSDAYOFW
+.nameit symbol=SYSMO      text=&mo&SYSMONTH
+.*----- User macros -----
+.dm seelay on
+:rev refid=r42.
+See also :hdref refid=layout. for additional information
+on how this option's value is used.
+:erev refid=r42.
+.dm off
+.dm dpopt on
+This option is also processed when encountered as an
+attribute on &bm.'s :xph.&colon.DOCPROF:exph. tag.
+.dm off
+.dm website on
+:psc proc=html.
+.*B2H HTML <A HREF="http://&*">http://&*</A>
+:epsc.
+:psc xproc=html.
+:xph.http&colon.//&*.:exph.
+:epsc.
+.dm off
+.*----- Revision characters -----
+:revision id=r42  char='+' run=no.
+:revision id=r43  char='+' run=no.
+:revision id=r44  char='+' run=no.
+:revision id=r45  char='+' run=no.
+:revision id=r46  char='!' run=no.
+:revision id=r47  char='|' run=yes.
+.*----- Title page definitions -----
+:title.
+&sysname.&colon Convert &bm., GML,
+&script. and &flat. files to &html
+&rbl.
+User's Guide
+:release.&release
+:etitle.
+:author.&authname.
+:author.&authemail.
+:address.
+AT&amp.T Corporation
+AT&amp.T Labs
+3405 W. Dr. Martin Luther King Jr. Blvd
+Tampa, Florida  33607
+&rbl.
+Formatted on &SYSDAY., &SYSMO &SYSDAYOFM., &$YEAR &cont.
+at &SYSHOUR.&colon.&SYSMINUTE.&colon.&SYSSECOND
+.*B2H HTML <I>HTML &b2hhtml version generated by &U'&b2hsig</I>
+:eaddress.
+:date.&docdate
+:eprolog.
+:frontm.
+:tipage.
+.hy off

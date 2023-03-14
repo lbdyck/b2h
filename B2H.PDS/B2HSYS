@@ -1,0 +1,4910 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HSYS: System PROFILE and SYMBOL table descriptions
+.*         Imbedded by B2H SCRIPT
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+.setup b2hsetup
+.*--------------------
+:h1 id=profile.&sysname. Profile
+:p.The profile is one of two &sysname. control files (the symbol
+table is the other).  It contains the options that control how
+&sysname operates.
+:p.A :hp1.system:ehp1. profile is provided as part of the &sysname.
+package.  Any desired updates can be made either to the system
+profile or you can create :hp1.user:ehp1. profiles and add one or
+more :xph.USERPROF=:exph. options to the system profile to point to
+the user profile(s).
+:p.You can always override option values using any of the methods
+described in :hdref refid=spcopts..
+:p.Many &sysname. options allow you to specify a file.
+See :hdref refid=sfile. for platform considerations when specifying
+the file.
+.*-----
+:rev refid=r42.
+:h2.Syntax of a &sysname. profile record
+:erev refid=r42.
+:lblbox.Format of a profile record
+:cgraphic.
+:rev refid=r42.&cont.
+&lbrk.(:pv.env:epv.)&rbrk. :pv.option:epv.=:pv.value:epv.  &cont.
+ &lbrk. ... :pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &rbrk.&cont.
+:erev refid=r42.
+:ecgraphic.
+:elblbox.
+:ul.
+:li.An option's :hp1.value:ehp1. must be specified immediately after
+the equal-sign (no blanks allowed), e.g.&rbl.:xph.MSGLEVEL=WARNING:exph..
+:li.If the value contains a blank, then the entire value must be
+enclosed in either single-quote or double-quote characters:
+.br;:xph.ABSTRACT='How to play the piano':exph.
+:li.Physical records with an asterisk in column one or records that
+are completely blank are considered comments and ignored.
+:rev refid=r45.
+:li.Comments may also be placed on the definition record itself by
+preceding the comment with two dashes (--).
+.br;Example:
+:xph.TOC=NO    -- Don't generate a TOC:exph.
+:eul.
+:erev refid=r45.
+.*-----
+:rev refid=r42.
+:h3 id=platfrm.Environment-specific definitions
+:p.You can specify that a physical record be applicable only for
+certain environments by indicating the criteria within
+parentheses as the first item on the record.
+:erev refid=r42.
+:parml.
+:pt.:xph.(CURR=:exph.:pv.platform:epv.:xph.)  option=value ...:exph.
+:pt.:xph.(:exph.:pv.platform:epv.:xph.)       option=value ...:exph.
+:pd.This record is applicable if &sysname. is being run currently on
+the specified platform. Note that :xph.CURR=:exph. is assumed if omitted.
+:pt.:xph.(DEST=:exph.:pv.platform:epv.:xph.)  option=value ...:exph.
+:pd.This record is applicable if the &html. output is destined for the
+specified platform.
+.cp 19
+:p.:hp2.Valid platform names&colon.:ehp2.
+.getw symbol=dhlen gmltype=hp2 text='C M S'
+:dl termhi=2 tsize=&dhlen..
+:dt.AIX
+:dd.Signifies the AIX platform
+:dt.CMS
+:dd.Signifies the CMS (VM/ESA) platform
+:dt.HPFS
+:dd.Signifies the OS/2 platform using the HPFS file system
+:dt.LINUX
+:dd.Signifies the Linux platform
+:dt.MVS
+:dd.Signifies the MVS (OS/390) platform
+:dt.OS2
+:dd.Signifies the OS/2 platform using the FAT file system
+:dt.PC
+:dd.Signifies the AIX, Linux,
+OS/2 (both FAT and HPFS), &win9x., &winnt.
+:rev refid=r47.
+or UNIX
+:erev refid=r47.
+platforms
+:dt.WIN95
+:dd.Signifies &win9x.
+:dt.WINNT
+:dd.Signifies &winnt.
+:rev refid=r47.
+:dt.UNIX
+:dd.Signifies the Unix platform
+:erev refid=r47.
+:edl.
+:rev refid=r42.
+:pt.:xph.(HTML=:exph.:pv.release:epv.:xph.)  option=value ...:exph.
+:pd.This record is applicable if the &html. release level being
+generated is applicable for the specified release level.
+.cp 12
+:p.:hp2.Valid release values&colon.:ehp2.
+.getw symbol=dhlen gmltype=hp2 text='C M S'
+:dl termhi=2 tsize=&dhlen..
+:dt.2
+:dd.&html. 2 is being generated
+:dt.2+
+:dd.&html. 2 (or higher) is being generated
+:dt.3
+:dd.&html. 3 is being generated
+:dt.3+
+:dd.&html. 3 (or higher) is being generated
+:dt.4
+:dd.&html. 4 is being generated
+:dt.4+
+:dd.&html. 4 (or higher) is being generated
+:edl.
+:erev refid=r42.
+:eparml.
+:p.If multiple conditions are specified, :hp1.all must be true:ehp1.
+for the record to be used.
+:p.:hp2.Example&colon.:ehp2.
+:xmp.
+  (CURR=OS2)          ... use if running on OS/2 (FAT)
+  (OS2)               ... same as above (CURR= assumed if omitted)
+  (DEST=AIX)          ... use if AIX is the destination platform
+  (CURR=CMS DEST=AIX) ... if on CMS and AIX is the destination
+:rev refid=r42.&cont.
+  (HTML=4)            ... use only if creating HTML 4 output
+  (DEST=CMS HTML=2)   ... use if creating HTML 2 for VM/CMS&cont.
+:erev refid=r42.
+:exmp.
+Another example: Define the IMBFT option differently based on platform
+:xmp.
+  (AIX)   IMBFT=script
+  (CMS)   IMBFT=SCRIPT
+  (HPFS)  IMBFT=script
+  (LINUX) IMBFT=script
+  (OS2)   IMBFT=scr
+  (WIN95) IMBFT=scr
+  (WINNT) IMBFT=scr
+:rev refid=r47.
+  (UNIX)  IMBFT=script
+:erev refid=r47.
+:exmp.
+:rev refid=r42.
+:p.If no parenthesed criteria is specified, the record is
+applicable in :hp1.all:ehp1. environments.
+:erev refid=r42.
+:p.For information on how &sysname. determines the :hp1.current:ehp1.
+platform on which it's running, see :hdref refid=howplat..
+.*----------
+.cp
+:h2 id=cmdparm.Available &sysname. Options
+:fig place=inline.
+:figcap.&sysname. options - Overview
+:cgraphic.
+ 
+ :hp5.Destination system:ehp5.
+ :pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | MVS | OS2 | VM | WIN95 | WINNT &cont.
+:rev refid=r47.| UNIX:erev refid=r47. &rbrc.:epk.
+:ecgraphic.
+:figseg fit=6.
+:cgraphic.
+ 
+ :hp5.Input File Characteristics:ehp5.
+ :pk.EXPDATE=&lbrk.:pv.yyyymmdd:epv. | &lbrc.+|-&rbrc.:pv.ddd:epv. | &cont.
+:pv.text:epv.&rbrk.:epk.
+:rev refid=r45.
+ :pk.LINENUM=&lbrc. :pk def.NO:epk. | BEGIN | END | &cont.
+:pv.startcol:epv.-:pv.endcol:epv. &rbrc.:epk.
+:erev refid=r45.
+ :pk.REVDATE=&lbrk.:pv.yyyymmdd:epv. | &lbrc.+|-&rbrc.:pv.ddd:epv. | &cont.
+:pv.text:epv.&rbrk.:epk.
+ :pk.SOURCE='&lbrc. :pk def.SCRIPT:epk. | SCRIPTONLY | FLAT &rbrc.,&cont.
+&lbrk.pre&rbrk.,&lbrk.blanksub&rbrk.':epk.
+ :pk.SYMCHARS=':pv.ccc...ccc:epv.':epk.
+:ecgraphic.
+:figseg fit=25.
+:cgraphic.
+ 
+ :hp5.Table-of-Contents, Indexing & Sectioning:ehp5.
+:rev refid=r42.
+ :pk.APPHD1=:epk.':pv.text:epv.'
+ :pk.APPHD1X=:epk.':pv.text:epv.'
+:erev refid=r42.
+ :pk.BODYHD0=:epk.':pv.text:epv.'
+ :pk.BODYHD0X=:epk.':pv.text:epv.'
+ :pk.BODYHD1=:epk.':pv.text:epv.'
+ :pk.BODYHD1X=:epk.':pv.text:epv.'
+ :pk.FBC=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+ :pk.FIGLIST=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.FTSEP=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.HEADNUM=&lbrc. YES | :pk def.NO:epk. | :pv.num:epv. | *:pv.num:epv. &rbrc.:epk.
+ :pk.INDEX=&lbrc. YES | :pk def.NO:epk. &rbrc.  &cont.
+&lbrc.INDEX|:pk def.NOINDEX:epk.&rbrc.:epk.
+:rev refid=r45.
+ :pk.INDEXREFLINK=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:erev refid=r45.
+ :pk.INDEXSORT.SPEC=:epk.'&cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk. ... &cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.'
+ :pk.INDEXSORT.NUM=:epk.'&cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk. ... &cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.'
+ :pk.INDEXSORT.LETTER=:epk.'&cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk. ... &cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.'
+ :pk.INDEXTOC=&lbrc. YES | NO | :pv.number:epv. | :pk def.50:epk. &rbrc.:epk.
+ :pk.INDEXTOCTAG=':pv.ts,te,ss,se,ns,ne,as,ae:epv.':epk.
+ :pk.PTOC=&lbrc. NO | :pv.num:epv. | *:pv.num:epv. | &cont.
+:pk def.4:epk. &rbrc.:epk.
+ :pk.TLIST=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.TOC=&lbrc. :pk def.YES:epk. | NO | :pv.num:epv. | *:pv.num:epv. &cont.
+&rbrc.:epk.
+ :pk.TOCC=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+ :pk.TOCINDENT=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.TOCSUPPRESS=&lbrc. :pk def.0:epk. | :pv.number:epv. &rbrc.:epk.
+ :pk.TOCTAG=':pv.ls,le,ts,te:rev refid=r42.,ts,te:erev refid=r42.:epv.':epk.
+:ecgraphic.
+:figseg fit=5.
+:cgraphic.
+ 
+ :hp5.Hyperlinking within the file:ehp5.
+ :pk.FNLINK=&lbrc. NO | TO | FROM | :pk def.BOTH:epk. &rbrc.:epk.
+ :pk.FTLINK=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.TOCRET=&lbrc. NO | TOC | :pk def.PTOC:epk. | &cont.
+PTOC:pv.x:epv. &rbrc.:epk.
+:ecgraphic.
+:figseg fit=42.
+:cgraphic.
+ 
+ :hp5.File Locations, Names and Format:ehp5.
+ :pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (AIX)
+ :pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (HPFS)
+ :pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (LINUX)
+ :pk.HTMLEXT=&lbrc. :pk def.HTML:epk. | :pv.ext:epv. &rbrc.:epk.     (MVS)
+ :pk.HTMLEXT=&lbrc. :pk def.htm:epk.  | :pv.ext:epv. &rbrc.:epk.     (OS/2)
+ :pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (VM)
+ :pk.HTMLEXT=&lbrc. :pk def.htm:epk.  | :pv.ext:epv. &rbrc.:epk.     (WIN95)
+ :pk.HTMLEXT=&lbrc. :pk def.htm:epk.  | :pv.ext:epv. &rbrc.:epk.     (WINNT)
+:rev refid=r47.
+ :pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (UNIX)
+:erev refid=r47.
+ :pk.HTMPEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (AIX)
+ :pk.HTMPEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (HPFS)
+ :pk.HTMPEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (LINUX)
+ :pk.HTMPEXT=&lbrc. :pk def.HTML:epk. | :pv.ext:epv. &rbrc.:epk.     (MVS)
+ :pk.HTMPEXT=&lbrc. :pk def.htm:epk.  | :pv.ext:epv. &rbrc.:epk.     (OS/2)
+ :pk.HTMPEXT=&lbrc. :pk def.HTML:epk. | :pv.ext:epv. &rbrc.:epk.     (VM)
+ :pk.HTMPEXT=&lbrc. :pk def.htm:epk.  | :pv.ext:epv. &rbrc.:epk.     (WIN95)
+ :pk.HTMPEXT=&lbrc. :pk def.htm:epk.  | :pv.ext:epv. &rbrc.:epk.     (WINNT)
+:rev refid=r47.
+ :pk.HTMPEXT=&lbrc. :pk def.html:epk. | :pv.ext:epv. &rbrc.:epk.     (UNIX)
+:erev refid=r47.
+ :pk.IMBFT=:epk.&lbrc. :pk def.script:epk. | :pv.ext:epv. &rbrc.     (AIX)
+ :pk.IMBFT=:epk.&lbrc. :pk def.script:epk. | :pv.ext:epv. &rbrc.     (HPFS)
+ :pk.IMBFT=:epk.&lbrc. :pk def.script:epk. | :pv.ext:epv. &rbrc.     (LINUX)
+ :pk.IMBFT=:epk.(not applicable)     (MVS)
+ :pk.IMBFT=:epk.&lbrc. :pk def.scr:epk.    | :pv.ext:epv. &rbrc.     (OS/2)
+ :pk.IMBFT=:epk.&lbrc. :pk def.SCRIPT:epk. | :pv.ft:epv.  &rbrc.     (VM)
+ :pk.IMBFT=:epk.&lbrc. :pk def.scr:epk.    | :pv.ext:epv. &rbrc.     (WIN95)
+ :pk.IMBFT=:epk.&lbrc. :pk def.scr:epk.    | :pv.ext:epv. &rbrc.     (WINNT)
+:rev refid=r47.
+ :pk.IMBFT=:epk.&lbrc. :pk def.script:epk. | :pv.ext:epv. &rbrc.     (UNIX)
+:erev refid=r47.
+ :pk.IMBFTEXT='&lbrc.YES|:pk def.NO:epk.&rbrc.:epk., &cont.
+:pk.&lbrc.ASIS|:pk def.LC:epk.|UC&rbrc.:epk., &cont.
+:pv.ft=ext ...:epv.:pk.':epk.
+ :pk.IMBPATH=&lbrc. CLEAR | &cont.
+:pv.path:epv.&lbrk.:pv.&semi.path&semi....&semi.path:epv.&rbrk. &rbrc.:epk.
+ :pk.IMGPATH=:epk.':pv.path:epv.'
+ :pk.OUTPUTFM=:epk.&lbrc. :pk def.A:epk. | :pv.disk:epv. &rbrc.
+ :pk.OUTPUTL=:epk.':pv.logical-output-file:epv.'
+ :pk.OUTPUTL83=&lbrc. YES | NO &rbrc.:epk.
+ :pk.OUTPUTLCASE=&lbrc. ASIS | LC | UC &rbrc.:epk.
+ :pk.OUTPUTP=:epk.':pv.physical-output-file:epv.'
+ :pk.OUTPUTP=&lbrc. ':pv.physical-output-file:epv.' | &cont.
+DD&colon.:pv.ddname:epv. | &cont.
+DD&colon.:pv.ddname:epv.(:pv.member:epv.) &rbrc.   &cont.
+(MVS only):epk.
+ :pk.OUTPUTP83=&lbrc. YES | NO &rbrc.:epk.
+ :pk.OUTPUTPCASE=&lbrc. ASIS | LC | UC &rbrc.:epk.
+ :pk.:rev refid=r42.SPLITDIGITS=:erev refid=r42.'&cont.
+&lbrc.:pk def.2:epk.|:pv.num:epv.&rbrc., &cont.
+&lbrc.:pk def.DEC:epk.|HEX|ALPHA|LALPHA&rbrc.':epk.
+ :pk.:rev refid=r42.SPLITDIR&cont.
+&lbrk..:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.&rbrk.=:erev refid=r42.&cont.
+':pv.physical-directory:epv.,:pv.logical-directory:epv.':epk.
+ :pk.:rev refid=r42.SPLITDIR.NEXT=:erev refid=r42.&cont.
+':pv.physical-directory:epv.,:pv.logical-directory:epv.':epk.
+ :pk.:rev refid=r42.SPLITNAME.:pv.x:epv.=:erev refid=r42.'&cont.
+&lbrk.:pv.physical-file-name:epv.&rbrk.,&cont.
+&lbrk.:pv.logical-file-name:epv.&rbrk.':epk.
+ :pk.:rev refid=r42.SPLITNAME.NEXT=:erev refid=r42.'&cont.
+&lbrk.:pv.physical-file-name:epv.&rbrk.,&cont.
+&lbrk.:pv.logical-file-name:epv.&rbrk.':epk.
+:ecgraphic.
+:figseg fit=5.
+:cgraphic.
+ 
+ :hp5.Artwork & Graphics:ehp5.
+ :pk.ARTLINKIMG=&lbrc. :pk def.B2HLINK.GIF:epk. | :pv.image.ext:epv. &rbrc.:epk.
+ :pk.ARTSHOW=&lbrc. :pk def.VIEW:epk. | LINK | NONE &rbrc.:epk.
+ :pk.ARTTYPE=&lbrc. :pk def.GIF:epk. | :pv.imagetype:epv. &rbrc.:epk.
+:ecgraphic.
+:figseg fit=5.
+:cgraphic.
+ 
+ :hp5.Controlling DVCF sectioning:ehp5.
+ :pk.DVCF=:epk.':pv.cond:sub.1:esub. cond:sub.2:esub. ... &cont.
+cond:sub.x:esub.:epv.'
+ :pk.SYSVAR=:epk.'0 :pv.file:epv.'
+ :pk.SYSVAR=:epk.'1 :pv.cond:sub.1:esub.:epv. &cont.
+2 :pv.cond:sub.2:esub.:epv. ... 9 :pv.cond:sub.9:esub.:epv.'
+:ecgraphic.
+:figseg fit=53.
+:cgraphic.
+ 
+ :hp5.&html. file's content & structure:ehp5.
+ :pk.ABSTRACT=:epk.':pv.text:epv.'
+ :pk.ANNOT=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+ :pk.:rev refid=r42.AUTOSPLIT=:erev refid=r42.'&lbrc. :pk def.NO:epk. | YES | :pv.num:epv. | *:pv.num:epv. &rbrc.
+            &lbrk. LEN=:pv.value:epv. &rbrk.
+            &lbrk. BYPASS=&lbrc. :pk def.0:epk. | :pv.num:epv. &rbrc. &rbrk.
+            &lbrc. IMBED | :pk def.NOIMBED:epk. &rbrc.
+            &lbrc. SETUP | :pk def.NOSETUP:epk. &rbrc.':epk.
+ :pk.BODYTAG=:epk.':pv.text:epv.'
+:rev refid=r46.
+ :pk.BORDERTAG=&lbrc. :pk def.BORDER="1":epk. | :pv.tag:epv. &rbrc.:epk.
+ :pk.BORDERTAG.:pv.x:epv.=:pv.tag:epv.:epk.
+:erev refid=r46.
+ :pk.CENTERTAG=&lbrc. YES | NO &rbrc.:epk.
+ :pk.CHARSET=':pv.text:epv.':epk.
+ :pk.COMMENT=&lbrc. ':pv.text:epv.' | CLEAR &rbrc.:epk.
+ :pk.COMMENTHEAD=':pv.text:epv.':epk.
+ :pk.CONTACT=:epk.':pv.text:epv.'
+:rev refid=r45.
+ :pk.DEFTEXT.:pv.name:epv.=':pv.text:epv.':epk.
+:erev refid=r45.
+:rev refid=r42.
+ :pk.DEFTEXT.:pv.name:epv.=':pv.text:epv.',&lbrk.:pv.width:epv.&rbrk.:epk.
+ :pk.DIALOG=&cont.
+'&lbrk.:pk def.LABEL:epk.&rbrk. &lbrk.FONT&rbrk. &lbrk.COLOR&rbrk.':epk.
+ :pk.DIALOGTAG.:pv.x:epv.=':pv.ts,te,fs,fe,cs,ce:epv.':epk.
+:erev refid=r42.
+ :pk.DLFMT=&lbrc. DL | TABLE &rbrc.:epk.
+ :pk.DLTAG.:pv.x:epv.=':pv.ls,le,ts,te,ds,de:epv.':epk.
+ :pk.FIGCAPLOC=&lbrc. :pk def.BEFORE:epk. | AFTER &rbrc.:epk.
+:rev refid=r42.
+ :pk.FNTAG=':pv.cs,ce,ls,le,lcs,lce,lts,lte,ts,te:epv.':epk.
+:erev refid=r42.
+:rev refid=r45.
+ :pk.FONTTAG=':pv.fonttext:epv.,:pv.efonttext:epv.,&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+':epk.
+ :pk.FONTTAG.:pv.name:epv.=':pv.fonttext:epv.,:pv.efonttext:epv.,&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+':epk.
+:erev refid=r45.
+ :pk.FOOTER=&lbrc. :pk def.NO:epk. | :pv.file:epv. &rbrc.:epk.
+:rev refid=r44.
+ :pk.FOOTER=&lbrc. :pk def.NO:epk. | :pv.file:epv. | &cont.
+DD&colon.:pv.ddname:epv. | &cont.
+DD&colon.:pv.ddname:epv.(:pv.member:epv.) &rbrc.   &cont.
+(MVS only):epk.
+:erev refid=r44.
+ :pk.GLFMT=&lbrc. DL | TABLE &rbrc.:epk.
+ :pk.GLTAG.:pv.x:epv.=':pv.ls,le,ts,te,ds,ds2,de,gs,ge:epv.':epk.
+ :pk.HEADER=&lbrc. :pk def.NO:epk. | :pv.file:epv. &rbrc.:epk.
+:rev refid=r44.
+ :pk.HEADER=&lbrc. :pk def.NO:epk. | :pv.file:epv. | &cont.
+DD&colon.:pv.ddname:epv. | &cont.
+DD&colon.:pv.ddname:epv.(:pv.member:epv.) &rbrc.   &cont.
+(MVS only):epk.
+:erev refid=r44.
+:rev refid=r42.
+ :pk.HEADREC=CLEAR:epk.
+ :pk.HEADREC.FILE=:pv.file:epv.:epk.
+ :pk.HEADREC.TEXT=':pv.text:epv.':epk.
+ :pk.HRTAG=&lbrc. :pk def.&lt.HR&gt.:epk. | :pv.tag:epv. &rbrc.:epk.
+ :pk.HRTAG.:pv.x:epv.=:pv.tag:epv.:epk.
+ :pk.HTAG=':pv.hs,he,ss,sr:epv.':epk.
+ :pk.HTAG.:pv.x:epv.=':pv.hs,he,ss,sr:epv.':epk.
+:erev refid=r42.
+ :pk.HTML=&lbrc. 2 | :pk def.3:epk. | &cont.
+:rev refid=r42.4:erev refid=r42. &rbrc.:epk.
+:rev refid=r47.
+ :pk.HTMLATT.:pv.tagname:epv.=':pv.attributes:epv.':epk.
+:erev refid=r47.
+:rev refid=r42.
+ :pk.HTMLDOCID.:pv.htmlrel:epv.=':pv.text:epv.':epk.
+:erev refid=r42.
+ :pk.INDEXTAG=':pv.ls,le,ts,te,is,ie:epv.':epk.
+ :pk.LINES=&lbrc. :pk def.PRE:epk. | BR &rbrc.:epk.
+ :pk.LINEWIDTH=&lbrc. :pk def.78:epk. | :pv.number:epv. &rbrc.:epk.
+ :pk.LIREF=&lbrc. NO | ID | :pk def.ACTUAL:epk. &rbrc.:epk.
+ :pk.MASTALT=:epk.':pv.alternate text:epv.'
+ :pk.MASTIMG=:epk.':pv.file.ext:epv., &cont.
+&lbrc. :pk def.ALL:epk. | FIRST &rbrc.'
+ :pk.META=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.METAKEYS=:epk.':pv.key:sub.1:esub. key:sub.2:esub. ... &cont.
+key:sub.x:esub.:epv.'
+ :pk.NOTELTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+ :pk.OLTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+ :pk.OLSEQ=':pv.sequence codes:epv.':epk.
+ :pk.OWNER=:epk.':pv.text:epv.'
+ :pk.REVTAG=':pv.revtext:epv.,:pv.erevtext:epv.,&cont.
+:rev refid=r42.&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+:erev refid=r42.&cont.
+':epk.
+ :pk.REVTAG.:pv.id:epv.=':pv.revtext:epv.,:pv.erevtext:epv.,&cont.
+:rev refid=r42.&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+:erev refid=r42.&cont.
+':epk.
+:psc xproc=html.
+:ecgraphic.
+:figseg fit=13.
+:cgraphic.
+:epsc proc=html.
+:rev refid=r42.
+ :pk.SETUPTAG.:pv.tagname:epv.=&cont.
+':pv.beforetext:epv.',':pv.aftertext:epv.':epk.
+:erev refid=r42.
+ :pk.SHADE.:pv.name:epv.=:pv.rrggbb:epv.:epk.
+ :pk.SLTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+ :pk.:rev refid=r42.SPLITLINK=:erev refid=r42.&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.:rev refid=r42.SPLITLINK.:pv.x:epv.=:erev refid=r42.':pv.text:epv. | CLEAR':epk.
+ :pk.SYNFONT=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+ :pk.SYSVAR='A &lbrc. YES | :pk def.NO:epk. &rbrc.':epk.
+ :pk.TABLE2=':pv.fl,fm,fr,fv,fhn,fhh,gutl,gutr:epv.':epk.
+ :pk.TFIGLISTTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+ :pk.TOPHEAD=&lbrc. :pk def.1:epk. | 2 | 3 | 4 | 5 | 6 | NO &rbrc.:epk.
+ :pk.TITLE=:epk.':pv.text:epv.'
+ :pk.ULTAG.:pv.x:epv.=':pv.ls,le,is,ie.:epv.':epk.
+ :pk.XEDITG=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:ecgraphic.
+:figseg fit=5.
+:cgraphic.
+ 
+ :hp5.Question &amp. Answer:ehp5.
+ :pk.QRESET=&lbrc. :pk def.NO:epk. | 0 | 1 | ... | 19 | 20 &rbrc.:epk.
+ :pk.QUESTION=TEXT:epk.
+ :pk.QUESTION='FORM,&lbrk.:pv.method:epv.&rbrk.,&cont.
+:pv.url-of-cgi:epv.,&lbrk:pv.answer-action:epv.&rbrk.,&cont.
+&lbrk:pv.optdata:epv.&rbrk.':epk.
+:ecgraphic.
+:figseg fit=21.
+:cgraphic.
+ 
+ :hp5.Miscellaneous:ehp5.
+ :pk.ALARM=&lbrc. YES | NO | :pv.number:epv. | :pk def.5:epk. &rbrc.:epk.
+ :pk.B2HREQ=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.DOCDESC=':pv.file:epv.':epk.
+ :pk.DOCDESC.:pv.id:epv.=':pv.file:epv.':epk.
+ :pk.IMBEDID=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+ :pk.LOG='&lbrc. :pk def.NO:epk. | YES | :pv.file:epv. &rbrc.&cont.
+,&lbrc. :pk def.CREATE:epk. | APPEND &rbrc.':epk.
+:rev refid=r43.
+ :pk.LOG=STREAM:pv.x:epv.:epk.
+:erev refid=r43.
+ :pk.LTGT=&lbrc. ASIS | :pk default.CONVERT:epk. &rbrc.:epk.
+ :pk.MAXWIDTH=&lbrc. :pk def.NOSPLIT:epk. | :pv.number:epv. &rbrc.:epk.
+ :pk.MSGLEVEL=&lbrc. :pk def.INFO:epk. | WARNING | ERROR &rbrc.:epk.
+ :pk.MSGNUM=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.MVSALLOC.:pv.name:epv.=&cont.
+':pv.allocation-values:epv.':epk.
+:rev refid=r45.
+ :pk.PROCACT=:epk.':pv.sit:epv.=:pv.action:epv. &cont.
+:pv.sit:sub.2:esub.:epv.=:pv.action:sub.2:esub.:epv. ... &cont.
+:pv.sit:sub.x:esub.:epv.=:pv.action:sub.x:esub.:epv.'
+:erev refid=r45.
+ :pk.PSC=:epk.':pv.process:sub.1:esub. process:sub.2:esub. ... &cont.
+process:sub.x:esub.:epv.'
+ :pk.QUIET | NOISY:epk.
+ :pk.SHOWLINES=&lbrc. NO | :pv.num:epv. &rbrc.:epk.
+ :pk.SYSVAR='W :pv.file:epv.':epk.
+ :pk.TAGCHECK=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+ :pk.USERPROF=:epk.:pv.file:epv.
+ :pk.USERSYM=:epk.:pv.file:epv.
+:ecgraphic.
+:efig.
+.*-----
+:rev refid=r42.
+:h3 id=parmdet.Description of &sysname. Options
+:erev refid=r42.
+:parml.
+.*-----
+:pt.:pk.ABSTRACT=':pv.text:epv.':epk.
+:pd.A short abstract of the document.  If present, causes a
+:q.&lt.META&gt.:eq.-type statement to be included in the &html. output.
+Also allows the server to generate an HTTP response header if abstract
+information is requested.
+.seelay
+:xmp.
+  ABSTRACT='Murphy''s Laws'
+:exmp.
+causes the following to be generated:
+:xmp.
+  &lt.META HTTP-EQUIV="abstract" CONTENT="Murphy's Laws"&gt.
+:exmp.
+.br;Default: :pk.ABSTRACT='':epk.
+.*-----
+:pt.:pk.ALARM=&lbrc. YES | NO | :pv.number:epv. | :pk def.5:epk. &rbrc.:epk.
+:pd.When running on a PC workstation, this controls the sounding of
+the audible alarm when warning or error messages are displayed.
+.getw symbol=dhlen gmltype=hp2 text='nu mb er'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.The audible alarm is always sounded
+:dt.NO
+:dd.The audible alarm is never sounded
+:dt.:pv.number:epv.
+:dd.The audible alarm is sounded only this many times; warning or
+error messages after this number are issued silently
+:edl.
+.br;Default: :pk.ALARM=5:epk.
+.*-----
+:spot id=annot  xreftext='ANNOT= option'.
+:spot id=annot2 xreftext='ANNOT='.
+:pt.:pk.ANNOT=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pd.A :q.short-hand:eq. method for setting the SYSVAR :q.:xph.A:exph.:eq.
+parameter for controlling the processing of text marked up with the
+:xph.&colon.ANNOT.:exph. and :xph.&colon.EANNOT.:exph. tag.
+:xph.ANNOT=YES:exph. is equivalent to :xph.SYSVAR='A&rbl.YES':exph.
+.getw symbol=dhlen gmltype=hp2 text='Y E S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.Process annotations
+:dt.NO
+:dd.Do not process annotations (default)
+:edl.
+.br;Default: :pk.ANNOT=NO:epk.
+.*-----
+:rev refid=r42.
+:spot id=aphd12 xreftext='APPHD1='.
+:pt.:pk.APPHD1=':pv.text:epv.':epk.
+:pd.Specifies the text to precede an :xph.&colon.H1:exph.
+heading in the appendix.
+If omitted, it defaults to the value specified for the
+:xph.DEFTEXT.APPENDIX=:exph. option.
+.dpopt
+.br;Example: APPHD1='Reference' produces "Reference A.", etc.
+.br;Default: :pk.APPHD1='':epk.
+.*-----
+:spot id=aphd1x2  xreftext='APPHD1X='.
+:pt.:pk.APPHD1X=':pv.text:epv.':epk.
+:pd.Specifies the text to follow an :xph.&colon.H1:exph.
+heading in the appendix.
+.dpopt
+.br;Example: APPHD1X='Reference' produces "A Reference", etc.
+.br;Default: :pk.APPHD1X='':epk.
+:erev refid=r42.
+.*-----
+:spot id=artlink xreftext='ARTLINKIMG= option'.
+:spot id=artlin2 xreftext='ARTLINKIMG='.
+:pt.:pk.ARTLINKIMG=&lbrc. :pk def.B2HLINK.GIF:epk. | &cont.
+:pv.image.ext:epv. &rbrc.:epk.
+:pd.If :xph.ARTSHOW=LINK:exph., this option specifies the graphic
+image to display as a hyperlink to the :q.real:eq. graphic image.
+.br;Default: :pk.ARTLINKIMG=B2HLINK.GIF:epk.
+:note.The :xph.B2HLINK.GIF:exph. file is supplied within the &zipvm.
+file.
+.*-----
+:spot id=artshow xreftext='ARTSHOW= option'.
+:spot id=artsho2 xreftext='ARTSHOW='.
+:pt.:pk.ARTSHOW=&lbrc. :pk def.VIEW:epk. | LINK | NONE &rbrc.:epk.
+:pd.Specifies how the &colon.ARTWORK. tag should be handled
+.getw symbol=dhlen gmltype=hp2 text='N O N E'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.VIEW
+:dd.The &html. "IMG SRC=" will be generated to cause the image to
+be loaded immediately at browse time
+:dt.LINK
+:dd.A link will be provided to the graphic, but the user must select
+it to see the image (the text defined for the
+:xph.DEFTEXT.ARTLINK:exph. option will be shown as the text for the
+link)
+:dt.NONE
+:dd.Ignore the &colon.ARTWORK tag.
+:edl.
+.br;Default: :pk.ARTSHOW=VIEW:epk.
+.*-----
+:spot id=arttype xreftext='ARTTYPE= option'.
+:spot id=arttyp2 xreftext='ARTTYPE='.
+:pt.:pk.ARTTYPE=&lbrc. :pk def.GIF:epk. | :pv.imagetype:epv. &rbrc.:epk.
+:pd.This specifies the file :hp1.extension:ehp1. of an image on the
+Web server referenced by the &colon.ARTWORK. tag or &period.SI
+control word.  The image file's :hp1.name:ehp1. is defined by the
+:xph.NAME=:exph. parameter on the &colon.ARTWORK. tag or the name
+specified after the &period.SI control word.
+The :hp1.location:ehp1. of the image on the server is specified by
+the IMGPATH= option.
+.br;Default: :pk.ARTTYPE=GIF:epk.
+.*-----
+:pt.:pk.:rev refid=r42.AUTOSPLIT=:erev refid=r42.'&cont.
+&lbrc. :pk def.NO:epk. | YES | :pv.num:epv. | *:pv.num:epv. &rbrc. &cont.
+&lbrk.LEN=:pv.value:epv.&rbrk. &cont.
+&lbrk.BYPASS=&lbrc.:pk def.0:epk.|:pv.num:epv.&rbrc.&rbrk. &cont.
+&lbrc.IMBED|:pk def.NOIMBED:epk.&rbrc. &cont.
+&lbrc.SETUP|:pk def.NOSETUP:epk.&rbrc.':epk.
+:pd.Causes the output &html. file to be broken into multiple &html.
+files.
+:fn.
+:rev refid=r42.
+AUTOSPLIT
+:erev refid=r42.
+is not available if &sysname. is running as a CMS pipeline filter
+:rev refid=r45.
+or :xph.SOURCE=FLAT:exph. is specified.
+:erev refid=r45.
+:efn.
+This is discussed in detail in :hdref refid=split..
+:rev refid=r42.
+:note.For compatibility with older releases of &sysname.,
+an option name of :xph.AUTOPART=:exph. is recognized as an
+alias of :xph.AUTOSPLIT=:exph..
+:erev refid=r42.
+:p.Example: :rev refid=r42.:xph.AUTOSPLIT=1:exph.:erev refid=r42.
+creates a separate &html. file for each &colon.H1. tag
+.br;Example: :rev refid=r42.:xph.AUTOSPLIT=*1:exph.:erev refid=r42.
+creates a separate &html file each &colon.H0. and &colon.H1. tag.
+.br;Example: :rev refid=r42.:xph.AUTOSPLIT=LEN=4:exph.:erev refid=r42.
+creates a separate &html. file
+when a :xph.&colon.LEN LEHD=4:exph. tag is encountered
+.br;Example: :rev refid=r42.:xph.AUTOSPLIT=IMBED:exph.:erev refid=r42.
+creates a separate &html. file
+whenever a file is imbedded
+.br;Example: :rev refid=r42.:xph.AUTOSPLIT='0 IMBED':exph.:erev refid=r42.
+creates a separate &html. file
+for each &colon.H0. tag and whenever a file is imbedded
+:p.Default: :rev refid=r42.:pk.AUTOSPLIT=NO:epk.:erev refid=r42.
+.*-----
+:pt.:pk.B2HREQ=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.&sysname. supports various options specified as a Script
+:q.comment:eq. (first two characters are :q.&period.*:eq.),
+such as &optioncmd. or &optioncmd2., and &htmlcmd. or &htmlcmd2..
+This option specifies whether the :q.:xph.B2H:exph.:eq. string is
+required or may be omitted.  (See also :hdref refid=b2hstmt.)
+.getw symbol=dhlen gmltype=hp2 text='Y E S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.If specified, then only the &optioncmd2 format is allowed and
+the &optioncmd. format is ignored
+:dt.NO
+:dd.If specified, then :hp1.either:ehp1. the &optioncmd2. or
+&optioncmd. formats may be used
+:edl.
+.br;Default: :pk.B2HREQ=YES:epk.
+.*-----
+:spot id=bhd02   xreftext='BODYHD0='.
+:pt.:pk.BODYHD0=':pv.text:epv.':epk.
+:pd.Number each &colon.H0. and give it this prefix label.
+.dpopt
+See also the :xph.FBC=:exph. option.
+.br;Example: BODYHD0='Part' produces "Part 1.", etc.
+.br;Default: :pk.BODYHD0='':epk.
+.*-----
+:spot id=bhd0x2  xreftext='BODYHD0X='.
+:pt.:pk.BODYHD0X=':pv.text:epv.':epk.
+:pd.Number each &colon.H0. and give it this suffix label.
+.dpopt
+.br;Example: BODYHD0X='Part' produces "1. Part", etc.
+.br;Default: :pk.BODYHD0X='':epk.
+.*-----
+:spot id=bhd12  xreftext='BODYHD1='.
+:pt.:pk.BODYHD1=':pv.text:epv.':epk.
+:pd.Number each &colon.H1. and give it this prefix label.
+.dpopt
+See also the :xph.FBC=:exph. option.
+.br;Example: BODYHD1='Chapter' produces "Chapter 1.", etc.
+.br;Default: :pk.BODYHD1='':epk.
+.*-----
+:spot id=bhd1x2  xreftext='BODYHD1X='.
+:pt.:pk.BODYHD1X=':pv.text:epv.':epk.
+:pd.Number each &colon.H1. and give it this suffix label.
+.dpopt
+.br;Example: BODYHD1X='Chapter' produces "1. Chapter", etc.
+.br;Default: :pk.BODYHD1X='':epk.
+.*-----
+:pt.:pk.BODYTAG=':pv.text:epv.':epk.
+:pd.Allows you to specify the &html. BODY tag to use at the
+document's beginning.  Useful if you want specialized parameters
+such as :xph.BGCOLOR=:exph. or :xph.TEXT=:exph..
+.seelay
+.br;Default: :pk.BODYTAG='&lt.BODY&gt.':epk.
+ 
+.*-----
+:rev refid=r46.
+:spot id=bortag2 xreftext='BORDERTAG='.
+:pt.:pk.BORDERTAG=&lbrc. :pk def.BORDER="1":epk. | &cont.
+:pv.tag:epv. &rbrc.:epk.
+:pt.:pk.BORDERTAG.:pv.x:epv.=:pv.tag:epv.:epk.
+:pd.These specify the :xph.BORDER:exph. attribute to use when the
+&html. :xph.&lt.TABLE&gt.:exph. tag is generated for various items.
+This option can be specified with or without the :q.:pv.x:epv.:eq.
+qualifier. If :q.:pv.x:epv.:eq. is omitted, the value applies
+to all usages.
+Otherwise, :q.:pv.x:epv.:eq. is a numeric value from 1 to 10
+defined as:
+:dl termhi=0 tsize=2m compact.
+:dthd.:pv.x:epv.
+:ddhd.Tag used for:
+:dt.1 :dd.Used for :xph.&colon.CODEL:exph. when :xph.STYLE=BOX:exph.
+:dt.2 :dd.Used for :xph.&colon.CODEL:exph. when :xph.STYLE=LBLBOX:exph.
+:dt.3 :dd.Used for :xph.&colon.FIG:exph. when :xph.FRAME=NONE:exph.
+is :hp1.not:ehp1. specified
+:dt.4 :dd.Used for :xph.&colon.LBLBOX:exph.
+:dt.5 :dd.Used for :xph.&colon.MSGL:exph. when :xph.STYLE=BOX:exph.
+:dt.6 :dd.Used for :xph.&colon.MSGL:exph. when :xph.STYLE=LBLBOX:exph.
+:dt.7 :dd.Used for :xph.&colon.SCHDATE:exph.
+:dt.8 :dd.Used for :xph.&colon.SYNTAX:exph. when :xph.STYLE=BOX:exph.
+:dt.9 :dd.Used for :xph.&colon.SYNTAX:exph. when :xph.STYLE=LBLBOX:exph.
+:dt.10 :dd.Used for :xph.&colon.TABLE:exph. itself
+:edl.
+.br;If omitted, all default to :q.:xph.BORDER="1":exph.:eq..
+:note.This option is applicable only for HTML=3 (or higher).
+:erev refid=r46.
+.*-----
+:spot id=centert xreftext='CENTERTAG= option'.
+:spot id=center2 xreftext='CENTERTAG='.
+:pt.:pk.CENTERTAG=&lbrc. YES | NO &rbrc.:epk.
+:pd.How should the &html. source support centering of text?
+If YES, then :xph.&lt.CENTER&gt.&rbl....&rbl.&lt./CENTER&gt.:exph.
+&html. tags are used (not all Web browsers support this tag).
+If NO, a number of monospaced blanks are prefixed to the text
+to approximate a centering effect.
+.br;Default: if :xph.HTML=2:exph.: then :pk.CENTERTAG=NO:epk.;
+otherwise :pk.CENTERTAG=YES:epk.
+.*-----
+:spot id=charset xreftext='CHARSET= option'.
+:pt.:pk.CHARSET=':pv.text:epv.':epk.
+:pd.This option allows you to specify the coded character used to
+encode the document.  If a value is specified, &sysname. generates
+the following statement:
+:xmp.
+  &lt.META HTTP-EQUIV="Content-Type" &cont.
+CONTENT="text/html&semi. charset=:pv.text:epv."&gt.
+:exmp.
+If no value is specified (the default), no META statement is
+generated and the normal World Wide Web default of
+:xph.ISO-8859-1:exph. is assumed.  (See also :hdref refid=nls..)
+:p.Default: :pk.CHARSET='':epk.
+:psc proc=html.
+.*B2H HTML <p><a href="http://ds.internic.net/rfc/rfc2070.txt">RFC 2070</a>
+:epsc.
+:psc xproc=html.
+:p.RFC 2070
+(:xph.http&colon.//ds.internic.net/rfc/rfc2070.txt:exph.)
+:epsc.
+contains the definitive list, but here are some of the character sets
+for each of the Group 1, 2 and 3 languages.
+:fn.
+Extracted from the documents
+.*B2H HTML <a href="http://w3.torolab.ibm.com/D979/Documents/htmlccs_guide.html">
+:cit.HTML Documents Coded Character Sets Guidelines:ecit.
+.*B2H HTML </a>
+:psc xproc=html.
+(:xph.http&colon.//w3.torolab.ibm.com/D979/Documents/htmlccs_guide.html:exph.)
+:epsc.
+and
+.*B2H HTML <a href="http://w3.rchland.ibm.com/projects/TWB/htmlguid.html">
+:cit.HTML 3.2 Guidelines &amp. Style Rules for NLS:ecit.
+.*B2H HTML </a>
+:psc xproc=html.
+(:xph.http&colon.//w3.rchland.ibm.com/projects/TWB/htmlguid.html:exph.)
+:epsc.
+from the IBM National Language Technical Center.
+:efn.
+:table cols='* * * *'
+       align='l'
+       valign='t'.
+:tcap.Some coded character sets
+:thd.
+:c.Language
+:c.Coded Character Set
+:c.charset=...
+:c.IBM CCSID
+:ethd.
+:row.
+:c.Albanian
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Arabic
+:c.ISO/IEC 8859-6
+:c.iso-8859-6
+:c.1089
+:row.
+:c.Bulgarian
+:c.Windows 1251
+:c.windows-1251
+:c.1251
+:row.
+:c.Byelorussian
+:c.Windows 1251
+:c.windows-1251
+:c.1251
+:row.
+:c.Catalan
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Chinese (simplified)
+:c.GB
+:c.gb2312
+:c.1381 (5477 is also valid)
+:row.
+:c.Chinese (traditional)
+:c.Big 5
+:c.big5
+:c.950
+:row.
+:c.Croatian
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Czech
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Danish
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Dutch
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.English
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Estonian
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Finnish
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.French
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.German
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Greek
+:c.ISO/IEC 8859-7
+:c.iso-8859-7
+:c.813
+:row.
+:c.Hebrew
+:c.ISO/IEC 8859-8
+:c.iso-8859-8
+:c.916
+:row.
+:c.Hungarian
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Italian
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Japanese
+:c.Shift JIS
+:c.x-sjis
+.br;(shift_jis is also used)
+:c.943
+(932, a subset of 943 from a character repertoire viewpoint, is also valid)
+:row.
+:c.Korean
+:c.EUC Korean
+:c.euc-kr
+:c.970
+(A better solution is to use 970 for AIX/Linux/Unix,
+and 949 for OS/2 and Windows)
+:row.
+:c.Latvian
+:c.Windows 1257
+:c.windows-1257
+:c.1257
+:row.
+:c.Lithuanian
+:c.Windows 1257
+:c.windows-1257
+:c.1257
+:row.
+:c.Macedonian
+:c.Windows 1251
+:c.windows-1251
+:c.1251
+:row.
+:c.Norwegian
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Polish
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Portuguese
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Romanian
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Russian
+:c.Windows 1251
+:c.windows-1251
+:c.1251
+:row.
+:c.Serbian (Cyrillic)
+:c.Windows 1251
+:c.windows-1251
+:c.1251
+:row.
+:c.Serbian (Latin 2)
+:c.Windows 1250
+:c.windows-1250
+:c.1250
+:row.
+:c.Slovakian
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Slovenian
+:c.ISO/IEC 8859-2
+:c.iso-8859-2
+:c.912
+:row.
+:c.Spanish
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Swedish
+:c.ISO/IEC 8859-1
+:c.iso-8859-1
+:c.819
+:row.
+:c.Thai
+:c.IBM 874
+:c.x-ibm-874
+:c.9066
+:row.
+:c.Turkish
+:c.ISO/IEC 8859-9
+:c.iso-8859-9
+:c.920
+:row.
+:c.Ukrainian
+:c.Windows 1251
+:c.windows-1251
+:c.1251
+:row.
+:c.Vietnamese
+:c.VISCII
+.br;UCS-2
+.br;UCS-4
+:c.viscii
+.br;iso-10646-ucs-2
+.br;iso-10646-ucs-4
+:c.TBD
+.br;1200 (growing) or 13488 (fixed)
+.br;TBD
+:etable.
+.*-----
+:pt.:pk.COMMENT=&lbrc. ':pv.text:epv.' | CLEAR &rbrc.:epk.
+:pd.Text to include in the header section of the &html. output file
+as an &html. comment (&amp.symbols are substituted).  This option
+can be specified as many times as desired.  The text is reformatted
+and multiple lines created if any individual comment record exceeds
+64 characters in width.  If :xph.COMMENT=CLEAR:exph., all
+previously-specified comments are discarded.
+.seelay
+.br;Default: :pk.COMMENT='':epk.
+.*-----
+:pt.:pk.COMMENTHEAD=':pv.text:epv.':epk.
+:pd.Text describing the operation of the &sysname. command.
+The text is inserted into the header section of the &html. output as
+an &html. comment with the intent of documenting the name of the
+input file, when the conversion took place, who did the conversion
+(if the platform allows user identification), etc.  &amp.symbols
+(e.g. &amp.variables) are substituted.
+.seelay
+:p.If omitted, the following text is assumed
+(shown here on two lines):
+:xmp.
+COMMENTHEAD='&amp.b2hiall converted by &amp.b2hsig (&amp.b2hplat) &amp.b2huser
+             on &amp.date at &amp.time'
+:exmp.
+.*-----
+:pt.:pk.CONTACT=':pv.text:epv.':epk.
+:pd.The contact person for the document.  If present, causes a
+:q.&lt.META&gt.:eq.-type statement to be included in the &html.
+output.  Also allows the server to generate an HTTP response header
+if contact information is requested.
+.seelay
+:xmp.
+  CONTACT='johndoe@acme.com'
+:exmp.
+causes the following to be generated:
+:xmp.
+  &lt.META HTTP-EQUIV="contact" CONTENT="johndoe@acme.com"&gt.
+:exmp.
+.br;Default: :pk.CONTACT='':epk.
+.*-----
+:spot id=deftext xreftext='DEFTEXT= option'.
+:spot id=deftex2 xreftext='DEFTEXT='.
+:pt.:pk.DEFTEXT.:pv.name:epv.=':pv.text:epv.':epk.
+:pt.:rev refid=r42.:pk.DEFTEXT.:pv.name:epv.=':pv.text:epv.',&cont.
+&lbrk.:pv.width:epv.&rbrk.:epk.
+:erev refid=r42.
+:pd.Some tags provide default text if not explicitly specified
+(e.g. :q.Index:eq. for :xph.&colon.index:exph.); other parts of a
+document generate text which is not explicitly specifiable (e.g.
+:q.Special Characters:eq. header within the index).  This option
+allows you to specify the text that &sysname. should use in these
+situations.  (See also :hdref refid=nls.)
+.br;e.g. :xph.DEFTEXT.PREFACE='Vorwort':exph.
+.cp 25
+:tdef  id=tdeftxt cols='*'.
+:table cols='* * *'.
+:tcap.DEFTEXT.name= values
+:thd.
+:c.Option
+:c.Default value
+:c.Where used
+:ethd.
+:row.
+:c.:xph.DEFTEXT.ABBREV:exph.
+:c.:q.List of Abbreviations:eq.
+:c.Default text for :xph.&colon.ABBREV:exph. tag
+:row.
+:c.:xph.DEFTEXT.ABSTRACT:exph.
+:c.:q.Abstract:eq.
+:c.Default text for :xph.&colon.ABSTRACT:exph. tag
+:row.
+:c.:xph.DEFTEXT.APPENDIX:exph.
+:c.:q.Appendix:eq.
+:c.Default text for :xph.&colon.APPENDIX:exph. tag
+:row.
+:c.:xph.DEFTEXT.ARTLABEL:exph.
+:c.:q.Figure :pv.figure:epv. not displayed.:eq.
+:c.This specifies the default :q.alternate text:eq. for a
+graphic when :xph.ARTSHOW=LINK:exph. and no alternate text is
+specified on a &bm. :xph.&colon.ARTWORK:exph. tag,
+(such as :xph.&colon.ARTWORK&rbl.NAME=:pv.name:epv.
+LABEL="alternate&rbl.text".:exph.).
+:row.
+:c.:xph.DEFTEXT.ARTLINK:exph.
+:c.:q.View figure.:eq.
+:c.Text to show for a graphic link when :xph.ARTSHOW=LINK:exph.
+:row.
+:c.:xph.DEFTEXT.BIBLIOG:exph.
+:c.:q.Bibliography:eq.
+:c.Default text for :xph.&colon.BIBLIOG:exph. tag
+:row.
+:c.:xph.DEFTEXT.COPYR:exph.
+:c.:q.&amp.copy&semi. Copyright &amp.b2hcopyr. &amp.b2hcoprext:eq.
+:c.Default text used in conjunction with the :xph.COPYR=:exph.
+attribute on either the :xph.&colon.GDOC:exph. or
+:xph.&colon.USERDOC:exph. tag.
+:row.
+:c.:xph.DEFTEXT.DAYS:exph.
+:c.:q.Mon Tue Wed Thu Fri Sat Sun:eq.
+:c.Days-of-the-week for use with RFC 822 date conversions, such as
+for :xph.EXPDATE=:exph. and :xph.REVDATE=:exph..
+:rev refid=r42.
+:row.
+:c.:xph.DEFTEXT.DIALSYS:exph.
+:c.:q.System:eq.
+:c.Default prefix text for a Dialog's :xph.&colon.SYS:exph. tag
+:row.
+:c.:xph.DEFTEXT.DIALUSER:exph.
+:c.:q.User:eq.
+:c.Default prefix text for a Dialog's :xph.&colon.USER:exph. tag
+:row.
+:c.:xph.DEFTEXT.DOCNUM:exph.
+:c.:q.Document Number:eq.
+:c.Default prefix text for :xph.&colon.DOCNUM:exph. tag
+:erev refid=r42.
+:row.
+:c.:xph.DEFTEXT.FIGLIST:exph.
+:c.:q.Figures:eq.
+:c.Default text for :xph.&colon.FIGLIST:exph. tag
+:row.
+:c.:xph.DEFTEXT.FIGURE:exph.
+:c.:q.Figure:eq.
+:c.Default text used with the figure number in conjunction with
+the :xph.&colon.FIGCAP:exph. tag
+:row.
+:c.:xph.DEFTEXT.FOOTNOTES:exph.
+:c.:q.Footnotes:eq.
+:c.Default text used to indicate the beginning of the footnotes
+:row.
+:c.:xph.DEFTEXT.GLOSSARY:exph.
+:c.:q.Glossary:eq.
+:c.Default text for :xph.&colon.GLOSSARY:exph. tag
+:row.
+:c.:xph.DEFTEXT.HTMLCMTL:exph.
+:c.:q.&lt.&xclm.-- :eq.
+:c.Left or beginning portion of an &html. comment
+:row.
+:c.:xph.DEFTEXT.HTMLCMTR:exph.
+:c.:q. --&gt:eq.
+:c.Right or ending portion of an &html. comment
+:row.
+:c.:xph.DEFTEXT.HTMLHEAD:exph.
+:c.:q.&lt.&xclm.DOCTYPE HTML PUBLIC &sdq.-//IETF//DTD HTML
+:rev refid=r42.&amp.b2hhtmlid:erev refid=r42.//EN&sdq.&gt.:eq.
+:c.The first physical record of an &html. output file
+:row.
+:c.:xph.DEFTEXT.IBMCOPYR:exph.
+:c.:q.&lt.B&gt.&amp.copy&semi. Copyright International Business
+Machines Corporation &amp.b2hibmcopyr..  All rights reserved.
+&amp.b2hcoprext.&lt./B&gt. &lt.BR&gt.Note to U.S. government Users
+-- Documentation related to restricted rights -- Use, duplication or
+disclosure is subject to restrictions set forth in GSA ADP Schedule
+contract with IBM Corp.:eq.
+:c.Default text used in conjunction with the :xph.IBMCOPYR=:exph.
+attribute on the :xph.&colon.USERDOC:exph. tag.
+:row.
+:c.:xph.DEFTEXT.IBMZALI:exph.
+:c.:q.&lt.HR&gt.&lt.B&gt.IBM License Information&cont.
+&lt./B&gt.&lt.HR&gt.:eq.
+:c.Default text used in conjunction with the
+:xph.&colon.IBMLPS:exph. tag when :xph.STYLE=IBMZALI:exph. specified
+on the :xph.&colon.DOCPROF:exph. tag.
+:row.
+:c.:xph.DEFTEXT.IBMZALP:exph.
+:c.:q.&lt.HR&gt.&lt.B&gt.&cont.
+IBM Licensed Program Specifications&lt./B&gt.&lt.HR&gt.:eq.
+:c.Default text used in conjunction with the
+:xph.&colon.IBMLPS:exph. tag when :xph.STYLE=IBMZALP:exph. specified
+(or defaulted) on the :xph.&colon.DOCPROF:exph. tag.
+:row.
+:c.:xph.DEFTEXT.INDEX:exph.
+:c.:q.Index:eq.
+:c.Default text for :xph.&colon.INDEX:exph. tag
+:rev refid=r45.
+:row.
+:c.:xph.DEFTEXT.INDEXENTRYL:exph.
+:c.:q.(:eq.
+:c.When showing the references for a particular index entry, this
+precedes (to the left of) each reference identifier.
+:row.
+:c.:xph.DEFTEXT.INDEXENTRYR:exph.
+:c.:q.):eq.
+:c.When showing the references for a particular index entry, this
+follows (to the right of) each reference identifier.
+:erev refid=r45.
+:row.
+:c.:xph.DEFTEXT.INDEX0:exph.
+:c.:q.Special Characters:eq.
+:c.Used as a header within the sorted index
+:row.
+:c.:xph.DEFTEXT.INDEX1:exph.
+:c.:q.Numerics:eq.
+:c.Used as a header within the sorted index
+:row.
+:c.:xph.DEFTEXT.INDEX2:exph.
+:c.:q.See also:eq.
+:c.Used within the sorted index
+:row.
+:c.:xph.DEFTEXT.INDEX3:exph.
+:c.:q.See:eq.
+:c.Used within the sorted index
+:row.
+:c.:xph.DEFTEXT.LEGEND:exph.
+:c.:q.Legend:eq.
+:c.Default text for :xph.&colon.LEGEND:exph. tag
+:row.
+:c.:xph.DEFTEXT.LERSAUTH:exph.
+:c.:q.Authorization:eq.
+:c.Default text for :xph.&colon.LERS AUTH=:exph. and
+:xph.&colon.LEDI AUTH:exph..
+:row.
+:c.:xph.DEFTEXT.LERSCOMMENTS:exph.
+:c.:q.Comments:eq.
+:c.Default text for :xph.&colon.LERS COMMENTS=:exph. and
+:xph.&colon.LEDI COMMENTS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSCONTEXT:exph.
+:c.:q.Context:eq.
+:c.Default text for :xph.&colon.LERS CONTEXT=:exph. and
+:xph.&colon.LEDI CONTEXT:exph..
+:row.
+:c.:xph.DEFTEXT.LERSDEFAULTS:exph.
+:c.:q.Defaults:eq.
+:c.Default text for :xph.&colon.LERS DEFAULTS=:exph. and
+:xph.&colon.LEDI DEFAULTS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSERRCOND:exph.
+:c.:q.Error Conditions:eq.
+:c.Default text for :xph.&colon.LERS ERRCOND=:exph. and
+:xph.&colon.LEDI ERRCON:exph..
+:row.
+:c.:xph.DEFTEXT.LERSEXAMPLES:exph.
+:c.:q.Examples:eq.
+:c.Default text for :xph.&colon.LERS EXAMPLES=:exph. and
+:xph.&colon.LEDI EXAMPLES:exph..
+:row.
+:c.:xph.DEFTEXT.LERSFLAGS:exph.
+:c.:q.Flags:eq.
+:c.Default text for :xph.&colon.LERS FLAGS=:exph. and
+:xph.&colon.LEDI FLAGS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSFORMAT:exph.
+:c.:q.Format:eq.
+:c.Default text for :xph.&colon.LERS FORMAT=:exph. and
+:xph.&colon.LEDI FORMAT:exph..
+:row.
+:c.:xph.DEFTEXT.LERSINTREP:exph.
+:c.:q.Internal Representation:eq.
+:c.Default text for :xph.&colon.LERS INTREP=:exph. and
+:xph.&colon.LEDI INTREP:exph..
+:row.
+:c.:xph.DEFTEXT.LERSMESSAGES:exph.
+:c.:q.Messages:eq.
+:c.Default text for :xph.&colon.LERS MESSAGES=:exph. and
+:xph.&colon.LEDI MESSAGES:exph..
+:row.
+:c.:xph.DEFTEXT.LERSOPTIONS:exph.
+:c.:q.Options:eq.
+:c.Default text for :xph.&colon.LERS OPTIONS=:exph. and
+:xph.&colon.LEDI OPTIONS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSOTHE:exph.
+:c.:q.:eq.
+:c.Default text for :xph.&colon.LERS OTHE=:exph. and
+:xph.&colon.LEDI OTHE:exph..
+:row.
+:c.:xph.DEFTEXT.LERSPARMS:exph.
+:c.:q.Parameters:eq.
+:c.Default text for :xph.&colon.LERS PARMS=:exph. and
+:xph.&colon.LEDI PARMS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSPREREQS:exph.
+:c.:q.Prerequisites:eq.
+:c.Default text for :xph.&colon.LERS PREREQS=:exph. and
+:xph.&colon.LEDI PREREQS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSPROCESS:exph.
+:c.:q.Processing:eq.
+:c.Default text for :xph.&colon.LERS PROCESS=:exph. and
+:xph.&colon.LEDI PROCESS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSPURPOSE:exph.
+:c.:q.Purpose:eq.
+:c.Default text for :xph.&colon.LERS PURPOSE=:exph. and
+:xph.&colon.LEDI PURPOSE:exph..
+:row.
+:c.:xph.DEFTEXT.LERSRELATED:exph.
+:c.:q.Related Information:eq.
+:c.Default text for :xph.&colon.LERS RELATED=:exph. and
+:xph.&colon.LEDI RELATED:exph..
+:row.
+:c.:xph.DEFTEXT.LERSRESTRICT:exph.
+:c.:q.Restrictions:eq.
+:c.Default text for :xph.&colon.LERS RESTRICT=:exph. and
+:xph.&colon.LEDI RESTRICT:exph..
+:row.
+:c.:xph.DEFTEXT.LERSRESULTS:exph.
+:c.:q.Results:eq.
+:c.Default text for :xph.&colon.LERSRESULTS=:exph. and
+:xph.&colon.LEDI RESULTS:exph..
+:row.
+:c.:xph.DEFTEXT.LERSRETCODES:exph.
+:c.:q.Return Codes:eq.
+:c.Default text for :xph.&colon.LERS RETCODES=:exph. and
+:xph.&colon.LEDI RETCODES:exph..
+:row.
+:c.:xph.DEFTEXT.LERSSYSENV:exph.
+:c.:q.System Environment:eq.
+:c.Default text for :xph.&colon.LERS SYSENV=:exph. and
+:xph.&colon.LEDI SYSENV:exph..
+:row.
+:c.:xph.DEFTEXT.LERSUSAGE:exph.
+:c.:q.Usage:eq.
+:c.Default text for :xph.&colon.LERS USAGE=:exph. and
+:xph.&colon.LEDI USAGE:exph..
+:row.
+:c.:xph.DEFTEXT.LERSVERSION:exph.
+:c.:q.Version:eq.
+:c.Default text for :xph.&colon.LERS VERSION=:exph. and
+:xph.&colon.LEDI VERSION:exph..
+:row.
+:c.:xph.DEFTEXT.MCDEST:exph.
+:c.:q.Destination:eq.
+:c.Default text for :xph.&colon.MSGL DEST=:exph. and
+:xph.&colon.DEST:exph..
+:row.
+:c.:xph.DEFTEXT.MCMODULE:exph.
+:c.:q.Module:eq.
+:c.Default text for :xph.&colon.MSGL MODULE=:exph. and
+:xph.&colon.MODULE:exph..
+:row.
+:c.:xph.DEFTEXT.MCNUMBYTES:exph.
+:c.:q.Number of Error Bytes:eq.
+:c.Default text for :xph.&colon.MSGL NUMBYTES=:exph. and
+:xph.&colon.NUMBYTES:exph..
+:row.
+:c.:xph.DEFTEXT.MCORESP:exph.
+:c.:q.Operator Response:eq.
+:c.Default text for :xph.&colon.MSGL ORESP=:exph. and
+:xph.&colon.ORESP:exph..
+:row.
+:c.:xph.DEFTEXT.MCPRESP:exph.
+:c.:q.Programmer Response:eq.
+:c.Default text for :xph.&colon.MSGL PRESP=:exph. and
+:xph.&colon.PRESP:exph..
+:row.
+:c.:xph.DEFTEXT.MCPROBD:exph.
+:c.:q.Problem Determination:eq.
+:c.Default text for :xph.&colon.MSGL PROBD=:exph. and
+:xph.&colon.PROBD:exph..
+:row.
+:c.:xph.DEFTEXT.MCSEVERITY:exph.
+:c.:q.Severity:eq.
+:c.Default text for :xph.&colon.MSGL SEVERITY=:exph. and
+:xph.&colon.SEVERITY:exph..
+:row.
+:c.:xph.DEFTEXT.MCSPRESP:exph.
+:c.:q.System Programmer Response:eq.
+:c.Default text for :xph.&colon.MSGL SPRESP=:exph. and
+:xph.&colon.SPRESP:exph..
+:row.
+:c.:xph.DEFTEXT.MCSYSACT:exph.
+:c.:q.System Action:eq.
+:c.Default text for :xph.&colon.MSGL SYSACT=:exph. and
+:xph.&colon.SYSACT:exph..
+:row.
+:c.:xph.DEFTEXT.MCURESP:exph.
+:c.:q.User Response:eq.
+:c.Default text for :xph.&colon.MSGL URESP=:exph. and
+:xph.&colon.URESP:exph..
+:row.
+:c.:xph.DEFTEXT.MCXPL:exph.
+:c.:q.Explanation:eq.
+:c.Default text for :xph.&colon.MSGL XPL=:exph. and
+:xph.&colon.XPL:exph..
+:row.
+:c.:xph.DEFTEXT.MONTHS:exph.
+:c.:q.Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec:eq.
+:c.Months-of-the-year for use with RFC 822 date conversions, such as
+for :xph.EXPDATE=:exph. and :xph.REVDATE=:exph..
+:row.
+:c.:xph.DEFTEXT.NOTE:exph.
+:c.:q.Note:eq.
+:c.Default text for :xph.&colon.NOTE:exph. tag
+:row.
+:c.:xph.DEFTEXT.NOTEL:exph.
+:c.:q.Notes:eq.
+:c.Default text for :xph.&colon.NOTEL:exph. tag
+:row.
+:c.:xph.DEFTEXT.NT:exph.
+:c.:q.Note:eq.
+:c.Default text for :xph.&colon.NT:exph. tag
+:row.
+:c.:xph.DEFTEXT.PREFACE:exph.
+:c.:q.Preface:eq.
+:c.Default text for :xph.&colon.PREFACE:exph. tag
+:row.
+:c.:xph.DEFTEXT.PTOC:exph.
+:c.:q.Partial Table-of-Contents:eq.
+:c.Default text to identify a partial table-of-contents
+:row.
+:c.:xph.DEFTEXT.PTOCLT:exph.
+:c.:q.(Go to main Table-of-Contents):eq.
+:c.Default text for a PTOC's hyperlink back to the main
+table-of-contents (see :xph.TOCRET=PTOC:pv.x:epv.:exph. options for
+more info)
+:row.
+:c.:xph.DEFTEXT.QANSREF:exph.
+:c.:q.the answer to question:eq.
+:c.Default text used in conjunction with the
+:xph.&colon.ANSREF:exph. tag.
+:row.
+:c.:xph.DEFTEXT.QQREF:exph.
+:c.:q.question:eq.
+:c.Default text used in conjunction with the
+:xph.&colon.QREF:exph. tag.
+:row.
+:c.:xph.DEFTEXT.SAFETY:exph.
+:c.:q.Safety:eq.
+:c.Default text for :xph.&colon.SAFETY:exph. tag
+:row.
+:c.:xph.DEFTEXT.SCHEDACTHD:exph.
+:c.:q.Activities:eq.
+:c.Default text for :xph.&colon.SCHEDULE ACTHD=:exph.
+:row.
+:c.:xph.DEFTEXT.SOA:exph.
+:c.:q.Summary of Amendments:eq.
+:c.Default text for :xph.&colon.SOA:exph. tag
+:row.
+:c.:xph.DEFTEXT.SPOT1:exph.
+:c.:q.Ref #:eq.
+:c.Default text at the location of a
+:xph.&colon.SPOT:exph. tag :hp1.if:ehp1. the :xph.XREFTEXT:exph.
+attribute is omitted.
+:row.
+:c.:xph.DEFTEXT.SPOT2:exph.
+:c.:q. reference #:eq.
+:c.Default text at the location of a :xph.&colon.SPOTREF:exph. tag
+:hp1.if:ehp1. the :xph.XREFTEXT:exph. attribute is omitted from the
+:xph.&colon.SPOT:exph. tag itself.
+:row.
+:c.:xph.DEFTEXT.SYNNT:exph.
+:c.:q.Note&colon.:eq.
+:c.Default text when listing a syntax diagram's notes specified
+using :xph.&colon.SYNNT.:exph.
+:row.
+:c.:xph.DEFTEXT.T2XREF:exph.
+:c.:q.the appropriate section:eq.
+:c.Text to show for a :hp1.forward:ehp1. cross-reference link within
+an &html. 2 table (for more info, see :hdref refid=th2.)
+:row.
+:c.:xph.DEFTEXT.TABLE:exph.
+:c.:q.Table:eq.
+:c.Default text used with the table number in conjunction with the
+:xph.&colon.TCAP:exph. tag
+:row.
+:c.:xph.DEFTEXT.TLIST:exph.
+:c.:q.Tables:eq.
+:c.Default text for :xph.&colon.TLIST:exph. tag
+:row.
+:c.:xph.DEFTEXT.TOC:exph.
+:c.:q.Table of Contents:eq.
+:c.Default text for the :xph.&colon.TOC:exph. tag
+:rev refid=r42.
+:row.
+:c.:xph.DEFTEXT.VOLNUM:exph.
+:c.:q.Volume:eq.
+:c.Default prefix text for :xph.&colon.VOLNUM:exph. tag
+:erev refid=r42.
+:row.
+:c.:xph.DEFTEXT.WARRASIS:exph.
+:c.:q.This program is provided &odq.As Is&cdq. as specified in the
+IBM license.:eq.
+:c.Default text for :xph.SUBJECT=ASIS:exph. attribute on the
+:xph.&colon.WARRANTY:exph. tag
+:row.
+:c.:xph.DEFTEXT.WARRFULL:exph.
+:c.:q.This program is warranted as specified in the IBM license.
+&lt.p&gt.Licensed Program Specifications may be updated from time to
+time and such updates may constitute a change in
+specifications.&lt.p&gt.For Distributed Systems License Option
+(DSLO) Licenses, warranty service, if any, will be provided only
+through the Basic License location.  &lt.p&gt.Following the
+discontinuance of all program services, this program will be
+provided &odq.As Is&cdq. as specified in the IBM license.:eq.
+:c.Default text for :xph.SUBJECT=FULL:exph. attribute on the
+:xph.&colon.WARRANTY:exph. tag
+:row.
+:c.:xph.DEFTEXT.WARRNODSLO:exph.
+:c.:q.This program is warranted as specified in the IBM license.
+&lt.p&gt.Licensed Program Specifications may be updated from time to
+time and such updates may constitute a change in specifications.
+&lt.p&gt.Following the discontinuance of all program services, this
+program will be provided &odq.As Is&cdq. as specified in the IBM
+license.:eq.
+:c.Default text for :xph.SUBJECT=NODSLO:exph. attribute on the
+:xph.&colon.WARRANTY:exph. tag
+:row refid=tdeftxt temp.
+:c.:hp3.The following values are used for drawing syntax diagrams:ehp3.
+:rev refid=r42.
+:p.The syntax for the :xph.DEFTEXT:exph. option is slightly
+different when specifying syntax diagram characters.
+:xmp.
+   :pk.DEFTEXT.:pv.name:epv.=':pv.text:epv.',&cont.
+&lbrk.:pv.width:epv.&rbrk.:epk.
+:exmp.
+The optional value specifies the :q.width:eq. (the number of
+characters) that is shown by the specified text.  If you omit the
+width value, it defaults to the length of the text string.  If you
+specify a text string whose displayed width is different than the
+length of the text string itself, make sure you specify the width
+value.  For example:
+:xmp.
+   DEFTEXT._CROSS='+'
+   DEFTEXT._CROSS='&amp.#43;',1
+:exmp.
+For more information and an example, see :hdref refid=faqsn..
+:erev refid=r42.
+:row.
+:c.:xph.DEFTEXT._CROSS:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Line crossing
+:row.
+:c.:xph.DEFTEXT._DASH:exph.
+:c.:xph.'-':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Line dash
+:row.
+:c.:xph.DEFTEXT._END:exph.
+:c.:xph.'&amp.gt;&amp.lt;':rev refid=r42.,2:erev refid=r42.:exph.
+:c.End of syntax diagram
+:row.
+:c.:xph.DEFTEXT._FRAGMENT_END:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.End of fragment diagram
+:row.
+:c.:xph.DEFTEXT._FRAGMENT_START:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Start of fragment diagram
+:row.
+:c.:xph.DEFTEXT._FRAGREF_END:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.End of fragment reference
+:row.
+:c.:xph.DEFTEXT._FRAGREF_START:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Start of fragment reference
+:row.
+:c.:xph.DEFTEXT._LOWERLEFT:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Bottom left corner
+:row.
+:c.:xph.DEFTEXT._LOWERRIGHT:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Bottom right corner
+:row.
+:c.:xph.DEFTEXT._MIDDLE:exph.
+:c.:xph.'&amp.gt;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Middle of syntax diagram
+:row.
+:c.:xph.DEFTEXT._MIDDLELEFT:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Left side
+:row.
+:c.:xph.DEFTEXT._MIDDLERIGHT:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Right side
+:rev refid=r42.
+:row.
+:c.:xph.DEFTEXT._REPSEPJOINL:exph.
+:c.:xph.'V',1:exph.
+:c.The point where the repeating separator joins the base line on
+the left side
+:row.
+:c.:xph.DEFTEXT._REPSEPJOINR:exph.
+:c.:xph.'+',1:exph.
+:c.The point where the repeating separator joins the base line on
+the right side
+:erev refid=r42.
+:row.
+:c.:xph.DEFTEXT._REPSEPLEFT:exph.
+:c.:xph.'&amp.lt;-':rev refid=r42.,2:erev refid=r42.:exph.
+:c.Left part of repeating separator
+:row.
+:c.:xph.DEFTEXT._REPSEPRIGHT:exph.
+:c.:xph.'--&amp.lt;':rev refid=r42.,3:erev refid=r42.:exph.
+:c.Right part of repeating separator
+:row.
+:c.:xph.DEFTEXT._START:exph.
+:c.:xph.'&amp.gt;&amp.gt;':rev refid=r42.,2:erev refid=r42.:exph.
+:c.Start of syntax diagram
+:row.
+:c.:xph.DEFTEXT._TEEDOWN:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Downward-pointing T
+:row.
+:c.:xph.DEFTEXT._TEELEFT:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Leftward-pointing T
+:row.
+:c.:xph.DEFTEXT._TEERIGHT:exph.
+:c.:xph.'&amp.#124;':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Rightward-pointing T
+:row.
+:c.:xph.DEFTEXT._TEEUP:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Upward-pointing T
+:row.
+:c.:xph.DEFTEXT._UPPERLEFT:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Top left corner
+:row.
+:c.:xph.DEFTEXT._UPPERRIGHT:exph.
+:c.:xph.'+':rev refid=r42.,1:erev refid=r42.:exph.
+:c.Top right corner
+:etable.
+.*-----
+:pt.:pk.DESTSYS=&lbrc. :pk def.AIX:epk. | HPFS | &cont.
+LINUX | MVS | OS2 | VM | WIN95 | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (AIX)
+:pt.:pk.DESTSYS=&lbrc. AIX | :pk def.HPFS:epk. | &cont.
+LINUX | MVS | OS2 | VM | WIN95 | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (HPFS)
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | &cont.
+:pk def.LINUX:epk. | &cont.
+MVS | OS2 | VM | WIN95 | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (LINUX)
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | &cont.
+:pk def.MVS:epk. | OS2 | VM | WIN95 | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (MVS)
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | &cont.
+MVS | :pk def.OS2:epk. | VM | WIN95 | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (OS/2)
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | &cont.
+MVS | OS2 | :pk def.VM:epk. | WIN95 | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (VM)
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | &cont.
+MVS | OS2 | VM | :pk def.WIN95:epk. | WINNT &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (WIN95)
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | &cont.
+MVS | OS2 | VM | WIN95 | :pk def.WINNT:epk. &cont.
+| :rev refid=r47.UNIX:erev refid=r47. &rbrc.:epk.  (WINNT)
+:rev refid=r47.
+:pt.:pk.DESTSYS=&lbrc. AIX | HPFS | LINUX | &cont.
+MVS | OS2 | VM | WIN95 | WINNT &cont.
+| :pk def.UNIX:epk. &rbrc.:epk.  (UNIX)
+:erev refid=r47.
+:pd.Specifies the system on which the &html. source will be browsed
+(e.g. the system on which the Web server and/or browser will be
+run).  The default is the system on which &sysname. is run.
+:note.If the destination system is DOS, you should specify :q.OS2:eq..
+:p.For information on how &sysname. determines the :hp1.current:ehp1.
+platform on which it's running, see :hdref refid=howplat..
+See also :hdref refid=xplat..
+.*-----
+:rev refid=r42.
+:spot id=dialog  xreftext='DIALOG= option'.
+:spot id=dialog2 xreftext='DIALOG='.
+:pt.:pk.DIALOG=&cont.
+'&lbrk.:pk def.LABEL:epk.&rbrk. &lbrk.FONT&rbrk. &lbrk.COLOR&rbrk.':epk.
+:pd.Specifies the dialog technique to be used with the
+:xph.&colon.DIALOG.:exph. tag.
+.dpopt
+None, one or multiple of the following
+values may be specified:
+.getw symbol=dhlen gmltype=hp2 text='C O L O R'
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:pk.LABEL:epk.
+:dd.Places :q.System:eq. and :q.User:eq. labels in front of system
+and user text.
+:dt.:pk.FONT:epk.
+:dd.User text is displayed using the &html. font-type tags specified
+for the :q.:pv.fs:epv.:eq. and :q.:pv.fe:epv.:eq. values of the
+:xph.DIALOGTAG=:exph. option.
+:dt.:pk.COLOR:epk.
+:dd.User text is displayed using the &html. color-type tags
+specified for the :q.:pv.cs:epv.:eq. and :q.:pv.ce:epv.:eq. values
+of the :xph.DIALOGTAG=:exph. option.
+:edl.
+.br;Default: :pk.DIALOG='LABEL':epk.
+:xmp.
+Example:  DIALOG='FONT'
+          DIALOG='LABEL COLOR'
+:exmp.
+:erev refid=r42.
+.*-----
+:rev refid=r42.
+:spot id=dialta2 xreftext='DIALOGTAG='.
+:pt.:pk.DIALOGTAG.:pv.x:epv.=':pv.ts,te,fs,fe,cs,ce:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+for the :xph.&colon.SYS:exph. and :xph.&colon.USER:exph. tags when
+processing an interactive dialog (:xph.&colon.DIALOG:exph.).
+See the :xph.DIALOG=:exph. option for how these values are
+:q.triggered:eq..
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for the :xph.&colon.SYS:exph. tag
+:dt.1
+:dd.&html. tags for the :xph.&colon.USER:exph. tag
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ts :dd.:q.Normal:eq. text start
+:dt.te :dd.:q.Normal:eq. text end
+:dt.fs :dd.:q.Font:eq. text start
+(:q.:xph.FONT:exph.:eq. specified within :xph.DIALOG=:exph.)
+:dt.fe :dd.:q.Font:eq. text end
+:dt.ss :dd.Colored text start
+(:q.:xph.COLOR:exph.:eq. specified within :xph.DIALOG=:exph.)
+:dt.se :dd.Colored text end
+:edl.
+.br;Default:
+:xmp.
+  DIALOGTAG.0='&lt.TT&gt.,&lt./TT&gt.,&lt.B&gt.,&lt./B&gt.,&cont.
+&lt.FONT COLOR="BLUE"&gt.,&lt./FONT&gt.'
+  DIALOGTAG.1=''
+:exmp.
+:erev refid=r42.
+.*-----
+:spot id=dlfmt2 xreftext='DLFMT='.
+:pt.:pk.DLFMT=&lbrc. DL | TABLE &rbrc.:epk.
+:pd.When a definition-list tag (&colon.DL) is processed, do you want
+it mapped to &html.'s &lt.DL&gt. tag or to a two-column unframed
+table?
+.getw symbol=dhlen gmltype=hp2 text='F R O M'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.DL
+:dd.Map to &html.'s standard definition-list tags (e.g. &lt.DL&gt.)
+:dt.TABLE
+:dd.Map to a two-column unframed table.  Available only when
+generating &html. 3 (or higher) output.
+:edl.
+:rev refid=r45.
+.br;Default: :pk.DLFMT=DL:epk. when :pk.HTML=2:epk., otherwise
+defaults to :pk.DLFMT=TABLE:epk.
+:erev refid=r45.
+.*-----
+:spot id=dltag2 xreftext='DLTAG='.
+:pt.:pk.DLTAG.:pv.x:epv.=':pv.ls,le,ts,te,ds,de:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing a directory list (&colon.DL) and it's associated
+tags.
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for a non-compact list when :xph.DLFMT=DL:exph.
+:dt.1
+:dd.&html. tags for a compact list (e.g. &colon.DL COMPACT)
+when :xph.DLFMT=DL:exph.
+:dt.2
+:dd.&html. tags for a non-compact list when :xph.DLFMT=TABLE:exph.
+:dt.3
+:dd.&html. tags for a compact list (e.g. &colon.DL COMPACT)
+when :xph.DLFMT=TABLE:exph.
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.List start
+:dt.le :dd.List end
+:dt.ts :dd.Text start
+:dt.te :dd.Text end
+:dt.ds :dd.Definition start
+:dt.de :dd.Definition end
+:edl.
+.br;Default:
+:xmp.
+  DLTAG.0='&lt.DL&gt.,&lt./DL&gt.,&lt.P&gt.&lt.DT&gt.,,&lt.DD&gt.,'
+  DLTAG.1='&lt.DL COMPACT&gt.,&lt./DL&gt.,&lt.DT&gt.,,&lt.DD&gt.,'
+  DLTAG.2='&lt.TABLE CELLPADDING="3"&gt.,&lt./TABLE&gt.,&cont.
+&lt.TR VALIGN="TOP"&gt.&lt.TD&gt.&lt.P&gt.,&lt./TD&gt.,
+           &lt.TD&gt.&lt.P&gt.,&lt./TD&gt.&lt./TR&gt.'
+  DLTAG.3='&lt.TABLE CELLPADDING="3"&gt.,&lt./TABLE&gt.,&cont.
+&lt.TR VALIGN="TOP"&gt.&lt.TD&gt.,&lt./TD&gt.,
+           &lt.TD&gt.,&lt./TD&gt.&lt./TR&gt.'
+:exmp.
+.*-----
+:spot id=docdesc xreftext='DOCDESC= option'.
+:spot id=docdes2 xreftext='DOCDESC='.
+:pt.:pk.DOCDESC=':pv.file:epv.':epk.
+:pt.:pk.DOCDESC.:pv.id:epv.=':pv.file:epv.':epk.
+:pd.In &bmgr., the :xph.&colon.DOCDESC:exph. tag describes an
+external document for creating interdocument links.  This option
+performs the same function for &html. files and can be specified as
+many times as necessary.  If omitted for a particular document, then
+no interdocument links are generated.
+For more information, see :hdref refid=interd..
+.getw symbol=dhlen gmltype=hp2 text='F I L E'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.id
+:dd.The value specified for :xph.ID=:exph. on the
+:xph.&colon.DOCDESC:exph. tag.
+If omitted, this definition applies to :hp1.all:ehp1.
+:xph.&colon.DOCDESC:exph. tags.
+:dt.file
+:dd.The &html. file containing this document
+:edl.
+.br;Default: :pk.DOCDESC='':epk.
+.*-----
+:spot id=dvcf  xreftext='DVCF= option'.
+:spot id=dvcf2 xreftext='DVCF='.
+:pt.:pk.DVCF=:epk.':pv.cond:sub.1:esub. cond:sub.2:esub. ... &cont.
+cond:sub.x:esub.:epv.'
+:pd.A :q.short-hand:eq. method for setting conditions used by &bm.'s
+:q.:xph.&period.when:exph.:eq. DVCF macro.
+:xmp.
+  This:              DVCF='sport wagon truck'
+  Is equivalent to:  SYSVAR='1 sport 2 wagon 3 truck'
+:exmp.
+.*-----
+:pt.:pk.EXPDATE=:epk. &lbrk. :pv.yyyymmdd:epv. | &cont.
+&lbrc.+|-&rbrc.:pv.ddd:epv. | &cont.
+:pv.text:epv. &rbrk.
+:pd.The date when this file should expire.  Allows the server to
+generate an HTTP response header if expiration date information is
+requested.
+:ul compact.
+:li.If a date in :q.:pv.yyyymmdd:epv.:eq. format is specified, it is
+converted to conform to RFC 822 (updated by RFC 1123)
+:li.If a plus or minus sign precedes a numeric value, then today's
+date plus or minus the specified number of days is used, then
+converted to conform to the above RFC format
+:li.If no value is specified, the source file's date + two years is
+assumed, then converted to conform to the above RFC format
+:li.Otherwise the option's text value is included verbatim
+:eul.
+.seelay
+:p.Example: An input file with a date/time stamp of
+"1996-05-03 12:34:56" and :xph.EXPDATE=19960727:exph., the following
+is generated:
+:xmp.
+  &lt.META HTTP-EQUIV="expires" CONTENT="Sat, 27 Jul 1996 12:34:56"&gt.
+:exmp.
+Default: source file date + two years
+.*-----
+:spot id=fbc2 xreftext='FBC='.
+:pt.:pk.FBC=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pd.Want Folio-By-Chapter?
+If YES, same as specifying :xph.BODYHD0='Part':exph. and
+:xph.BODYHD1='Chapter':exph..
+.dpopt
+See also the :xph.QRESET=:exph. option.
+.br;Default: :pk.FBC=NO:epk.
+.*-----
+:spot id=figcpl2 xreftext='FIGCAPLOC='.
+:pt.:pk.FIGCAPLOC=&lbrc. :pk def.BEFORE:epk. | AFTER &rbrc.:epk.
+:pd.Should a figure's caption (:xph.&colon.FIGCAP:exph.)
+and description (:xph.&colon.FIGDESC:exph.) be placed
+before or after the figure itself?
+.getw symbol=dhlen gmltype=hp2 text='F R O M'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.BEFORE
+:dd.The figure's caption (and any description) is placed
+:hp1.before:ehp1. the figure.  Since the caption is the
+:q.anchor:eq. for any hyperlinks to the figure, this is the
+preferred location.
+:dt.AFTER
+:dd.The figure's caption (and any description) is placed
+:hp1.after:ehp1. the figure.  This is how GML and &bm. work, but
+causes hyperlinks to jump to the bottom of the figure.
+:edl.
+.br;Default: :pk.FIGCAPLOC=BEFORE:epk.
+.*-----
+:pt.:pk.FIGLIST=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Do you want to generate a list of figures when the
+&colon.FIGLIST. statement is encountered?  Some people do not want a
+figure list in an &html. file and this option allows you to prevent
+one from being generated.
+.br;Example: FIGLIST=YES
+.*-----
+:spot id=fnlink2 xreftext='FNLINK='.
+:pt.:pk.FNLINK=&lbrc. NO | TO | FROM | :pk def.BOTH:epk. &rbrc.:epk.
+:pd.Want hyperlinks between footnote reference and definition?
+.getw symbol=dhlen gmltype=hp2 text='F R O M'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.NO   :dd.Do not generate hyperlinks
+:dt.TO   :dd.Generate hyperlink from footnote usage to definition
+:dt.FROM :dd.Generate hyperlink from footnote definition to it's usage
+:dt.BOTH :dd.Generate hyperlinks both ways
+:edl.
+.br;Default: :pk.FNLINK=BOTH:epk.
+.*-----
+:rev refid=r42.
+:spot id=fntag2 xreftext='FNTAG='.
+:pt.:pk.FNTAG=':pv.cs,ce,ls,le,lcs,lce,lts,lte,ts,te:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing an individual footnote (&colon.FN) and generating
+the list of footnotes.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.cs :dd.Start of footnote's callout
+:dt.ce :dd.End of footnote's callout
+:dt.ls :dd.Footnote list start
+:dt.le :dd.Footnote list end
+:dt.lcs:dd.Start of footnote's callout in the footnote list
+:dt.lce:dd.End of footnote's callout in the footnote list
+:dt.lts:dd.Start of a footnote's text in the footnote list
+:dt.lte:dd.End of a footnote's text in the footnote list
+:dt.ts :dd.Tag to start the list of footnotes
+:dt.te :dd.Tag to end the list of footnotes
+:edl.
+.br;Default:
+:xmp.
+  FNTAG='&lt.SUP&gt.,&lt./SUP&gt.,&lt.DL COMPACT&gt.,&lt./DL&gt.,&lt.P&gt.&lt.DT&gt.&lt.SUP&gt.,
+         &lt./SUP&gt.&lt./DT&gt.,&lt.DD&gt.,&lt./DD&gt.,&lt.HR&gt.,'
+:exmp.
+:erev refid=r42.
+ 
+ 
+.*-----
+:rev refid=r45.
+:spot id=fontag  xreftext='FONTTAG= option'.
+:spot id=fontag2 xreftext='FONTTAG='.
+:pt.:pk.FONTTAG=':pv.fonttext:epv.,:pv.efonttext:epv.,&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+':epk.
+:pt.:pk.FONTTAG.:pv.name:epv.=':pv.fonttext:epv.,:pv.efonttext:epv.,&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+':epk.
+:pd.Documents written using Script/VS control words use
+:xph..DF:exph. (Define Font) to define a font's characteristics and
+then use :xph..BF:exph. (Begin Font) to start using the font and
+:xph..PF:exph. (Previous Font) to restore the previous font, such as:
+:xmp.
+  &period.df one type ('sonoran sans serif' 6 ) codepage T1GI0395
+  &period.df two type ('sonoran sans serif' 7 ) codepage T1GI0395
+  &period.br;Base line in default font
+  &period.bf one
+  &period.br;This line in font "one" as a test
+  &period.pf
+  &period.br;Base line in default font
+  &period.bf two
+  &period.br;This line in font "two" as a test
+  &period.pf
+  &period.br;Base line in default font
+:exmp.
+:p.The :xph.FONTTAG:exph. option effectively replaces the :xph..DF:exph.
+control word and allows you to specify the text to use when a specified
+font is started or stopped.
+ 
+:xph.FONTTAG:exph. can be specified with or without the :pv.name:epv.
+qualifier. If :pv.name:epv. is omitted, the text is used to start/stop
+:hp5.any:ehp5. font.  If :pv.name:epv. is specified, the text is used
+only when the specified font is started or stopped.
+ 
+.getw symbol=dhlen gmltype=hp1 text='e fo nt text '
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:pv.fonttext:epv.
+:dd.Text and/or &html. tag(s) to insert for a
+:xph.&period.BF :pv.name:epv.:exph. control word
+:dt.:pv.efonttext:epv.
+:dd.Text and/or &html. tag(s) to insert for a
+:xph.&period.PF:exph. control word
+:dt.:pk.PROP:epk.
+:dd.When displaying an &html. table, many web browsers reset
+any font characteristics and display a cell's text in a
+default font.  :q.:pk.PROP:epk.:eq. specifies that if &sysname.
+generates an &html. table, all active font definition
+text should be :q.propagated:eq. into each table cell.
+This is the default value if omitted.
+:dt.:pk.NOPROP:epk.
+:dd.This specifies that active font definition text
+should NOT be :q.propagated:eq. into each table cell.
+:erev refid=r42.
+:edl.
+.br;Default: :pk.FONTTAG='':epk.
+.* :p.See :hdref refid=faq. for examples of using this capability.
+:p.Using the previous example, if you wanted font :q.one:eq. to be
+shown in bold and font :q.two:eq. to be blue italic in the Arial font,
+you could specify:
+:xmp.
+  FONTTAG.one='&lt.B&gt.,&lt./B&gt.'
+  FONTTAG.two='&lt.FONT FACE="Arial" COLOR="BLUE"&gt.&lt.I&gt.,&cont.
+&lt./I&gt.&lt./FONT&gt.'
+:exmp.
+:erev refid=r45.
+.*-----
+:pt.:pk.FOOTER=&lbrc. :pk def.NO:epk. | :pv.file:epv. &rbrc.:epk.
+:rev refid=r44.
+:pt.:pk.FOOTER=&lbrc. :pk def.NO:epk. | :pv.file:epv. | &cont.
+DD&colon.:pv.ddname:epv. | &cont.
+DD&colon.:pv.ddname:epv.(:pv.member:epv.) &rbrc.   &cont.
+(MVS only):epk.
+:erev refid=r44.
+:pd.If other than NO, any records in the specified
+file:fnref refid=file.
+:fn id=file.
+The syntax of the specified file must satisfy the naming
+convention for the platform on which you are running &sysname..
+See :hdref refid=sfile.
+:rev refid=r44.
+and :hdref refid=mvsfile.
+:erev refid=r44.
+for more information.
+:efn.
+are appended to the end of all &html. output files.
+(Symbol substitution will occur for any :q.&amp.variables:eq. in the
+footer records.) This option may be specified as many times are
+there are footer files to append to the &html. output files.
+:xph.FOOTER=NO:exph. resets to zero the number of footer files to
+process.
+.seelay
+.br;Default: :pk.FOOTER=NO:epk.
+.*-----
+:spot id=ftlink2 xreftext='FTLINK='.
+:pt.:pk.FTLINK=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.If a Figure List and/or Table List is created, each entry in the
+list is a hyperlink to the respective figure or table.  This option
+specifies whether the figure or table caption should also be a link
+:hp1.back:ehp1. to the appropriate list.  If omitted, :xph.YES:exph.
+is assumed.
+.br;Example: FTLINK=YES
+.*-----
+:spot id=ftsep2 xreftext='FTSEP='.
+:pt.:pk.FTSEP=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Should the figures and tables be listed separately or together?
+If :xph.YES:exph., a list of figures is generated when the
+:xph.&colon.FIGLIST.:exph. tag is encountered and a separate list of
+tables is generated when the &colon.TLIST. tag is encountered.  If
+:xph.FTSEP=NO:exph., then a combined list of both figures and tables
+is generated when the :xph.&colon.FIGLIST.:exph. tag is encountered
+(the :xph.&colon.TLIST.:exph. tag is then ignored).
+.dpopt
+.br;Example: FTSEP=NO
+.*-----
+:spot id=glfmt2 xreftext='GLFMT='.
+:pt.:pk.GLFMT=&lbrc. DL | TABLE &rbrc.:epk.
+:pd.When a glossary-list tag (&colon.GL) is processed, do you want
+it mapped to &html.'s &lt.DL&gt. tag or to a two-column unframed
+table?
+.getw symbol=dhlen gmltype=hp2 text='F R O M'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.DL
+:dd.Map to &html.'s standard definition-list tags (e.g. &lt.DL&gt.)
+:dt.TABLE
+:dd.Map to a two-column unframed table.  Available only when
+generating &html. 3 (or higher) output.
+:edl.
+:rev refid=r45.
+.br;Default: :pk.GLFMT=DL:epk. when :pk.HTML=2:epk., otherwise
+defaults to :pk.GLFMT=TABLE:epk.
+:erev refid=r45.
+.*-----
+:spot id=gltag2 xreftext='GLTAG='.
+:pt.:pk.GLTAG.:pv.x:epv.=':pv.ls,le,ts,te,ds,ds2,de,gs,ge:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing a glossary list (&colon.GL) and it's associated
+tags.
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for a non-compact list when :xph.GLFMT=DL:exph.
+:dt.1
+:dd.&html. tags for a compact list (e.g. &colon.GL COMPACT)
+when :xph.GLFMT=DL:exph.
+:dt.2
+:dd.&html. tags for a non-compact list when :xph.GLFMT=TABLE:exph.
+:dt.3
+:dd.&html. tags for a compact list (e.g. &colon.GL COMPACT)
+when :xph.GLFMT=TABLE:exph.
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.List start
+:dt.le :dd.List end
+:dt.ts :dd.Glossary Term start
+:dt.te :dd.Glossary Term end
+:dt.ds :dd.Glossary Definition start
+(first :xph.&colon.GD:exph. after a :xph.&colon.GT:exph.)
+:dt.ds2:dd.Glossary Definition start
+(subsequent :xph.&colon.GD:exph.s after a :xph.&colon.GT:exph.,
+e.g. when using :xph.&colon.GDG:exph.)
+:dt.de :dd.Glossary Definition end
+:dt.gs :dd.Group Separator (:xph.&colon.GRPSEP:exph.) start
+:dt.ge :dd.Group Separator (:xph.&colon.GRPSEP:exph.) end
+:edl.
+.br;Default:
+:xmp.
+  GLTAG.0='&lt.DL&gt.,&lt./DL&gt.,&lt.P&gt.&lt.DT&gt.,,&lt.DD&gt.,&lt.DD&gt.,,
+           &lt.P&gt.&lt.DT&gt.&lt.FONT SIZE="+2"&gt.&lt.STRONG&gt.,&lt./STRONG&gt.&lt./FONT&gt.&lt.P&gt.'
+  GLTAG.1='&lt.DL COMPACT&gt.,&lt./DL&gt.,&lt.DT&gt.,,&lt.DD&gt.,&lt.DD&gt.,,
+           &lt.P&gt.&lt.DT&gt.&lt.FONT SIZE="+2"&gt.&lt.STRONG&gt.,&lt./STRONG&gt.&lt./FONT&gt.&lt.P&gt.'
+  GLTAG.2='&lt.TABLE CELLPADDING="3"&gt.,&lt./TABLE&gt.,&lt.TR VALIGN=TOP&gt.&lt.TD&gt.&lt.P&gt.,&lt./TD&gt.,
+           &lt.TD&gt.&lt.P&gt.,&lt.P&gt.,&lt./TD&gt.&lt./TR&gt.,
+           &lt.TR&gt.&lt.TD COLSPAN="2"&gt.&lt.FONT SIZE="+2"&gt.&lt.STRONG&gt.&lt.P&gt.,
+           &lt.P&gt.&lt./STRONG&gt.&lt./FONT&gt.&lt.P&gt.&lt./TD&gt.&lt./TR&gt.'
+  GLTAG.3='&lt.TABLE CELLPADDING="3"&gt.,&lt./TABLE&gt.,&lt.TR VALIGN="TOP"&gt.&lt.TD&gt.,&lt./TD&gt.,
+           &lt.TD&gt.,&lt.BR&gt.,&lt./TD&gt.&lt./TR&gt.,
+           &lt.TR&gt.&lt.TD COLSPAN="2"&gt.&lt.FONT SIZE="+2"&gt.&lt.STRONG&gt.,
+           &lt./STRONG&gt.&lt./FONT&gt.&lt./TD&gt.&lt./TR&gt.'
+:exmp.
+.*-----
+:pt.:pk.HEADER=&lbrc. :pk def.NO:epk. | :pv.file:epv. &rbrc.:epk.
+:rev refid=r44.
+:pt.:pk.HEADER=&lbrc. :pk def.NO:epk. | :pv.file:epv. | &cont.
+DD&colon.:pv.ddname:epv. | &cont.
+DD&colon.:pv.ddname:epv.(:pv.member:epv.) &rbrc.   &cont.
+(MVS only):epk.
+:erev refid=r44.
+:pd.If other than NO, any records in the specified
+file:fnref refid=file. are included at the beginning of all &html.
+output files.  (Symbol substitution will occur for any
+:q.&amp.variables:eq. in the header records.) This option may be
+specified as many times are there are header files to include at the
+beginning of the &html. output files.  :xph.HEADER=NO:exph. resets
+to zero the number of header files to process.
+.seelay
+.br;Default: :pk.HEADER=NO:epk.
+.*-----
+:spot id=headnu2 xreftext='HEADNUM='.
+:pt.:pk.HEADNUM=&lbrc. YES | :pk def.NO:epk. | &cont.
+:pv.num:epv. | *:pv.num:epv. &rbrc.:epk.
+:pd.Number &colon.H:pv.x:epv.. headings with section numbers
+(e.g. 1.2.1)?  If :hp1.not:ehp1. :xph.NO:exph., number which
+&colon.H:pv.x:epv..  headers?  :q.12:eq. means number &colon.H1. and
+&colon.H2., :q.*3:eq. means number &colon.H1., &colon.H2 and
+&colon.H3.. :xph.YES:exph. is equivalent to :q.*6:eq..
+.dpopt
+.br;Default: :pk.HEADNUM=NO:epk.
+.*-----
+:spot id=headre2 xreftext='HEADREC='.
+:rev refid=r42.
+:pt.:pk.HEADREC=CLEAR:epk.
+:pt.:pk.HEADREC.FILE=:pv.file:epv.:epk.
+:pt.:pk.HEADREC.TEXT=':pv.text:epv.':epk.
+:pd.Inserts record(s) into the header section of all &html. output
+file(s).  :xph.HEADREC.FILE=:exph. specifies that the contents of
+the referenced file should be inserted; :xph.HEADREC.TEXT=:exph.
+specifies the contents of an individual record to insert.
+Either of these options may be specified as many times as desired
+and may be intermixed with each other.
+:xph.HEADREC=CLEAR:exph. resets to zero the records to insert.
+:erev refid=r42.
+.seelay
+:rev refid=r42.
+:p.This option is typically used to insert JavaScript code into the
+header portion of an &html. file.
+:p.Example:
+:xmp.
+  HEADREC.TEXT='&lt.script language="JavaScript"&gt.'
+  HEADREC.TEXT='&lt.!-- Hide JavaScript'
+  HEADREC.FILE=animate.js
+  HEADREC.TEXT='// end hiding --&gt.'
+  HEADREC.TEXT='&lt./script&gt.'
+:exmp.
+:erev refid=r42.
+.*-----
+:spot id=hrtag2 xreftext='HRTAG='.
+:rev refid=r42.
+:pt.:pk.HRTAG=&lbrc. :pk def.&lt.HR&gt.:epk. | &cont.
+:pv.tag:epv. &rbrc.:epk.
+:pt.:pk.HRTAG.:pv.x:epv.=:pv.tag:epv.:epk.
+:erev refid=r13.
+:erev refid=r42.
+:pd.These specify the horizontal-rule tag to use for various items.
+:rev refid=r42.
+This option can be specified with or without the :q.:pv.x:epv.:eq.
+qualifier. If :q.:pv.x:epv.:eq. is omitted, the value applies
+to all usages.
+:erev refid=r42.
+Otherwise, :q.:pv.x:epv.:eq. is a numeric value from 1 to 10
+defined as:
+:dl termhi=0 tsize=2m compact.
+:dthd.:pv.x:epv.
+:ddhd.Tag used for:
+:dt.1 :dd.:xph.&colon.ARTWORK RULE:exph.
+:dt.2 :dd.:xph.&colon.FIG:exph. when :xph.FRAME=:exph.
+value is :hp1.not:ehp1. :xph.NONE:exph.
+(not used when creating HTML 3 or higher output)
+:dt.3
+:rev refid=r42.
+:dd.(No longer used, see the :xph.HTAG=:exph. option)
+:erev refid=r42.
+:dt.4 :dd.:xph.&colon.MSGL:exph. and :xph.&colon.CODEL:exph.
+when :xph.STYLE=RULE:exph. specified
+:dt.5 :dd.To precede and follow a syntax diagram defined
+using :xph.&colon.SYNTAX&rbl.STYLE=RULES:exph.
+:dt.6
+:rev refid=r42.
+:dd.(No longer used, see the :xph.TOCTAG=:exph. option)
+:erev refid=r42.
+:dt.7 :dd.To precede an :xph.&colon.H0:exph. in the Table-of-Contents
+:dt.8
+:rev refid=r42.
+:dd.(No longer used, see the :xph.TOCTAG=:exph. option)
+:erev refid=r42.
+:dt.9
+:rev refid=r42.
+:dd.(No longer used, see the :xph.FNTAG=:exph. option)
+:erev refid=r42.
+:dt.10:dd.Preceding a :xph.&colon.LEN:exph. tag if :xph.SEP=RULE:exph.
+specified by the :xph.&colon.LERS:exph. tag
+:edl.
+:rev refid=r42.
+.br;If omitted, all default to :q.:xph.&lt.HR&gt.:exph.:eq..
+:erev refid=r42.
+.*-----
+:rev refid=r42.
+:spot id=htag  xreftext='HTAG= option'.
+:spot id=htag2 xreftext='HTAG='.
+:pt.:pk.HTAG=':pv.hs,he,ss,sr:epv.':epk.
+:pt.:pk.HTAG.:pv.x:epv.=':pv.hs,he,ss,sr:epv.':epk.
+:pd.When a :q.:xph.&colon.H:pv.x:epv.:exph.:eq. tag is encountered,
+this option specifies the &html. to generate.  It also specifies
+whether the next line of source text is to be inspected and
+optionally modified.  This option can be specified with or without
+the :q.:pv.x:epv.:eq. qualifier.  If :q.:pv.x:epv.:eq. is omitted,
+the text is used for :hp5.all:ehp5.
+:q.:xph.&colon.H:pv.x:epv.:exph.:eq. header tags.
+If :q.:pv.x:epv.:eq. is specified, the text is used only for those
+header tags of the same number.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.hs
+:dd.Header start
+:dt.he
+:dd.Header end
+:dt.ss
+:dd.If specified, the next source line is inspected and if the
+left-most text matches this value (case is ignored), then the text
+is replaced by the value specified for :q.:pv.sr:epv.:eq.
+:dt.sr
+:dd.The text to replace :q.:pv.ss:epv.:eq.
+:edl.
+The default values reflect &bm.'s standard layout:
+:ul compact.
+:li.A horizontal line precedes all :xph.&colon.H0:exph.,
+:xph.&colon.H1:exph. and :xph.&colon.H2:exph. head tags
+:li.The text following :xph.&colon.H0:exph. to :xph.&colon.H4:exph.
+head tags start on a new line
+:li.The text following :xph.&colon.H5:exph. to :xph.&colon.H20:exph.
+head tags is placed on the same line as the header itself
+:eul.
+:p.Default:
+:xmp.
+  HTAG='&lt.P&gt.&lt.I&gt.&lt.B&gt.,&cont.
+&colon.&amp.nbsp;&lt./B&gt.&lt./I&gt.&amp.nbsp;,&colon.P.,'
+  HTAG.0='&lt.HR&gt.&lt.H1&gt.,&lt./H1&gt.'
+  HTAG.1='&lt.HR&gt.&lt.H1&gt.,&lt./H1&gt.'
+  HTAG.2='&lt.HR&gt.&lt.H2&gt.,&lt./H2&gt.'
+  HTAG.3='&lt.P&gt.&lt.H3&gt.,&lt./H3&gt.'
+  HTAG.4='&lt.P&gt.&lt.H4&gt.,&lt./H4&gt.'
+:exmp.
+:erev refid=r42.
+.*-----
+:spot id=html2 xreftext='HTML='.
+:pt.:pk.HTML=&lbrc. 2 | :pk def.3:epk. |
+:rev refid=r42.4:erev refid=r42. &rbrc.:epk.
+:pd.This specifies the release level of &html. source to be
+generated.  The primary difference is in table support.
+When :xph.HTML=2:exph., &sysname. supports tables by manually
+generating them using a monospaced font, otherwise tables are
+supported using native &html. table tags.
+See :hdref refid=spect. for more information on tables.
+.br;Default: :pk.HTML=3:epk.
+.*-----
+:spot id=htmlatt xreftext='HTMLATT= option'.
+:spot id=htmlat2 xreftext='HTMLATT='.
+:pt.:pk.HTMLATT.:pv.tagname:epv.=':pv.attributes:epv.':epk.
+:pd.This option allows you to specify custom attributes for the
+indicated &html. tag whenever the &html. tag is generated.
+If omitted for a particular &html. tag, no additional attributes
+are generated.
+:rev refid=r47.
+:p.For example, an &html. table cell would normally be generated like:
+.br;:xph.&lt.TD&gt.:exph.
+:p.But if :xph.HTMLATT.TD='class="abc"':exph. were specified,
+the table cell would be generated like this:
+.br;:xph.&lt.TD class="abc"&gt.:exph.
+:erev refid=r47.
+:p.The following values for :q.:pv.tagname:epv.:eq. are
+available:
+:parml.
+:pt.:pk.HTMLATT.TABLE=':pv.attributes:epv.':epk.
+:pd.Defines the attributes to be associated with all generated
+:xph.&lt.TABLE&gt.:exph. tags.  For example, if you want all &html.
+tables be generated with a cell padding of 6 and a cell spacing of
+4, then specify:
+:xph.HTMLATT.TABLE='cellpadding=6&rbl.cellspacing=4':exph.
+:pt.:pk.HTMLATT.TD=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.TH=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.TR=':pv.attributes:epv.':epk.
+:pd.Defines the attributes to be associated with all generated
+:xph.&lt.TD&gt.:exph., :xph.&lt.TH&gt.:exph. and
+:xph.&lt.TR&gt.:exph. tags within an &html. table.
+.* :rev refid=r42.
+.* :pt.:pk.HTMLATT.H:pv.x:epv.=':pv.attributes:epv.':epk.
+.* :pd.No longer supported. See the :spotref refid=htag..
+.* :erev refid=r42.
+:rev refid=r47.
+:pt.:pk.HTMLATT.A=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.DD=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.DT=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.FORM=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.IMG=':pv.attributes:epv.':epk.
+:pt.:pk.HTMLATT.INPUT=':pv.attributes:epv.':epk.
+:pd.Defines the attributes to be associated with the specified &html. tag.
+:erev refid=r47.
+:eparml.
+.*-----
+:rev refid=r42.
+:spot id=htmldo2 xreftext='HTMLDOCID='.
+:pt.:pk.HTMLDOCID.:pv.htmlrel:epv.=':pv.text:epv.':epk.
+:pd.This allows you to specify the Document Type Definition (DTD)
+value for the first record of the &html. output -- the
+:q.:pv.xxx:epv.:eq. in the following:
+.br;:xph.&lt.!DOCTYPE HTML PUBLIC &cont.
+"-//IETF//DTD HTML :pv.xxx:epv.//EN"&gt.:exph.
+:p.If :xph.HTML=2:exph., then the value of :xph.HTMLDOCID.2:exph. is
+used, if :xph.HTML=3:exph., then the value of :xph.HTMLDOCID.3:exph.
+is used, etc.  The :xph.&amp.b2hhtmlid:exph. symbol contains the
+appropriate value of this option for the &html. release being
+generated.
+:p.Example: :xph.HTML=3 HTMLDOCID.3='3.1':exph.
+.br;causes the following DTD to be generated::
+.br;:xph.&lt.!DOCTYPE HTML PUBLIC &cont.
+"-//IETF//DTD HTML 3.1//EN"&gt.:exph.
+:p.Default:
+:xmp.
+  HTMLDOCID.2='2'
+  HTMLDOCID.3='3.2'
+  HTMLDOCID.4='4'
+:exmp.
+:erev refid=r42.
+.*-----
+:pt.:pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (AIX)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (HPFS)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (LINUX)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.HTML:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (MVS)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.htm:epk.  | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (OS/2)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (VM)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.htm:epk.  | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (WIN95)
+:pt.:pk.HTMLEXT=&lbrc. :pk def.htm:epk.  | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (WINNT)
+:rev refid=r47.
+:pt.:pk.HTMLEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (UNIX)
+:erev refid=r47.
+:pd.What should be the file extension of the :hp1.logical:ehp1. output
+file?  This value is used to construct the default value for
+:xph.OUTPUTL=:exph. and is also used when creating multiple output
+files when
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+is specified.
+:note.In most cases, it is recommended that the :xph.DESTSYS=:exph.
+option be used, since it will set this option appropriately.
+:p.See also :hdref refid=xplat..
+.*-----
+:pt.:pk.HTMPEXT=&lbrc. :pk def.html:epk.   | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (AIX)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.html:epk.   | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (HPFS)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (LINUX)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.HTML:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (MVS)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.htm:epk.    | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (OS/2)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.HTML:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (VM)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.htm:epk.    | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (WIN95)
+:pt.:pk.HTMPEXT=&lbrc. :pk def.htm:epk.    | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (WINNT)
+:rev refid=r47.
+:pt.:pk.HTMPEXT=&lbrc. :pk def.html:epk. | :pv.logical-ext:epv. &cont.
+&rbrc.:epk.  (UNIX)
+:erev refid=r47.
+:pd.What should be the file extension of the :hp1.physical:ehp1. output
+file?  This value is used to construct the default value for
+:xph.OUTPUTP=:exph. and is also used when creating multiple output
+files when
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+is specified.
+:note.In most cases, it is recommended that the :xph.DESTSYS=:exph.
+option be used, since it will set this option appropriately.
+:p.See also :hdref refid=xplat..
+.*-----
+:pt.:pk.IMBEDID=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pd.Should &sysname. insert &html. comment records into the output
+identifying the the imbed structure of the input file?  Useful when
+trying to identify certain script source and working with numerous
+imbedded files.
+.getw symbol=dhlen gmltype=hp2 text='Y E S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.Insert comment records
+:dt.NO
+:dd.Do not insert comment records (default)
+:edl.
+.br;Default: :pk.IMBEDID=NO:epk.
+.*-----
+:spot id=imbft  xreftext='IMBFT= option'.
+:pt.:pk.IMBFT=&lbrc. :pk def.script:epk. | :pv.ext:epv.   &cont.
+&rbrc.:epk.  (AIX)
+:pt.:pk.IMBFT=&lbrc. :pk def.script:epk. | :pv.ext:epv.   &cont.
+&rbrc.:epk.  (HPFS)
+:pt.:pk.IMBFT=&lbrc. :pk def.script:epk. | :pv.ext:epv.   &cont.
+&rbrc.:epk.  (LINUX)
+:pt.:pk.IMBFT=(not applicable):epk.  (MVS)
+:pt.:pk.IMBFT=&lbrc. :pk def.scr:epk. | :pv.ext:epv.  &cont.
+&rbrc.:epk.     (OS/2)
+:pt.:pk.IMBFT=&lbrc. :pk def.SCRIPT:epk. | :pv.ft:epv. &cont.
+&rbrc.:epk.  (VM)
+:pt.:pk.IMBFT=&lbrc. :pk def.scr:epk. | :pv.ext:epv.  &cont.
+&rbrc.:epk.     (WIN95)
+:pt.:pk.IMBFT=&lbrc. :pk def.scr:epk. | :pv.ext:epv.  &cont.
+&rbrc.:epk.     (WINNT)
+:rev refid=r47.
+:pt.:pk.IMBFT=&lbrc. :pk def.script:epk. | :pv.ext:epv.   &cont.
+&rbrc.:epk.  (UNIX)
+:erev refid=r47.
+:pd.At &sysname. execution time, if a file:fnref refid=file. is to
+be imbedded, but the filetype or extension of the imbedded file is
+omitted (as would be the case for
+:q.:xph.&period.im&rbl.abc:exph.:eq.), this specifies the default
+filetype or extension to use.  Using the defaults, if
+:q.:xph..im&rbl.abc:exph.:eq. was encountered, on AIX, Linux,
+:rev refid=r47.
+UNIX
+:erev refid=r47.
+or HPFS, :q.:xph.abc.script:exph.:eq. would be imbedded; on OS/2,
+&win9x. or &winnt., :q.:xph.abc.scr:exph.:eq. would be
+imbedded; on VM, :q.:xph.ABC&rbl.SCRIPT:exph.:eq. would be imbedded.
+:p.This option is not applicable when running on MVS as there are
+specific rules as to how imbedded files are retrieved.
+(See the Script/VS User's Guide for further information on how imbedded
+files are handled under MVS.)
+:p.Default: :pk.IMBFT=script:epk.   (AIX)
+.br;Default: :pk.IMBFT=script:epk.   (HPFS)
+.br;Default: :pk.IMBFT=script:epk.   (LINUX)
+.br;Default: :pk.IMBFT=scr:epk.      (OS/2)
+.br;Default: :pk.IMBFT=SCRIPT:epk.   (VM)
+.br;Default: :pk.IMBFT=scr:epk.      (WIN95)
+.br;Default: :pk.IMBFT=scr:epk.      (WINNT)
+:rev refid=r47.
+.br;Default: :pk.IMBFT=script:epk.   (UNIX)
+:erev refid=r47.
+.*-----
+:spot id=imbftex  xreftext='IMBFTEXT= option'.
+:spot id=imbfte2  xreftext='IMBFTEXT='.
+:pt.:pk.IMBFTEXT='&lbrc.YES|:pk def.NO:epk.&rbrc.:epk., &cont.
+:pk.&lbrc.ASIS|:pk def.LC:epk.|UC&rbrc.:epk., &cont.
+:pv.ft=ext ft:sub.2:esub.=ext:sub.2:esub. ... &cont.
+ft:sub.x:esub.=ext:sub.x:esub.:epv.:pk.':epk.
+:pd.When &sysname. is run on a PC workstation and an imbed statement
+explicitly specifying a VM-type filetype is encountered, this
+parameter specifies if :hp1.extended:ehp1. filetype processing
+should be performed.  If this parameter is omitted or :xph.NO:exph.
+specified, then the VM filetype is ignored and the value defined for
+the :xph.IMBFT=:exph. option is used as the PC file's extension.
+If :xph.YES:exph., then the :pv.ft:epv. value is used as the
+extension, either spelled the same or :q.mapped:eq. to another
+value.
+:p.The following markup formats are supported by this option:
+:xmp.
+  &period.im (fn ft)
+ 
+  &period.namefile name=nid cms='fn ft'
+  &period.im nid
+ 
+  &period.dd abc fn ft
+  &period.im abc
+:exmp.
+.getw symbol=dhlen1 gmltype=hp1 text='Y E S M'
+.getw symbol=dhlen2 gmltype=hp2 text='A S I S'
+:dl termhi=1 tsize=&dhlen1..
+:dt.yesno
+:dd.Whether extended filetype processing should be done
+:dl termhi=2 tsize=&dhlen2..
+:dt.YES
+:dd.Perform extended filetype processing
+:dt.NO
+:dd.Do not perform extended filetype processing (this is the default)
+:edl.
+:dt.case
+:dd.How should the :q.case:eq. of the resultant file name be handled?
+:dl termhi=2 tsize=&dhlen2..
+:dt.ASIS
+:dd.Leave the case :q.as-is:eq.
+:dt.LC
+:dd.Explicitly lower-case the file name (this is the default)
+:dt.UC
+:dd.Explicitly upper-case the file name
+:edl.
+:dt.ft=ext
+:dd.Allows you to :q.map:eq. a specific filetype to a specific
+extension.  This is almost always required if you are running on an
+OS/2 FAT system since a VM filetype can be up to eight characters,
+but the OS/2 FAT extension is limited to three characters.  Multiple
+mappings can be defined, each specified as :q.:pv.ft=ext:epv.:eq.,
+such as :q.:xph.manual=man:exph.:eq., :q.:xph.report=rpt:exph.:eq.,
+:q.:xph.listing=lst:exph.:eq., etc.  For example:
+:xmp.
+If:   IMBFTEXT='YES,LC,REPORT1=RP1 REPORT2=RP2'
+      IMBFT=script
+ 
+Then: &period.im (abc report1)  maps to: .im abc.rp1
+      &period.im (abc report2)  maps to: .im abc.rp2
+      &period.im (abc sample)   maps to: .im abc.sample
+      &period.im (abc)          maps to: .im abc.script
+      &period.im abc            maps to: .im abc.script
+:exmp.
+:edl.
+.*-----
+:spot id=imbpath  xreftext='IMBPATH= option'.
+:pt.:pk.IMBPATH=&lbrc. CLEAR | &cont.
+:pv.path:epv.&lbrk.&semi.:pv.path:epv.&semi....&cont.
+&semi.:pv.path:epv.&rbrk. &rbrc.:epk.
+:pd.At &sysname. execution time, if an imbedded file can not be
+found, look in these directory(ies) (applicable only on a PC
+workstation).  If multiple directories should be searched, this
+option can be specified as many times as desired and/or multiple
+directories can be specified (each separated by a semi-colon).
+Specify :xph.IMBPATH=CLEAR:exph. to clear any previously-specified
+directories.
+.br;Example: IMBPATH='/afs/btv.com/u/'   (AIX)
+.br;Example: IMBPATH='c&colon.&bsl.pubs&bsl.&semi.d&colon.&bsl.docs'      (OS/2)
+.br;Default: :pk.IMBPATH='':epk.
+.*-----
+:pt.:pk.IMGPATH=':pv.path:epv.':epk.
+:pd.The default path where the GIF and other image files are stored
+in the WEB server
+.br;Example: IMGPATH='..\images\'
+.br;Default: :pk.IMGPATH='':epk.
+.*-----
+:spot id=index2  xreftext='INDEX='.
+:pt.:pk.INDEX=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pt.:pk.&lbrc INDEX | :pk def.NOINDEX:epk. &rbrc.:epk.
+:pd.Whether &sysname. should generate an index if the
+:xph.&colon.INDEX:exph. tag is encountered.  :xph.INDEX:exph. is
+equivalent to :xph.INDEX=YES:exph., and :xph.NOINDEX:exph. is
+equivalent to :xph.INDEX=NO:exph..
+.br;Default: :pk.INDEX=NO:epk.
+.*-----
+:rev refid=r45.
+:spot id=indexre xreftext='INDEXREFLINK='.
+:pt.:pk.INDEXREFLINK=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pd.Specifies if hyperlinks should be generated for index entries
+that provide their own reference text.
+:p.The markup for an index entry is usually coded by the author such
+that the index points to the :hp1.location:ehp1. of the index entry
+markup within the source document.  This causes &sysname. to
+generate a hyperlink from the index to the location of the index
+entry markup.
+:p.However, if the author specifies the
+:xph.PG=':pv.text:epv.':exph. attribute on the
+:xph.&colon.I:pv.x:epv.:exph. tag (or if the fourth term of the
+index entry is specified on the :xph.&period.PI:exph. control word),
+then the index simply displays the provided reference text and,
+by default, &sysname. will :hp1.not:ehp1. generate a hyperlink since
+the location of the index entry markup is irrelevant.  But if you
+want &sysname. to generate a hyperlink even when reference text is
+provided, specify :xph.INDEXREFLINK=YES:exph..
+:p.Default: :pk.INDEXREFLINK=NO:epk.
+:erev refid=r45.
+.*-----
+:spot id=idxsort xreftext='INDEXSORT= option'.
+:spot id=idxsor2 xreftext='INDEXSORT='.
+:pt.:pk.INDEXSORT.SPEC=:epk.'&cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk. ... &cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.'
+:pt.:pk.INDEXSORT.NUM=:epk.'&cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk. ... &cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.'
+:pt.:pk.INDEXSORT.LETTER=:epk.'&cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk. ... &cont.
+:pv.x:epv.&lbrk.-:pv.y:epv.&rbrk.'
+:pd.Update the translate table used to identify which characters
+:q.belong:eq. in each section within a document's index.
+:q.:xph.INDEXSORT.SPEC:exph.:eq. specifies the characters to be
+listed in the :q.Special Characters:eq. section of the index,
+:q.:xph.INDEXSORT.NUM:exph.:eq. specifies the characters for the
+:q.Numerics:eq. section, and :q.:xph.INDEXSORT.LETTER:exph.:eq.
+specifies those characters to have their own section.
+:dl tsize=2m termhi=1.
+:dt.x
+:dd.A single character or a 2-digit hexadecimal code
+:dt.y
+:dd.Specifies that a :hp1.range:ehp1. of characters is being
+defined.  If specified, the hex value of :q.:pv.y:epv.:eq. must
+:q.exceed:eq. that of :q.:pv.x:epv.:eq..  If omitted, only the
+:q.:pv.x:epv.:eq. character is defined.
+:edl.
+:notel.
+:li.If no INDEXSORT statements are defined, the following is assumed:
+:xmp.
+  INDEXSORT.SPEC='00-FF'
+  INDEXSORT.NUM='0-9'
+  INDEXSORT.LETTER='A-Z'
+:exmp.
+:li.:xph.INDEXSORT:exph. statements are cumulative. This means each
+:xph.INDEXSORT:exph. statement updates the translate table as it
+existed after the previous :xph.INDEXSORT:exph. statement was
+processed.  Therefore, to define a completely new table, the first
+statement should be :xph.INDEXSORT.SPEC='00-FF':exph. to reset the
+entire table (note the sequence of statements in the previous item).
+:li.If defining a range of characters, :q.wrapping:eq. is not allowed:
+:xmp.
+  INDEXSORT.SPEC='F5-05'           (not allowed)
+  INDEXSORT.SPEC='F5-FF 00-05'     (OK)
+:exmp.
+:li.When specifying a character using hex notation, remember that
+the hex value for a specific character may be different on a
+mainframe (EBCDIC coding) than on a PC workstation (ASCII coding)
+:enotel.
+:p.See :hdref refid=idxsrtd. for information on :hp1.when:ehp1. the
+:xph.INDEXSORT:exph. option is typically used.
+.*-----
+:spot id=indxta2 xreftext='INDEXTAG='.
+:pt.:pk.INDEXTAG=':pv.ls,le,ts,te,is,ie:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should use when
+generating the index.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls:dd.Start tag for a common level of indices
+:dt.le:dd.End tag for a common level of indices
+:dt.ts:dd.Start tag for a specific reference within a level
+:dt.te:dd.End tag for a specific reference within a level
+:dt.is:dd.Start tag for identifying the first letter of a block of indices
+:dt.ie:dd.End tag for identifying the first letter of a block of indices
+:edl.
+.br;Default:
+:xph.INDEXTAG='&lt.MENU&gt.,&lt./MENU&gt.,&lt.LI&gt.,&lt./LI&gt.,&cont.
+&lt.STRONG&gt.,&lt./STRONG&gt.':exph.
+.*-----
+:spot id=indxto2 xreftext='INDEXTOC='.
+:pt.:pk.INDEXTOC=&lbrc. YES | NO | :pv.number:epv. | &cont.
+:pk def.50:epk. &rbrc.:epk.
+:pd.If an index is generated, should &sysname. also create a
+Table-Of-Contents for the index itself?  Useful for navigating a large
+index, the TOC contains an entry for each section
+(e.g. :q.Special Characters:eq., :q.Numerics:eq., :q.A:eq.,
+:q.B:eq. ...) which links to that section, and each index section
+is a link back to the index TOC.
+.getw symbol=dhlen gmltype=hp2 text='N U M B E R'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.Always generate an index TOC if an index is created
+:dt.NO
+:dd.Never generate an index TOC
+:dt.:pv.number:epv.
+:dd.If the number of entries in the index equals or exceeds this
+value, then build an index TOC.  Otherwise, do not build an index TOC.
+:edl.
+.br;Default:
+:xph.INDEXTOC=50:exph.
+.*-----
+:spot id=indxtt2 xreftext='INDEXTOCTAG='.
+:pt.:pk.INDEXTOCTAG=':pv.ts,te,ss,se,ns,ne,as,ae:epv.':epk.
+:pd.Allows you to specify the &html. tags to use when generating the
+index Table-Of-Contents (see also INDEXTOC=)
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ts
+:dd.Tag for the beginning of the index TOC
+:dt.te
+:dd.Tag for the end of the index TOC
+:dt.ss
+:dd.Start tag for the :q.Special Characters:eq. index TOC entry
+:dt.se
+:dd.End tag for the :q.Special Characters:eq. index TOC entry
+:dt.ns
+:dd.Start tag for the :q.Numerics:eq. index TOC entry
+:dt.ne
+:dd.End tag for the :q.Numerics:eq. index TOC entry
+:dt.as
+:dd.Start tag for an alphabetic-letter index TOC entry
+:dt.ae
+:dd.End tag for an alphabetic-letter index TOC entry
+:edl.
+.br;Default:
+:xph.INDEXTOCTAG=',&lt.HR&gt.,,&lt.BR&gt.,,&lt.BR&gt.,,':exph.
+.*-----
+:rev refid=r45.
+:spot id=linenum xreftext='LINENUM= option'.
+:spot id=linenu2 xreftext='LINENUM='.
+:pt.:pk.LINENUM=&lbrc. :pk def.NO:epk. | BEGIN | END | &cont.
+:pv.startcol:epv.-:pv.endcol:epv. &rbrc.:epk.
+:pd.Should &sysname. check the input source records for line numbers?
+.getw symbol=dhlen gmltype=hp2 text='start col - end col'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.NO
+:dd.The source lines do not contain line numbers (this is the default)
+:dt.BEGIN
+:dd.The first :q.word:eq. of each source line is checked and if the
+value is numeric, the word is discarded
+:dt.END
+:dd.The last :q.word:eq. of each source line is checked and if the
+value is numeric, the word is discarded
+:dt.:pv.startcol:epv.-:pv.endcol:epv.
+:dd.The text within the specified starting and ending columns of
+each source line are checked and if the value is numeric
+(blanks are allowed), the text is removed
+:edl.
+.br;Example: :pk.LINENUM=73-80:epk.
+.br;Default: :pk.LINENUM=NO:epk.
+:erev refid=r45.
+.*-----
+:spot id=lines  xreftext='LINES= option'.
+:spot id=lines2 xreftext='LINES='.
+:pt.:pk.LINES=&lbrc. :pk def.PRE:epk. | BR &rbrc.:epk.
+:pd.How should &bm.'s :xph.&colon.LINES/&colon.ELINES:exph.
+tags be handled?
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:dl compact tsize=&dhlen..
+:dt.:xph.PRE:exph.
+:dd.The text should be displayed using a monospaced
+font by generating &html. :q.:xph.&lt.PRE&gt.:exph.:eq. and
+:q.:xph.&lt./PRE&gt.:exph.:eq. tags.
+Any tab characters within the text will be displayed correctly.
+This is the default.
+:dt.:xph.BR:exph.
+:dd.The text should be displayed using the current font (normally a
+proportional font) and a new line forced using &html.'s
+:q.:xph.&lt.BR&gt.:exph.:eq. tag at the end of each record.
+Any tab characters within the text will generally be lost since the
+user's browser will reformat the text.
+:edl.
+.br;Default: :pk.LINES=PRE:epk.
+.*-----
+:spot id=linewid xreftext='LINEWIDTH= option'.
+:spot id=linewi2 xreftext='LINEWIDTH='.
+:pt.:pk.LINEWIDTH=&lbrc. :pk def.78:epk. | :pv.number:epv. &rbrc.:epk.
+:pd.The maximum width of the output line when using a monospaced
+font or for tags which require certain types of spacing.  A numeric
+value of 40 or larger can be specified.  The following commands,
+macros and tags refer to this value:
+.getw symbol=dhlen gmltype=hp4 text='T A B R A C K'
+:dl termhi=4 compact tsize=&dhlen..
+:dt.:xph.&period.CE:exph.
+:dd.If CENTERTAG=NO, used to determine the number of leading blanks
+:dt.:xph.&period.SX:exph.
+:dd.To determine center and right-justification spacing
+:dt.:xph.&period.TABRACK:exph.
+:dd.For correctly spacing the tab stops
+:dt.:xph.&colon.LBLBOX:exph.
+:dd.Used to draw the box header and trailer (HTML 2 only)
+:dt.:xph.&colon.QUALIF:exph.
+:dd.Used to draw the qualification box header and trailer
+:dt.:xph.&colon.SCREEN:exph.
+:dd.Used to correctly draw the screen border
+if the :xph.WIDTH=:exph. option is omitted
+:dt.:xph.&colon.TABLE:exph.
+:dd.If :xph.HTML=2:exph., used to correctly build the table using a
+monospaced font
+:edl.
+.*-----
+:spot id=liref  xreftext='LIREF= option'.
+:spot id=liref2 xreftext='LIREF='.
+:pt.:pk.LIREF=&lbrc. NO | ID | :pk def.ACTUAL:epk. &rbrc.:epk.
+:pd.Handle :xph.&colon.LIREF:exph. references to a list item
+(:xph.&colon.LI:exph.)?
+.getw symbol=dhlen gmltype=hp4 text='V A L U E'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.NO
+:dd.All list-item references are ignored
+:dt.ID
+:dd.The ID name for :q.:xph.&colon.LI ID=:pv.name:epv.:exph.:eq.
+is italicized and inserted at both the beginning of the list item
+and also when referenced using
+:q.:xph.&colon.LIREF&rbl.REFID=:pv.name:epv.:exph.:eq.
+:dt.ACTUAL
+:dd.Same as above, except that for ordered lists
+(:xph.&colon.OL:exph.), the item's :hp1.indice:ehp1.
+is used at the reference point (this is how &bm. works).
+If the user's web browser generates only numeric indices for an
+ordered list, you will need to specify either:  :xph.OLSEQ=N:exph.
+to force &sysname. to generate only numeric indices, or
+:xph.LIREF=ID:exph. to use the reference :hp1.name:ehp1. as the
+indice.
+:note.For backwards compatability with previous releases of &sysname.,
+:xph.LIREF=NUM:exph. is accepted as a synonym of :xph.LIREF=ACTUAL:exph..
+:edl.
+.br;Default: :pk.LIREF=ACTUAL:epk.
+.*-----
+:spot id=logopt  xreftext='LOG= option'.
+:rev refid=r43.
+:pt.:pk.LOG='&lbrc. :pk def.NO:epk. | YES | :pv.file:epv. &rbrc.&cont.
+,&lbrc. :pk def.CREATE:epk. | APPEND &rbrc.':epk.
+:pt.:pk.LOG=STREAM:pv.x:epv.:epk.
+:pd.Whether a copy of all messages displayed on the terminal should
+be saved, and if so, whether the records should be written to either
+a disk file:fnref refid=file. or a pipeline output stream.  No
+records are saved if :xph.LOG=NO:exph. (this is the default).
+:p.To save log records to a disk file:
+.getw symbol=dhlen gmltype=hp1 text='F I L E'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.YES
+:dd.Log records are saved to :q.:xph.b2h.log:exph.:eq. if on MVS or
+a PC, or :q.:xph.B2H LOG:exph.:eq. if on VM.
+:dt.:pv.file:epv.
+:dd.Log records are saved to the specified file.
+.br;:xph.Example:  LOG='mydoc.b2h':exph.
+.br;:xph.Example:  LOG='MYDOC B2HLOG A':exph.
+:p.If the name contains an asterisk (*), the asterisk is dynamically
+replaced with the filename of the input file.
+.br;:xph.Example:  B2H timecard.sct ( LOG='*.b2h':exph.
+.br;:xph.Result:   the log is written to 'timecard.b2h':exph.
+.br;:xph.Example:  B2H project script ( LOG='* B2HLOG A':exph.
+.br;:xph.Result:   the log is written to 'PROJECT B2HLOG A':exph.
+:edl.
+:p.The second parameter specifies what to do if the disk file
+already exists.  :xph.CREATE:exph. (the default) means to erase the
+existing log file and create a new one; :xph.APPEND:exph. means to
+append the log records to the existing file.
+.br;:xph.Example: LOG='monday.log':exph.
+.br;:xph.Example: LOG='batch.log,append':exph.
+:p.If &sysname. is running as a Pipeline filter, you can specify
+:xph.LOG=STREAM:pv.x:epv.:exph. which means that the log records
+should be written to the pipeline output stream :q.:pv.x:epv.:eq..
+.br;:xph.Example: LOG=STREAM1:exph.
+:erev refid=r43.
+.*-----
+:pt.:pk.LTGT=&lbrc. ASIS | :pk def.CONVERT:epk. &rbrc.:epk.
+:pd.If your input file contains :q.&lt.:eq. and :q.&gt.:eq.
+characters, this specifies if you want them converted to the &html.
+entity names :q.&amp.LT;:eq. and :q.&amp.GT;:eq., respectively.
+Without conversion, some browsers may treat :q.&lt.text&gt.:eq. as
+unknown &html. tags and ignore the text altogether.  When
+:xph.LTGT=CONVERT:exph.&colon. all records in a :q.flat:eq. file are
+checked; for non-:q.flat:eq. files, all non-comment records are
+checked.
+.br;Default: :pk.LTGT=CONVERT:epk.
+.*-----
+:pt.:pk.MAXWIDTH=&lbrc. :pk def.NOSPLIT:epk. | :pv.number:epv. &rbrc.:epk.
+:pd.Depending on how the source is marked up and a variety of other
+factors, it is possible for an output HTML record to be quite
+:q.wide:eq.. A :xph.MAXWIDTH=:exph. value larger than zero (0)
+specifies that any output record exceeding this width be split at
+the first blank prior to this limit.  (Exception:  lines within a
+:q.:xph.&lt.PRE&gt.:exph.:eq. and :q.:xph.&lt./PRE&gt.:exph.:eq. are
+never split.) :xph.MAXWIDTH=NOSPLIT:exph. means that output records
+are never split.
+.br;Default: :pk.MAXWIDTH=NOSPLIT:epk.
+.*-----
+:pt.:pk.MASTALT=':pv.alternate text:epv.':epk.
+:pd.This and :xph.MASTIMG=:exph. allow a default masthead for
+&html. output files.
+.seelay
+This is the &html. ALT= text for users not loading graphics.
+.br;Default: :pk.MASTALT='':epk.
+.*-----
+:pt.:pk.MASTIMG=':pv.file.ext:epv., &cont.
+&lbrc. :pk def.ALL:epk. | FIRST &rbrc.':epk.
+:pd.This and :xph.MASTALT=:exph. allow a default masthead for &html.
+output files.  This specifies the masthead image file to be used
+(located in the path specified by the :xph.IMGPATH=:exph. option).
+If the &html. output is being split (see the
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+option), the second parameter specifies whether the masthead image
+should be included in :hp1.all:ehp1. output &html. files (the
+default) or just the :hp1.first:ehp1. &html. file.
+.seelay
+.br;Default: :pk.MASTIMG='':epk.
+.*-----
+:pt.:pk.META=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Should :q.&lt.META ...&gt.:eq.-type statements be included in
+the output &html. file?
+.seelay
+.br;Default: :pk.META=YES:epk.
+.*-----
+:pt.:pk.METAKEYS=':pv.key:sub.1:esub. key:sub.2:esub. ... &cont.
+key:sub.x:esub.:epv.':epk.
+:pd.List of keywords to :q.attach:eq. to the document to allow users
+to search for the file.
+.seelay
+:xmp.
+  METAKEYS='do re mi'
+:exmp.
+causes the following to be generated:
+:xmp.
+  &lt.META HTTP-EQUIV="keywords" CONTENT="do re mi"&gt.
+:exmp.
+.br;Default: :pk.METAKEYS='':epk.
+.*-----
+:pt.:pk.MSGLEVEL=&lbrc. :pk def.INFO:epk. | WARNING | ERROR &rbrc.:epk.
+:pd.Which processing messages should be shown?  Messages :q.below:eq.
+this value are suppressed.
+.br;Default: :pk.MSGLEVEL=INFO:epk.
+.*-----
+:spot id=msgnum  xreftext='MSGNUM= option'.
+:pt.:pk.MSGNUM=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Should message numbers be displayed in &sysname.'s
+console and log output?
+.br;Default: :pk.MSGNUM=YES:epk.
+.*-----
+:spot id=mvsall  xreftext='MVSALLOC= option'.
+:pt.:pk.MVSALLOC.:pv.name:epv.=':pv.allocation-values:epv.':epk.
+:pd.When running on MVS, if the named dataset needs to be created,
+these are the operands to use on the TSO/E :q.:xph.ALLOC:exph.:eq.
+command.
+:table cols='* 2* 2*'.
+:tcap.MVSALLOC.name= values
+:thd.
+:c.Option
+:c.Default value
+:c.Where used
+:ethd.
+:row.
+:c.:xph.MVSALLOC.ANSFILE:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE:eq.
+:c.The answer file for Question/Answers.
+See the :spotref refid=queso. for further information.
+:row.
+:c.:xph.MVSALLOC.LOG:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE:eq.
+:c.Disk copy of the console log.
+See the :spotref refid=logopt. for further information.
+:row.
+:c.:xph.MVSALLOC.OUTPUTPO:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) TRACKS
+SPACE(5,5) RELEASE DIR(10):eq.
+:c.The output &html. file if creating a partitioned data set
+:row.
+:c.:xph.MVSALLOC.OUTPUTPS:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE:eq.
+:c.The output &html. file if creating a sequential
+data set; if multiple sequential output files are created,
+this applies to each output file
+:row.
+:c.:xph.MVSALLOC.SYSVARW:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE:eq.
+:c.The output file written if :xph.SYSVAR='W :pv.filespec:epv.':exph.
+specified
+:row.
+:c.:xph.MVSALLOC.TEMP:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) TRACKS SPACE(5,5) RELEASE:eq.
+:c.&sysname.'s temporary work file
+:row.
+:c.:xph.MVSALLOC.TRACE:exph.
+:c.:q.DSORG(PS) LRECL(1024) RECFM(V) CYLINDERS SPACE(5,5) RELEASE:eq.
+:c.&sysname.'s internal trace file (for system support use)
+:etable.
+.*-----
+:spot id=notelt2 xreftext='NOTELTAG='.
+:pt.:pk.NOTELTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing a NOTE list (&colon.NOTEL) and it's associated tags.
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for a non-compact list
+:dt.1
+:dd.&html. tags for a compact list (e.g. &colon.NOTEL COMPACT)
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.List start
+:dt.le :dd.List end
+:dt.is :dd.List item start
+:dt.ie :dd.List item end
+:edl.
+.br;Default:
+:xmp.
+  NOTELTAG.0='&lt.OL&gt.,&lt./OL&gt.,&lt.P&gt.&lt.LI&gt.,'
+  NOTELTAG.1='&lt.OL COMPACT&gt.,&lt./OL&gt.,&lt.LI&gt.,'
+:exmp.
+.*-----
+:spot id=olseq2 xreftext='OLSEQ='.
+:pt.:pk.OLSEQ=':pv.sequence codes:epv.':epk.
+:pd.Specifies the sequence to use for each nested level of ordered
+lists.
+.dpopt
+(See also the :spotref refid=liref.)
+:tdef  id=tolseq1
+       cols='* 4* 3* 4*'
+       align='c l'.
+:table refid=tolseq1.
+:tcap.Script-to-HTML mapping for the OLSEQ= option
+:thd.
+:c.Value
+:c.&bm. creates:
+:c.&sysname. generates:
+:c.HTML creates:
+:ethd.
+:row.
+:c.N:c.1. 2. 3. 4. ...:c.&lt.OL TYPE="1"&gt.:c.1. 2. 3. 4. ...
+:row.
+:c.n:c.1) 2) 3) 4) ...:c.&lt.OL TYPE="1"&gt.:c.1. 2. 3. 4. ...
+:row.
+:c.A:c.A. B. C. D. ...:c.&lt.OL TYPE="A"&gt.:c.A. B. C. D. ...
+:row.
+:c.a:c.a) b) c) d) ...:c.&lt.OL TYPE="a"&gt.:c.a. b. c. d. ...
+:row.
+:c.x:c.a. b. c. d. ...:c.&lt.OL TYPE="a"&gt.:c.a. b. c. d. ...
+:row.
+:c.R:c.I. II. III. IV. ...:c.&lt.OL TYPE="I"&gt.:c.I. II. III. IV. ...
+:row.
+:c.r:c.i) ii) iii) iv) ...:c.&lt.OL TYPE="i"&gt.:c.i. ii. iii. iv. ...
+:row.
+:c.y:c.i. ii. iii. iv. ...:c.&lt.OL TYPE="i"&gt.:c.i. ii. iii. iv. ...
+:etable.
+:p.Default: :xph.OLSEQ='Nar':exph.
+.*-----
+:spot id=oltag2 xreftext='OLTAG='.
+:pt.:pk.OLTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing an ordered list (&colon.OL) and it's associated tags.
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for a non-compact list
+:dt.1
+:dd.&html. tags for a compact list (e.g. &colon.OL COMPACT)
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.List start
+:dt.le :dd.List end
+:dt.is :dd.List item start
+:dt.ie :dd.List item end
+:edl.
+.br;Default:
+:xmp.
+  OLTAG.0='&lt.OL&gt.,&lt./OL&gt.,&lt.P&gt.&lt.LI&gt.,'
+  OLTAG.1='&lt.OL COMPACT&gt.,&lt./OL&gt.,&lt.LI&gt.,'
+:exmp.
+.*-----
+:pt.:pk.OUTPUTFM=:epk.&lbrc. :pk def.A:epk. | :pv.disk:epv. &rbrc.   &cont.
+(applicable only on VM)
+:pd.When &sysname. is run on VM/ESA, this specifies the default disk
+where the output &html. files are to be written.  If omitted, the
+output files are written to the A-disk.  If a disk letter is specified
+for the :xph.OUTPUTP=:exph. option, it's value overrides this option.
+.br;Default: :pk.OUTPUTFM=A:epk.
+.*-----
+:pt.:pk.OUTPUTL=':pv.logical-output-file:epv.':epk.
+:pd.What should be the :hp1.logical:ehp1. name of the output file
+(the name it will have on the WEB server)?
+If omitted defaults to :q.:pv.physical-output-filename.lext:epv.:eq.
+(the :pv.lext:epv. value is defined by :xph.HTMLEXT=:exph.).
+:p.For information on how this value is used,
+see :hdref refid=outfmt. and :hdref refid=xplat..
+.*-----
+:pt.:pk.OUTPUTL83=&lbrc. YES | NO &rbrc.:epk.   &cont.
+(applicable on all platforms)
+:pd.When splitting the &html. file using
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.,
+:erev refid=r42.
+should the :hp1.logical:ehp1. files honor the 8.3 naming convention?
+If :xph.YES:exph., the file name is limited to eight characters.
+On AIX/Linux/:rev refid=r47.UNIX:erev refid=r47.,
+if the :hp1.destination:ehp1. system is also
+AIX/Linux/:rev refid=r47.UNIX:erev refid=r47.,
+or if running in an OS/2 HPFS environment, :xph.NO:exph.
+is assumed. In all other cases, :xph.YES:exph. is the default.
+.getw symbol=dhlen gmltype=hp2 text='Y E S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.Files must honor 8.3 names (e.g. CMS, OS/2 with FAT,
+&win9x. and &winnt.)
+:dt.NO
+:dd.Not necessary to honor 8.3 names
+(e.g. AIX, Linux,
+:rev refid=r47.
+UNIX,
+:erev refid=r47.
+OS/2 with HPFS)
+:edl.
+:p.See also :hdref refid=xplat..
+.*-----
+:pt.:pk.OUTPUTLCASE=&lbrc. ASIS | LC | UC &rbrc.:epk.   &cont.
+(applicable on all platforms)
+:pd.How should the :q.case:eq. of the :hp1.logical:ehp1. output
+files be handled?
+.getw symbol=dhlen gmltype=hp2 text='A S I S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.ASIS
+:dd.Leave the file names :q.as-is:eq.
+:dt.LC
+:dd.Explicitly lower-case the file names
+:dt.UC
+:dd.Explicitly upper-case the file names
+:edl.
+If omitted, :q.:xph.ASIS:exph.:eq. is assumed unless running on
+VM/ESA or :xph.DESTSYS=CMS:exph., in which case :q.:xph.LC:exph.:eq.
+is assumed.
+:p.See also :hdref refid=xplat..
+.*-----
+:pt.:pk.OUTPUTP=':pv.physical-output-file:epv.':epk.
+:pt.:pk.OUTPUTP=&lbrc. ':pv.physical-output-file:epv.' | &cont.
+DD&colon.:pv.ddname:epv. | &cont.
+DD&colon.:pv.ddname:epv.(:pv.member:epv.) &rbrc.   &cont.
+(MVS only):epk.
+:pd.What should be the :hp1.physical:ehp1. name of the output
+file:fnref refid=file.?
+If the output &html. file is split, then :hp1.all:ehp1. output files
+are placed into the same location, e.g. the specified directory
+(AIX, Linux, OS/2, &win9x., &winnt.
+:rev refid=r47.or UNIX:erev refid=r47.)
+or the specified mini-disk (VM).
+:p.When running on MVS, the dataset may be referenced by dataset
+name or by DD name.
+(See :hdref refid=ofcmvs. for more information.)
+:p.For information on how this value is used,
+see :hdref refid=outfmt. and :hdref refid=xplat..
+See also :hdref refid=sfile..
+.*-----
+:pt.:pk.OUTPUTP83=&lbrc. YES | NO &rbrc.:epk.   &cont.
+(Applicable only on PC workstations)
+:pd.When splitting the &html. file using
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.,
+:erev refid=r42.
+should the :hp1.physical:ehp1. files honor the 8.3 naming convention?
+If :xph.YES:exph., the file name is limited to eight characters.
+On CMS, OS/2 FAT, &win9x. and &winnt., :xph.YES:exph. is assumed.
+On AIX/Linux/:rev refid=r47.UNIX:erev refid=r47.,
+if the :hp1.destination:ehp1. system is also
+AIX/Linux/:rev refid=r47.UNIX:erev refid=r47.,
+or if in an OS/2 HPFS environment, :xph.NO:exph. is assumed;
+else :xph.YES:exph..
+.getw symbol=dhlen gmltype=hp2 text='Y E S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.YES
+:dd.Files must honor 8.3 names
+(e.g. OS/2 with FAT, &win9x. and &winnt.)
+:dt.NO
+:dd.Not necessary to honor 8.3 names (e.g. AIX, Linux,
+:rev refid=r47.
+UNIX,
+:erev refid=r47.
+OS/2 with HPFS)
+:edl.
+:p.See also :hdref refid=xplat..
+.*-----
+:pt.:pk.OUTPUTPCASE=&lbrc. ASIS | LC | UC &rbrc.:epk.   &cont.
+(applicable on all platforms)
+:pd.How should the :q.case:eq. of the :hp1.physical:ehp1. output
+files be handled?
+.getw symbol=dhlen gmltype=hp2 text='A S I S'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.ASIS
+:dd.Leave the file names :q.as-is:eq.
+:dt.LC
+:dd.Explicitly lower-case the file names
+:dt.UC
+:dd.Explicitly upper-case the file names
+:edl.
+If omitted, :q.:xph.ASIS:exph.:eq. is assumed on AIX, Linux, OS/2,
+&win9x., &winnt.
+:rev refid=r47.
+and UNIX,
+:erev refid=r47.
+and :q.:xph.UC:exph.:eq. is assumed on MVS and VM.
+:p.See also :hdref refid=xplat..
+.*-----
+:pt.:pk.OWNER=':pv.text:epv.':epk.
+:pd.The owner of the document.  If present, causes a
+:q.&lt.META&gt.:eq.-type statement to be included in the &html.
+output.  Also allows the server to generate an HTTP response header
+if owner information is requested.
+.seelay
+:xmp.
+  OWNER='John Doe'
+:exmp.
+causes the following to be generated:
+:xmp.
+  &lt.META HTTP-EQUIV="owner" CONTENT="Joe Doe"&gt.
+:exmp.
+.br;Default: :pk.OWNER='':epk.
+.*-----
+:spot id=procact xreftext='PROCACT= option'.
+:pt.:pk.PROCACT=:epk.':pv.sit:epv.=:pv.action:epv. &cont.
+:pv.sit:sub.2:esub.:epv.=:pv.action:sub.2:esub.:epv. ... &cont.
+:pv.sit:sub.x:esub.:epv.=:pv.action:sub.x:esub.:epv.'
+:pd.What processing action should &sysname. take when certain
+situations occur during conversion?  This allows you to control
+whether &sysname. should ignore some situations, show an error
+message, stop execution immediately, etc.
+:p.The situations you can control:
+:dl termhi=2 compact tsize=&dhlen..
+:dt.NOENDTAG
+:dd.The end-tag for certain &bm./GML tags was not found
+(e.g. :xph.&colon.TITLE:exph. with no :xph.&colon.ETITLE:exph.,
+:xph.&colon.TABLE:exph. with no :xph.&colon.ETABLE:exph.)
+:dt.NOIMBED
+:dd.A file being imbedded can not be found
+:dt.NOINDEX
+:dd.The :xph.INDEX:exph. or :xph.INDEX=YES:exph. option was
+specified, but the :xph.&colon.INDEX tag:exph. was not encountered
+in the source
+:dt.NOPER
+:dd.A &bm./GML tag is missing it's terminating period
+:dt.NOXREF
+:dd.The target of a cross-reference tag can not be found
+(e.g. :xph.&colon.FIG ID=abc.:exph. not found for a
+:xph.&colon.FIGREF REFID=abc.:exph.)
+:dt.UNKOPT
+:dd.An unknown &sysname. option
+(or &bm. option on the :xph.&colon.DOCPROF:exph. tag)
+was encountered
+:rev refid=r45.
+:dt.UNKSYM
+:dd.An unknown &sysname. symbol table record was encountered
+:erev refid=r45.
+:dt.UNKTAG
+:dd.An unknown &bm./GML tag was encountered
+:edl.
+:p.The actions you can specify:
+.getw symbol=dhlen gmltype=hp2 text='N O END TAG'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.IGNORE
+:dd.Ignore the situation completely, no message issued,
+the return code (RC) is not updated
+:dt.INFO
+:dd.Issue an information-only type message, RC not updated
+:dt.WARNING
+:dd.Issue a warning message (RC set to 4 if not already higher)
+:dt.ERROR
+:dd.Issue an error message (RC set to 8 if not already higher),
+continue execution
+:dt.TERM
+:dd.Terminate &sysname. (RC set to 8)
+:edl.
+:p.Initial settings:
+:xmp.
+  PROCACT='NOENDTAG=WARNING NOIMBED=ERROR NOINDEX=WARNING'
+  PROCACT='NOPER=WARNING NOXREF=ERROR UNKOPT=TERM &cont.
+:rev refid=r45.UNKSYM=TERM:erev refid=r45.'
+  PROCACT='UNKTAG=WARNING'
+:exmp.
+.*-----
+:spot id=psc1 xreftext='PSC= option'.
+:spot id=psc2 xreftext='PSC='.
+:pt.:pk.PSC=:epk.':pv.process:sub.1:esub. process:sub.2:esub. ... &cont.
+process:sub.x:esub.:epv.'
+:pd.Specifies the &bm. processes &sysname. should accept for the
+&colon.PSC. tag.  A special process of :q.:xph.1ST:exph.:eq. is
+available which, if specified, means &sysname. should always process
+the statements for the :hp1.first:ehp1. &colon.PSC group.
+:p.In addition to what is specified here, &sysname. also adds
+:rev refid=r42.
+additional process names based on the &html. release being generated.
+See :hdref refid=psc. for more information.
+:erev refid=r42.
+:p.Default: :pk.PSC='CHAR HTML':epk.
+plus one or more of:
+:pk.HTML2:epk.,
+:rev refid=r42.
+:pk.HTML2+:epk.,
+:erev refid=r42.
+:pk.HTML3:epk.,
+:rev refid=r42.
+:pk.HTML3+:epk.,
+:pk.HTML4:epk. or
+:pk.HTML4+:epk.
+:erev refid=r42.
+.*-----
+:spot id=ptoc2 xreftext='PTOC='.
+:pt.:pk.PTOC=&lbrc. NO | :pv.num:epv. | *:pv.num:epv. | &cont.
+:pk def.4:epk. &rbrc.:epk.
+:pd.What :q.depth:eq. of heading levels should be included in a
+partial table-of-contents?  If :xph.NO:exph. specified, no partial
+table-of-contents are generated.
+.dpopt
+Defaults to heading level 4 if omitted.
+.*-----
+:spot id=qreset2 xreftext='QRESET='.
+:pt.:pk.QRESET=&lbrc. :pk def.NO:epk. | 0 | 1 | ... | 19 | 20 &rbrc.:epk.
+:pd.Questions created with the :xph.&colon.QUESTION:exph. tag are
+numbered automatically.  :xph.QRESET:exph. specifies if and when the
+question number should be reset.
+.dpopt
+:note.:xph.QRESET=1:exph. is assumed if :xph.FBC=YES:exph. is
+specified.
+.getw symbol=dhlen gmltype=hp2 text='N O E'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.NO
+:dd.Questions are numbered sequentially from the beginning of the
+document to the end
+:dt.0
+:dd.Reset question numbering at each head level 0
+(:xph.&colon.H0:exph.)
+:dt.1
+:dd.Reset question numbering at head levels 0 and 1
+(:xph.&colon.H0:exph. and :xph.&colon.H1:exph.)
+:dt.2
+:dd.Reset question numbering at head levels 0 through 2
+:dt.&vellip
+:dd.&vellip
+:dt.20
+:dd.Reset question numbering at head levels 0
+through 20
+:edl.
+.br;Default: :pk.QRESET=NO:epk.
+.*-----
+:spot id=queso xreftext='QUESTION= option'.
+:spot id=ques2 xreftext='QUESTION='.
+:pt.:pk.QUESTION=TEXT:epk.
+:pt.:pk.QUESTION='FORM,&lbrk.:pv.method:epv.&rbrk.,&cont.
+:pv.url-of-cgi:epv.,&cont.
+&lbrk:pv.answer-action:epv.&rbrk.,&cont.
+&lbrk:pv.optdata:epv.&rbrk.':epk.
+:pd.Specifies how the Question and Answer tags should be handled.
+For more information, see :hdref refid=qanda..
+.getw symbol=dhlen  gmltype=hp2 text='<TE XT | FO RM>'
+.getw symbol=dhlen1 gmltype=hp2 text='< F O R M >'
+:dl termhi=0 compact tsize=&dhlen..
+:dt.&lbrc.:pk def.TEXT:epk.|FORM&rbrc.
+:dd.Controls whether Question &amp. Answer tags are converted to
+blocks of text (which is what &bm. does) or &html. FORMs
+:dl termhi=2 compact tsize=&dhlen1..
+:dt.TEXT
+:dd.Generate text for Question &amp. Answer tags
+(if specified, all other parameters for this option are ignored)
+:dt.FORM
+:dd.Generate &html. FORMs for Question &amp. Answer tags
+:edl.
+Default: TEXT
+:dt.:pv.method:epv.
+:dd.If generating HTML forms, this defines the HTTP method for form
+input, e.g. &lt.FORM&rbl.METHOD=:pv.xxx:epv.&gt..
+:dl termhi=2 break=fit compact tsize=&dhlen1..
+:dt.GET
+:dd.Use GET method for FORM input
+:dt.POST
+:dd.Use POST method for FORM input
+:edl.
+Default: GET
+:dt.:pv.url-of-CGI:epv.
+:dd.If generating &html. forms, this defines the URL for the CGI
+program to verify the answers,
+e.g. &lt.FORM&rbl.ACTION=":pv.url-of-CGI:epv."&gt..
+.br;Default: ''  (none)
+:dt.:pv.answer-action:epv.
+:dd.If generating &html. forms, this defines how the answers
+are handled (obtained from the ANS= or ANSID= attributes on the
+:xph.&colon.QUESTION:exph., :xph.&colon.BLANK:exph.,
+:xph.&colon.MATCH:exph. or :xph.&colon.QITEM:exph. tags)
+:dl termhi=2 compact tsize=&dhlen1..
+:dt.HIDDEN
+:dd.A hidden input field containing the answer data will be
+added to the form created for each question, like this:
+.br;:xph.  &lt.INPUT TYPE=HIDDEN NAME=ANS VALUE="...."&gt.:exph.
+:dt.:pv.file:epv.
+:dd.An answer file of this name:fnref refid=file. is generated with
+each record containing the answer to a specific question.  It is
+assumed that this file will be transferred to the server to be used
+by the CGI program to verify the user's answers.
+See :hdref refid=qanda. for information on the format of each
+record.
+:dt.NONE
+:dd.No answer data is written anywhere.  The CGI program must define
+an alternative method of verifying the user input.
+:edl.
+Default: HIDDEN
+:dt.:pv.optdata:epv.
+:dd.If generating &html. forms, this specifies any optional data to
+insert into a hidden field for each question, like this:
+.br;:xph.  &lt.INPUT TYPE=HIDDEN NAME=OPTDATA VALUE="...."&gt.:exph.
+.br;Often used to pass information to the CGI about where to find a
+question's answer, such as the name of the answer file or a database
+name.
+.br;Default: ''  (none)
+:edl.
+.br;Default: :pk.QUESTION=TEXT:epk.
+.*-----
+:spot id=quiet xreftext='QUIET and NOISY options'.
+:pt.:pk.QUIET | NOISY:epk.
+:pd.Specifies whether messages issued during the conversion should
+be displayed on the terminal.
+.getw symbol=dhlen gmltype=hp2 text='Q U I E T'
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:xph.NOISY:exph.
+:dd.Display messages on the terminal
+:dt.:xph.QUIET:exph.
+:dd.Do not display messages on the terminal
+:edl.
+:xph.NOISY:exph. is assumed unless &sysname. is running as a
+pipeline filter, in which case the default is :xph.QUIET:exph..
+.*-----
+:pt.:pk.REVDATE=:epk. &lbrk. :pv.yyyymmdd:epv. | &cont.
+&lbrc.+|-&rbrc.:pv.ddd:epv. | &cont.
+:pv.text:epv. &rbrk.
+:pd.The date when this file should be reviewed for currency.  Allows
+the server to generate an HTTP response header if review date
+information is requested.
+:ul compact.
+:li.If a date in :q.:pv.yyyymmdd:epv.:eq. format is specified, it is
+converted to conform to RFC 822 (updated by RFC 1123)
+:li.If a plus or minus sign precedes a numeric value, then today's
+date plus or minus the specified number of days is used, then
+converted to conform to the above RFC format
+:li.If no value is specified, the source file's date + one year is
+assumed, then converted to conform to the above RFC format
+:li.Otherwise the option's text value is included verbatim
+:eul.
+.seelay
+:p.Example: An input file with a date/time stamp of "1996-05-03 12:34:56"
+and :xph.REVDATE=19960727:exph., the following is generated:
+:xmp.
+  &lt.META HTTP-EQUIV="review" CONTENT="Sat, 27 Jul 1996 12:34:56"&gt.
+:exmp.
+Default: source file date + one year
+.*-----
+:spot id=revtag  xreftext='REVTAG= option'.
+:spot id=revtag2 xreftext='REVTAG='.
+:pt.:pk.REVTAG=':pv.revtext:epv.,:pv.erevtext:epv.,&cont.
+:rev refid=r42.&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+:erev refid=r42.&cont.
+':epk.
+:pt.:pk.REVTAG.:pv.id:epv.=':pv.revtext:epv.,:pv.erevtext:epv.,&cont.
+:rev refid=r42.&cont.
+&lbrk.:pk def.PROP:epk.|:pk.NOPROP:epk.&rbrk.&cont.
+:erev refid=r42.&cont.
+':epk.
+:pd.Many documents use the :xph.&colon.REVISION:exph. tag or
+:xph.&period.RC:exph. command to activate revision identifiers, such
+as:
+:xmp.
+  &colon.revision id=abc run=yes char="!".
+  &period.rc 1 !
+:exmp.
+The :xph.REVTAG:exph. option allows you to specify the text to insert
+when the active :xph.&colon.REV:exph. and :xph.&colon.EREV:exph. tags
+or the :xph.&period.RC:exph. control word is encountered, such as:
+:xmp.
+  &colon.rev refid=abc.
+  &colon.erev refid=abc.
+  &period.rc 1 on
+  &period.rc 1 off
+:exmp.
+The :xph.REVTAG:exph. option can be specified with or without the
+:q.id:eq. qualifier. If :q.id:eq. is omitted, the text is used for
+:hp1.all:ehp1. active :xph.&colon.REV/&colon.EREV:exph. tags and
+:xph.&period.RC x ON/OFF:exph. control words.
+If :q.id:eq. is specified, the text is used only for those active
+:xph.&colon.REV/&colon.EREV:exph. tags with
+:xph.REFID=:exph.:pv.id:epv., or
+:xph.&period.RC&rbl.:pv.x:epv.&rbl.ON/OFF:exph. where :pv.x:epv.
+matches :q.id:eq..
+(The :xph.&amp.b2hrevchar:exph. symbol contains the currently-active
+revision code character in case you wish to include it in the text.)
+.getw symbol=dhlen gmltype=hp1 text='e rev text '
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:pv.revtext:epv.
+:dd.Text and/or &html. tag(s) to insert for a :xph.&colon.REV:exph.
+tag or :xph.&period.RC :pv.x:epv. ON:exph. control word
+:dt.:pv.erevtext:epv.
+:dd.Text and/or &html. tag(s) to insert for a :xph.&colon.EREV:exph.
+tag or :xph.&period.RC :pv.x:epv. OFF:exph. control word
+:rev refid=r42.
+:dt.:pk.PROP:epk.
+:dd.When displaying an &html. table, many web browsers reset any
+font characteristics (including color) and display a cell's text in
+a default font.  :q.:pk.PROP:epk.:eq. specifies that if &sysname.
+generates an &html. table, all active start-revision/end-revision
+text should be :q.propagated:eq. into each table cell.
+This is the default value if omitted.
+:dt.:pk.NOPROP:epk.
+:dd.This specifies that active start-revision/end-revision text
+should NOT be :q.propagated:eq. into each table cell.
+:erev refid=r42.
+:edl.
+.br;Default: :pk.REVTAG='':epk.
+:p.See :hdref refid=faq. for examples of using this capability.
+.*-----
+:pt.:pk.SECURITY=':pv.text:epv.':epk.
+:pd.The security of the document.  If present, causes a
+:q.&lt.META&gt.:eq.-type statement to be included in the &html.
+output.  Also allows the server to generate an HTTP response header
+if security information is requested.
+.seelay
+:xmp.
+  SECURITY='public'
+:exmp.
+causes the following to be generated:
+:xmp.
+  &lt.META HTTP-EQUIV="security" CONTENT="public"&gt.
+:exmp.
+.br;e.g. SECURITY='None'
+.br;Default: SEC= parameter on the &colon.GDOC. or &colon.DOCPROF.
+tag, else :pk.SECURITY='':epk.
+.*-----
+:rev refid=r42.
+:spot id=settag  xreftext='SETUPTAG= option'.
+:spot id=settag2 xreftext='SETUPTAG='.
+:pt.:pk.SETUPTAG.:pv.tagname:epv.=':pv.beforetext:epv.',&cont.
+':pv.aftertext:epv.':epk.
+:pd.Allows you to specify &html. text for &sysname. to insert before
+and after the specified GML/&bm. tag.  Any text specified for
+:pv.beforetext:epv. will be inserted :hp5.before:ehp5. any &html.
+generated for the referenced tag; and any text specified for
+:pv.aftertext:epv. will be inserted :hp5.after:ehp5. any &html.
+generated for the referenced tag.
+:table cols='* 3*'.
+:tcap.SETUPTAG.tagname values
+:thd.
+:c.Option
+:c.Description
+:ethd.
+:row.
+:c.:xph.SETUPTAG.ADDRESS:exph.
+:c.Text to precede the :xph.&colon.ADDRESS.:exph. tag
+and to follow the :xph.&colon.EADDRESS.:exph. tag
+(used within the title page).
+:row.
+:c.:xph.SETUPTAG.ANNOT:exph.
+:c.Text to precede the :xph.&colon.ANNOT.:exph. tag and to follow
+the :xph.&colon.EANNOT.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.APPENDIX:exph.
+:c.Text to precede and follow the :xph.&colon.APPENDIX.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.CGRAPHIC:exph.
+:c.Text to precede the :xph.&colon.CGRAPHIC.:exph. tag and to follow
+the :xph.&colon.ECGRAPHIC.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.CIT:exph.
+:c.Text to precede the :xph.&colon.CIT.:exph. tag and to follow the
+:xph.&colon.ECIT.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.CODEL:exph.
+:c.Text to precede the :xph.&colon.CODEL.:exph. tag and to follow
+the :xph.&colon.ECODEL.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.DIALOG:exph.
+:c.Text to precede the :xph.&colon.DIALOG.:exph. tag and to follow
+the :xph.&colon.EDIALOG.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.DIRECT:exph.
+:c.Text to precede the :xph.&colon.DIRECT.:exph. tag and to follow
+the :xph.&colon.EDIRECT.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.FIG:exph.
+:c.Text to precede the :xph.&colon.FIG.:exph. tag and to follow the
+:xph.&colon.EFIG.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.FIGLIST:exph.
+:c.Text to precede and follow the :xph.&colon.FIGLIST.:exph. tag
+(which generates the list of figures).
+:row.
+:c.:xph.SETUPTAG.FN:exph.
+:c.Text to precede and follow the list of footnotes generated at the
+end of each physical &html. output file.
+:row.
+:c.:xph.SETUPTAG.H:pv.x:epv.:exph.
+:c.Text to precede and follow the appropriate
+:xph.&colon.H:pv.x:epv.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.INDEX:exph.
+:c.Text to precede and follow the :xph.&colon.INDEX.:exph. tag
+:row.
+:c.:xph.SETUPTAG.LBLBOX:exph.
+:c.Text to precede the :xph.&colon.LBLBOX.:exph. tag and to follow
+the :xph.&colon.ELBLBOX.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.LERS:exph.
+:c.Text to precede the :xph.&colon.LERS.:exph. tag and to follow the
+:xph.&colon.ELERS.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.LINES:exph.
+:c.Text to precede the :xph.&colon.LINES.:exph. tag and to follow
+the :xph.&colon.ELINES.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.LITDATA:exph.
+:c.Text to precede the :xph.&colon.LITDATA.:exph. tag and to follow
+the :xph.&colon.ELITDATA.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.MSGL:exph.
+:c.Text to precede the :xph.&colon.MSGL.:exph. tag and to follow the
+:xph.&colon.EMSGL.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.NOTEL:exph.
+:c.Text to precede the :xph.&colon.NOTEL.:exph. tag and to follow
+the :xph.&colon.ENOTEL.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.NT:exph.
+:c.Text to precede the :xph.&colon.NT.:exph. tag and to follow the
+:xph.&colon.ENT.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.PK:exph.
+:c.Text to precede the :xph.&colon.PK.:exph. tag and to follow the
+:xph.&colon.EPK.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.PTOC:exph.
+:c.Text to precede and follow the :xph.&colon.PTOC.:exph. tag
+(which generates a partial table of contents).
+:row.
+:c.:xph.SETUPTAG.QUALIF:exph.
+:c.Text to precede the :xph.&colon.QUALIF.:exph. tag and to follow
+the :xph.&colon.EQUALIF.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.QUESTION:exph.
+:c.Text to precede the :xph.&colon.QUESTION.:exph. tag and to follow
+the :xph.&colon.EQUESTION.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.SCHDATE:exph.
+:c.Text to precede and follow the :xph.&colon.SCHDATE.:exph. tag
+(which generates a schedule chart).
+:row.
+:c.:xph.SETUPTAG.SCREEN:exph.
+:c.Text to precede the :xph.&colon.SCREEN.:exph. tag and to follow
+the :xph.&colon.ESCREEN.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.SYNTAX:exph.
+:c.Text to precede the :xph.&colon.SYNTAX.:exph. tag and to follow
+the :xph.&colon.ESYNTAX.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.TABDATA:exph.
+:c.Text to precede the :xph.&colon.TABDATA.:exph. tag and to follow
+the :xph.&colon.ETABDATA.:exph. tag.
+:row.
+:c.:xph.SETUPTAG.TABLE:exph.
+:c.Text to precede the :xph.&colon.TABLE.:exph. tag and to follow
+the :xph.&colon.ETABLE.:exph. tag.  The before/after text is also
+propagated into each table cell.
+:row.
+:c.:xph.SETUPTAG.TIPAGE:exph.
+:c.Text to precede and follow the :xph.&colon.TIPAGE.:exph. tag
+(which generates the title page).
+:row.
+:c.:xph.SETUPTAG.TLIST:exph.
+:c.Text to precede and follow the :xph.&colon.TLIST.:exph. tag
+(which generates the list of tables).
+:row.
+:c.:xph.SETUPTAG.TOC:exph.
+:c.Text to precede and follow the :xph.&colon.TOC.:exph. tag
+(which generates the table of contents).
+:row.
+:c.:xph.SETUPTAG.XMP:exph.
+:c.Text to precede the :xph.&colon.XMP.:exph. tag and to follow the
+:xph.&colon.EXMP.:exph. tag.
+:etable.
+:p.:hp2.Example 1&colon.:ehp2. Cause the title page to be centered
+:xmp.
+   SETUPTAG.TIPAGE='&lt.center&gt.','&lt./center&gt.'
+:exmp.
+:p.:hp2.Example 2&colon.:ehp2.
+Enable a specific monospaced font for all syntax diagrams.
+(For a more detailed description, see :hdref refid=faqsn.)
+:xmp.
+  SETUPTAG.SYNTAX='&lt.font face="courier"&gt.','&lt./font&gt.'
+ 
+Then this source:
+  &colon.SYNTAX ...
+  (... the specification of the diagram ...)
+  &colon.ESYNTAX.
+ 
+Generates this &html.&colon.
+  &lt.font face="courier"&gt.&lt.PRE&gt.
+  (... the syntax diagram itself ...)
+  &lt./PRE&gt.&lt./font&gt.
+:exmp.
+:erev refid=r42.
+.*-----
+:spot id=shade2 xreftext='SHADE='.
+:pt.:pk.SHADE.:pv.name:epv.=:pv.rrggbb:epv.:epk.
+:pd.The color values to be associated with the different
+:xph.SHADE=:exph. attributes on the :xph.&colon.FIG:exph.,
+:xph.&colon.FIGDEF:exph.,
+:xph.&colon.TABLE:exph. and :xph.&colon.TDEF:exph. tags.
+The :q.:pv.rrggbb:epv.:eq. values are hexadecimal digits
+representing the red, green and blue ingredients of the desired
+shade.  :q.:pv.name:epv.:eq. is one of the allowable
+:xph.SHADE=:exph. settings. See :hdref refid=xshade. for an example.
+.cp 20
+Default values:
+:table cols='* * *' alignh=l.
+:tcap.Default SHADE.name= option values
+:thd.
+:c.Option&colon.
+:c.&html. generated&colon.
+:c.Shows as&colon.
+:ethd.
+:row.
+:c.:xph.SHADE.XLIGHT=DADADA:exph.
+:c.:xph.BGCOLOR=&numsign.DADADA:exph.
+:c.Extra-Light Gray
+:row.
+:c.:xph.SHADE.LIGHT=B0B0B0:exph.
+:c.:xph.BGCOLOR=&numsign.B0B0B0:exph.
+:c.Light Gray
+:row.
+:c.:xph.SHADE.MEDIUM=8C8C8C:exph.
+:c.:xph.BGCOLOR=&numsign.8C8C8C:exph.
+:c.Medium Gray
+:row.
+:c.:xph.SHADE.DARK=6E6E6E:exph.
+:c.:xph.BGCOLOR=&numsign.6E6E6E:exph.
+:c.Dark Gray
+:row.
+:c.:xph.SHADE.XDARK=585858:exph.
+:c.:xph.BGCOLOR=&numsign.585858:exph.
+:c.Extra-Dark Gray
+:row.
+:c.:xph.SHADE.YES=B0B0B0:exph.
+:c.:xph.BGCOLOR=&numsign.B0B0B0:exph.
+:c.Light Gray
+:row.
+:c.:xph.SHADE.SCREEN=B0B0B0:exph.
+:c.:xph.BGCOLOR=&numsign.B0B0B0:exph.
+:c.Light Gray
+:etable.
+:note.:q.:xph.SHADE.SCREEN=:exph.:eq. specifies the shading to use
+for the :xph.&colon.SCREEN:exph. tag if the :xph.SHADE=SCREEN:exph.
+attribute is specified on the :xph.&colon.DOCPROF:exph. tag.
+.*-----
+:spot id=showlin xreftext='SHOWLINES= option'.
+:pt.:pk.SHOWLINES=&lbrc. NO | :pk def.100:epk. | :pv.num:epv. &rbrc.:epk.
+:pd.Should :hp1.:q.processing line x of y:eq.:ehp1. messages be
+shown while &sysname. does the conversion? And if so, how often?
+.br;Default:  :pk.SHOWLINES=100:epk. on PC workstations
+and :pk.SHOWLINES=NO:epk. on MVS and VM.
+.*-----
+:spot id=sltag2  xreftext='SLTAG='.
+:pt.:pk.SLTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing a simple list (&colon.SL) and it's associated tags.
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for a non-compact list
+:dt.1
+:dd.&html. tags for a compact list (e.g. &colon.SL COMPACT)
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.List start
+:dt.le :dd.List end
+:dt.is :dd.List item start
+:dt.ie :dd.List item end
+:edl.
+.br;Default:
+:xmp.
+  SLTAG.0='&lt.DL&gt.,&lt./DL&gt.,&lt.DD&gt.&lt.P&gt.,'
+  SLTAG.1='&lt.DL COMPACT&gt.,&lt./DL&gt.,&lt.DD&gt.,'
+:exmp.
+.*-----
+:spot id=source xreftext='SOURCE= option'.
+:pt.:pk.SOURCE=&lbrc. :pk def.SCRIPT:epk. | &cont.
+SCRIPTONLY | FLAT &rbrc.:epk.
+:pt.:pk.SOURCE='FLAT,&lbrk.pre&rbrk.,&lbrk.blanksub&rbrk.':epk.
+:pd.This specifies the format of the input file.
+:ul.
+:li.If the input is a script-type document
+(e.g. Bookmaster or GML), specify:  :xph.SOURCE=SCRIPT:exph.
+.br;For more information, see :hdref refid=conbm..
+:li.If the input is a script document, but is to be processed using
+the rules of &script. and :hp1.not:ehp1. GML or &bm., specify:
+:xph.SOURCE=SCRIPTONLY:exph.
+.br;For more information, see :hdref refid=conscr..
+:li.If it is a &flat. file, specify: :xph.SOURCE=FLAT:exph.
+.br;For more information, see :hdref refid=conflat..
+:eul.
+:p.If the input is a &flat. file, additional processing options are
+available.
+:parml.
+:pt.:pv.pre:epv.
+:pd.Specifies when and if any text should be enclosed within the
+:q.&pre.:eq. and :q.&epre.:eq. &html. tags.
+:dl tsize=4m termhi=0 compact.
+:dt.:xph.PRE:exph.
+:dd.The entire file is enclosed within &pre.&epre..
+(This is the default)
+:dt.:xph.NOPRE:exph.
+:dd.No &pre and &epre tags are inserted into the text
+:p.Careful! If you specify this and do not specify anything for
+:pv.blanksub:epv., the browser may format the entire file into one
+big paragraph!
+:dt.:pv.num:epv.
+:dd.If this many columns at the start of an input record are blank,
+the record is enclosed in &pre.&epre., otherwise no additional
+&pre.&epre tags are inserted.
+:edl.
+:pt.:pv.blanksub:epv.
+:pd.Should an &html. paragraph tag replace blank records?
+:dl tsize=4m termhi=0 compact.
+:dt.:xph.NO:exph.
+:dd.Blank records are written :q.as-is:eq. (default)
+:dt.:xph.YES:exph.
+:dd.A :xph.&lt.P&gt.:exph. tag is substituted for a blank record
+:dt.:pv.text:epv.
+:dd.Replace a blank record with this text
+:edl.
+:eparml.
+ 
+ 
+.*-----
+:spot id=partdig xreftext='SPLITDIGITS= option'.
+:pt.:pk.:rev refid=r42.SPLITDIGITS=:erev refid=r42.'&lbrc. &cont.
+:pk def.2:epk. | :pv.num:epv. &rbrc.,
+&lbrc. :pk def.DEC:epk. | HEX | ALPHA | LALPHA &rbrc.':epk.
+:pd.When splitting the output file, this specifies how many digits
+will be appended to the end of the filename to ensure unique files.
+For example,
+:rev refid=r42.
+:xph.SPLITDIGITS=2:exph.
+:erev refid=r42.
+might create :xph.abc.htm, abc02.htm, abc03.htm:exph., etc.
+(See :hdref refid=split. for additional information.)
+If the number of output files exceeds what can be accomodated by
+this value, a warning message is issued and the value is dynamically
+increased.
+:p.The second parameter specifies the type of numbering to use.
+.getw symbol=dhlen gmltype=hp2 text='M AL P HA'
+:dl termhi=2 compact tsize=&dhlen..
+:dt.DEC
+:dd.Decimal (base 10) numbering using the digits 0-9 (this is the default)
+:dt.HEX
+:dd.Hexadecimal (base 16) numbering using the digits 0-9,A-F
+:dt.ALPHA
+:dd.Alphanumeric (base 36) numbering using the digits 0-9,A-Z
+:dt.LALPHA
+:dd.Alphanumeric (base 36) numbering using the digits 0-9,a-z
+:edl.
+:rev refid=r42.
+:note.For compatibility with older releases of &sysname.,
+an option name of :xph.PARTDIGITS=:exph. is recognized as an
+alias of :xph.SPLITDIGITS=:exph..
+:erev refid=r42.
+:p.Default: :rev refid=r42.:pk.SPLITDIGITS=:erev refid=r42.'2,DEC':epk.
+.*-----
+:spot id=partdir xreftext='SPLITDIR= option'.
+:spot id=partdi2 xreftext='SPLITDIR='.
+:pt.:pk.:rev refid=r42.SPLITDIR&cont.
+&lbrk..:pv.x:epv.&lbrk.-y&rbrk.&rbrk.=:erev refid=r42.'&cont.
+&lbrk.:pv.physical-file-name:epv.&rbrk.,
+&lbrk.:pv.logical-file-name:epv.&rbrk.&cont.
+':epk.
+:pt.:pk.:rev refid=r42.SPLITDIR.NEXT=:erev refid=r42.'&cont.
+&lbrk.:pv.physical-file-name:epv.&rbrk.,
+&lbrk.:pv.logical-file-name:epv.&rbrk.&cont.
+':epk.
+:pd.When you use the
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+option to split the output &html. file, the physical and logical
+locations for the split files are normally derived using the
+physical and logical destination of the main file.  This option
+allows you to pre-specify the physical and logical
+:hp1.directory:ehp1. for each split file.  (The main output file is
+always placed in the location specified by the :xph.OUTPUTP=:exph.
+and :xph.OUTPUTL=:exph. options.)
+:p.The following syntaxes are accepted:
+:parml.
+:pt.:xph.:rev refid=r42.SPLITDIR=:erev refid=r42.:exph.':pv.physicaldir:epv.,:pv.logicaldir:epv.'
+:pd.All split files are directed to the specified directories
+:pt.:xph.:rev refid=r42.SPLITDIR.3=:erev refid=r42.:exph.':pv.physicaldir:epv.,:pv.logicaldir:epv.'
+:pd.The third split file is directed to the specified directories
+:pt.:xph.:rev refid=r42.SPLITDIR.5-8=:erev refid=r42.:exph.':pv.physicaldir:epv.,:pv.logicaldir:epv.'
+:pd.The fifth through eighth split files are directed to the
+specified directories
+:rev refid=r42.
+:pt.:xph.SPLITDIR.NEXT=:exph.':pv.physicaldir:epv.,:pv.logicaldir:epv.'
+:pd.The next split file (wherever and whenever it occurs) is
+directed to the specified directories.
+This form of the option is normally included on a
+:xph.&optioncmd2:exph. statement within the source file.
+:erev refid=r42.
+:eparml.
+:p.See :hdref refid=splitx. for more information.
+:notel.
+:li.This option is intended for advanced users and should be used
+with caution
+:li.:xph.:rev refid=r42.SPLITDIR.1=:erev refid=r42.:exph. is ignored
+as those values are represented by the :xph.OUTPUTP=:exph. and
+:xph.OUTPUTL=:exph. options
+:rev refid=r42.
+:li.If :hp1.multiple:ehp1. :xph.SPLITDIR.NEXT=:exph. options are
+specified before the next time the input file is actually split,
+the options just overlay each other
+:li.For compatibility with older releases of &sysname.,
+an option name of :xph.PARTDIR=:exph. is recognized as an
+alias of :xph.SPLITDIR=:exph..
+:erev refid=r42.
+:enotel.
+.*-----
+:pt.:pk.:rev refid=r42.SPLITLINK=:erev refid=r42.&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Specifies if you want &sysname. to :hp1.automatically:ehp1. include
+NextPage/PrevPage/Table-Of-Contents/Index
+hyperlinks when splitting the &html
+output file using
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+or the
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+command.
+If :xph.:rev refid=r42.SPLITLINK=YES:erev refid=r42.:exph. (the
+default), the linkage text defined for the :xph.:rev
+refid=r42.SPLITLINK:erev refid=r42..:pv.x:epv.=:exph. options are
+used.  (See :hdref refid=split. for additional information.)
+:rev refid=r42.
+:note.For compatibility with older releases of &sysname., an option
+name of :xph.PARTLINK=:exph. is recognized as an alias of
+:xph.SPLITLINK=:exph..
+:erev refid=r42.
+:p.Default: :pk.:rev refid=r42.SPLITLINK=:erev refid=r42.YES:epk.
+.*-----
+:pt.:pk.:rev refid=r42.SPLITLINK.:pv.x:epv.=:erev refid=r42.':pv.text:epv. | CLEAR':epk.
+:pd.These specify the NextPage/Prevpage/Table-Of-Contents hyperlink
+text to automatically insert into the output &html. files when
+splitting the output using
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+or the
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+command.
+(See also the :xph.:rev refid=r42.SPLITLINK=:erev refid=r42.:exph.
+option.) &sysname. will not process the text other than to perform
+substitution for any &amp.variables. (See :hdref refid=split. for
+additional information.)
+:p.:q.:pv.x:epv.:eq. is a numeric value from 1 to 6 or 11 to 16.
+:p.Values 1 to 6 are used if an index is :hp1.not:ehp1. being
+generated:
+:dl termhi=0 tsize=2m compact.
+:dt.1
+:dd.Text to insert at the :hp1.top:ehp1. of the :hp1.first:ehp1.
+output &html. file.  No default text is provided for this value.
+:dt.2
+:dd.Text to insert at the :hp1.bottom:ehp1. of the :hp1.first:ehp1.
+output &html. file.  The default text contains hyperlinks to the
+top-of-page and to the next page.
+:dt.3
+:dd.Text to insert at the :hp1.top:ehp1. of the :hp1.middle:ehp1.
+(not the first, but not the last) output &html. file.  No default
+text is provided for this value.
+:dt.4
+:dd.Text to insert at the :hp1.bottom:ehp1. of each
+:hp1.middle:ehp1. (not the first, but not the last) output &html.
+file.  The default text contains hyperlinks to the top-of-page,
+previous page, next page and to the table-of-contents.
+:dt.5
+:dd.Text to insert at the :hp1.top:ehp1. of the :hp1.last:ehp1.
+output &html. file.  No default text is provided for this value.
+:dt.6
+:dd.Text to insert at the :hp1.bottom:ehp1. of the :hp1.last:ehp1.
+output &html. file. The default text contains hyperlinks to the
+top-of-page, previous page and to the table-of-contents.
+:edl.
+:p.Values 11 to 16 are used if an index :hp1.is:ehp1. being generated:
+:dl termhi=0 tsize=2m compact.
+:dt.11
+:dd.Text to insert at the :hp1.top:ehp1. of the
+:hp1.first:ehp1. output &html. file.
+No default text is provided for this value.
+:dt.12
+:dd.Text to insert at the :hp1.bottom:ehp1. of the
+:hp1.first:ehp1. output &html. file. The default text contains
+hyperlinks to the top-of-page, next page and to the index.
+:dt.13
+:dd.Text to insert at the :hp1.top:ehp1. of the
+:hp1.middle:ehp1. (not the first, but not the last)
+output &html. file. No default text is provided for this value.
+:dt.14
+:dd.Text to insert at the :hp1.bottom:ehp1. of each
+:hp1.middle:ehp1. (not the first, but not the last)
+output &html. file. The default text contains hyperlinks to the
+top-of-page, previous page, next page, table-of-contents and
+to the index.
+:dt.15
+:dd.Text to insert at the :hp1.top:ehp1. of the
+:hp1.last:ehp1. output &html. file.
+No default text is provided for this value.
+:dt.16
+:dd.Text to insert at the :hp1.bottom:ehp1. of the :hp1.last:ehp1.
+output &html. file. The default text contains hyperlinks to the
+top-of-page, previous page, table-of-contents and to the index.
+:edl.
+:p.:hdref refid=b2hvars. lists the &amp.variables which are provided
+with the intent of their being used within a
+:xph.:rev refid=r42.SPLITLINK.:pv.x:epv.:erev refid=r42.=:exph.
+definition.
+:p.To facilitate entering long strings of text, you can specify each
+option as many times as desired, the values are accumulated.
+Specifying a value of :pk.CLEAR:epk. erases all text for a given
+option.
+:rev refid=r42.
+:note.For compatibility with older releases of &sysname., an option
+name of :xph.PARTLINK.:pv.x:epv.=:exph. is recognized as an alias of
+:xph.SPLITLINK.:pv.x:epv.=:exph..
+:erev refid=r42.
+.*-----
+:spot id=partnam xreftext='SPLITNAME= option'.
+:spot id=partna2 xreftext='SPLITNAME='.
+:pt.:pk.:rev refid=r42.SPLITNAME:erev refid=r42..:pv.x:epv.='&cont.
+&lbrk.:pv.physical-file-name:epv.&rbrk.,
+&lbrk.:pv.logical-file-name:epv.&rbrk.&cont.
+':epk.
+:pt.:pk.:rev refid=r42.SPLITNAME.NEXT:erev refid=r42.='&cont.
+&lbrk.:pv.physical-file-name:epv.&rbrk.,
+&lbrk.:pv.logical-file-name:epv.&rbrk.&cont.
+':epk.
+:pd.When you use the
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+option to split the output &html. file, &sysname. normally generates
+unique file names by appending a counter to the output filename.
+:xph.:rev refid=r42.SPLITNAME.:pv.x:epv.=:erev refid=r42.:exph.
+allows you to pre-specify the file names, overriding &sysname.'s
+automatically-generated names.
+Each :xph.:rev refid=r42.SPLITNAME.:pv.x:epv.=:erev refid=r42.:exph.
+option designates both the physical and logical file name for the
+specific output file indicated by the :q.:pv.x:epv.:eq. value.
+For example:
+:xmp.
+  :rev refid=r42.SPLITNAME.4=:erev refid=r42.'PROJDEF HTML A,projdef.htm'
+:exmp.
+This specifies that the fourth output file should be physically
+created as :q.:xph.PROJDEF HTML A:exph.:eq. and logically known as
+:q.:xph.projdef.htm:exph.:eq..
+:rev refid=r42.
+:xmp.
+  SPLITNAME.NEXT='DOITNOW HTML A,doitnow.htm'
+:exmp.
+This specifies that the :hp1.next:ehp1. output file (whenever and
+wherever it occurs), should be physically created as :q.:xph.PROJDEF
+HTML A:exph.:eq. and logically known as
+:q.:xph.projdef.htm:exph.:eq..  This form of the option is normally
+included on a :xph.&optioncmd2:exph. statement within the source file.
+:erev refid=r42.
+:notel.
+:li.This option is intended for advanced users and should be used
+with caution
+:li.See :hdref refid=splitx. for more information.
+:li.:xph.:rev refid=r42.SPLITNAME.1=:erev refid=r42.:exph. is
+ignored as those values are represented by the :xph.OUTPUTP=:exph.
+and :xph.OUTPUTL=:exph. options
+:rev refid=r42.
+:li.If :hp1.multiple:ehp1. :xph.SPLITNAME.NEXT=:exph. options are
+specified before the next time the input file is actually split,
+the options just overlay each other
+:li.For compatibility with older releases of &sysname., an option
+name of :xph.PARTNAME.:pv.x:epv.=:exph. is recognized as an alias of
+:xph.SPLITNAME.:pv.x:epv.=:exph..
+:erev refid=r42.
+:enotel.
+.*-----
+:pt.:pk.SYMCHARS=':pv.ccc...ccc:epv.':epk.
+:pd. Allows additional characters to be recognized within a
+&amp.symbol name. Unless specified, only the standard characters
+(@,#,$,A-Z,a-z,0-9) are valid.
+.br;Default: :pk.SYMCHARS='':epk.
+.*-----
+:spot id=synfon2 xreftext='SYNFONT='.
+:pt.:pk.SYNFONT=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pd.Use fonts within syntax diagrams (e.g. keywords in bold,
+variables in italics)?  Some browsers use a different character
+width for bold/italic text than for regular text which causes
+alignment problems within the diagram.  If all your users are using
+browsers that do not exhibit this behavior, specify
+:xph.SYNFONT=YES:exph., otherwise stay with the default
+:xph.SYNFONT=NO:exph..
+:psc proc=html.
+See :hdref refid=exsynd. for an example of syntax diagrams with and
+without using fonts.
+:epsc.
+.br;Default: :pk.SYNFONT=NO:epk.
+.*-----
+:spot id=sysvra  xreftext="SYSVAR='A&rbl.value' option".
+:spot id=sysvra2 xreftext="SYSVAR='A&rbl.value'".
+:pt.:pk.SYSVAR=:epk.':pv.char value char value ...:epv.'
+:pd.Provides a means of providing options to &sysname. in a manner
+similar to how system variables are specified to &bm., where
+:pv.char:epv. is a single character of the option you are specifying
+and :pv.value:epv. is the vaue you are assigning to it.
+:table cols='6m *' align='c l'.
+:thd.
+:c.CHAR
+:c.Value and Meaning
+:ethd.
+:row.:c.:hp2.A:ehp2.
+:c.Controls the processing of annotation text marked up using
+the :xph.&colon.ANNOT.:exph. and :xph.&colon.EANNOT.:exph. tags.
+See also the :spotref refid=annot..
+:dl termhi=2 tsize=3M compact.
+:dt.YES :dd.Process annotations
+:dt.NO  :dd.Do not process annotations (default)
+:edl.
+:row.:c.:hp2.W:ehp2.
+:c.The file where extended cross-reference information should be
+written.  (See also :hdref refid=mvxref.) If specified, this should
+be the :hp1.last:ehp1. parameter specified for this SYSVAR option.
+If a filetype or extension is specified, it is ignored.
+:p.If :xph.SYSVAR='W book1':exph. is specified, the file created is:
+:xmp.
+  book1.b2hxrefs          (AIX)
+  book1.b2hxrefs          (LINUX)
+  :pv.userid:epv..BOOK1.B2HXREFS   (MVS)
+  BOOK1.B2X               (OS/2)
+  BOOK1 B2HXREFS          (VM)
+  BOOK1.B2X               (WIN95)
+  BOOK1.B2X               (WINNT)
+:rev refid=r47.
+  book1.b2hxrefs          (UNIX)
+:erev refid=r47.
+:exmp.
+:p.If :xph.SYSVAR='W projug':exph., then:
+:xmp.
+  projug.b2hxrefs         (AIX)
+  projug.b2hxrefs         (LINUX)
+  :pv.userid:epv..PROJUG.B2HXREFS  (MVS)
+  PROJUG.B2X              (OS/2)
+  PROJUG B2HXREFS         (VM)
+  PROJUG.B2X              (WIN95)
+  PROJUG.B2X              (WINNT)
+:rev refid=r47.
+  projug.b2hxrefs         (UNIX)
+:erev refid=r47.
+:exmp.
+:p.And if :xph.SYSVAR='W acmea.abc':exph., then:
+:xmp.
+  acmea.b2hxrefs          (AIX)
+  acmea.b2hxrefs          (LINUX)
+  :pv.userid:epv..ACMEA.B2HXREFS   (MVS)
+  ACMEA.B2X               (OS/2)
+  ACMEA B2HXREFS          (VM)
+  ACMEA.B2X               (WIN95)
+  ACMEA.B2X               (WINNT)
+:rev refid=r47.
+  acmea.b2hxrefs          (UNIX)
+:erev refid=r47.
+:exmp.
+:note.On AIX, Linux, OS/2, &win9x., &winnt.
+:rev refid=r47.
+or UNIX,
+:erev refid=r47.
+if a path is specifed, the file is placed into that directory;
+else the file is placed into the working directory.
+On VM/ESA, the file is placed
+on the disk specified by the :xph.OUTPUTFM=:exph. option.
+:row.:c.:hp2.0:ehp2.
+:c.DVCF conditions file; can be set to the name of a
+file:fnref refid=file. that contains symbols definitions for DVCF
+conditions.  If specified, this should be the :hp1.last:ehp1.
+parameter specified for this SYSVAR option.
+:xmp.
+  :pv.file    :epv.                (AIX)
+  :pv.file    :epv.                (LINUX)
+  :pv.filespec:epv.                (MVS)
+  :pv.file.ext:epv.                (OS/2)
+  :pv.fn ft fm:epv.                (VM)
+  :pv.file.ext:epv.                (WIN95)
+  :pv.file.ext:epv.                (WINNT)
+:rev refid=r47.
+  :pv.file    :epv.                (UNIX)
+:erev refid=r47.
+:exmp.
+This is the best method if you have a lot of conditions to set and
+you frequently set them in the same combination.
+:p.If your file of condition names were named
+:xph.sysvars.def:exph., you would specify:
+:xmp.
+  SYSVAR='0 sysvars.def'
+:exmp.
+and the file would contain this markup to set the conditions true:
+:xmp.
+  &period.setdvcf sport on
+  &period.setdvcf truck on
+:exmp.
+or this to set the conditions false:
+:xmp.
+  &period.setdvcf sport off
+  &period.setdvcf truck off
+:exmp.
+This is the SETDVCF macro, which generates a symbol and allows you
+to set DVCF conditions on or off.
+:row.:c.:hp2.1-9:ehp2.
+:c.DVCF conditions.  Each of the nine variables be set to an
+individual condition name.  If you want to set the :xph.WAGON:exph.
+and :xph.SPORT:exph. conditions to true:
+:xmp.
+  SYSVAR='1 WAGON 2 SPORT'
+:exmp.
+See also the :spotref refid=dvcf..
+:etable.
+.*-----
+:spot id=table22 xreftext='TABLE2='.
+:pt.:pk.TABLE2=':pv.fl,fm,fr,fv,fhn,fhh,gutl,gutr:epv.':epk.
+:pd.Allows you to specify the characters used to create, draw and
+format a table generated for &html. 2.
+.getw symbol=dhlen gmltype=hp1 text='G U T L'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.fl
+:dd.Frame: left edge character
+:dt.fm
+:dd.Frame: middle junction character
+:dt.fr
+:dd.Frame: right edge character
+:dt.fv
+:dd.Frame: Vertical character
+:dt.fhn
+:dd.Frame: Horizontal character - normal data cell
+:dt.fhh
+:dd.Frame: Horizontal character - header/footer cell
+:dt.gutl
+:dd.Cell gutter string - left
+:dt.gutr
+:dd.Cell gutter string - right
+:edl.
+.br;Default: :xph.TABLE2='+,+,+,&vbar.,&dash.,=, , ':exph.
+.*-----
+:spot id=tagche xreftext='TAGCHECK= option'.
+:pt.:pk.TAGCHECK=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Should &sysname. check the document for logical consistency in
+it's Script/GML/&bm. tags?  If :xph.YES:exph., the following is
+checked:
+:ul compact.
+:li.Start-tag encountered, but no end-tag
+(e.g. :xph.&colon.xmp:exph. missing it's :xph.&colon.exmp:exph.,
+:xph.&colon.hp1:exph. missing it's :xph.&colon.ehp1:exph.)
+:li.End-tag encountered without a previous start-tag
+(e.g. an :q.orphan:eq. :xph.&colon.erev:exph.)
+:li.Illegal nesting (e.g. :xph.&colon.fig:exph. inside
+a :xph.&colon.fig:exph.)
+:li.Tags found outside of where they should be,
+e.g. :xph.&colon.LI:exph. outside of a list, :xph.&colon.ROW:exph.
+outside of a table
+:li.:xph.INDEX=YES:exph. specified, but no :xph.&colon.INDEX:exph.
+tag encountered
+:li.A title-type tag encountered (e.g. :xph.&colon.TITLE:exph.,
+:xph.&colon.LIBRARY:exph., :xph.&colon.TOPIC:exph.),
+but no :xph.&colon.ETITLE/&colon.ETITLEP:exph. tag
+:eul.
+.br;Default: :xph.TAGCHECK=YES:exph.
+:note.If you are using &sysname. in conjunction with a web server to
+convert documents to &html. in :q.real-time:eq., you can improve
+performance slightly by specifying :xph.TAGCHECK=NO:exph..
+.*-----
+:spot id=tfigl2 xreftext='TFIGLISTTAG='.
+:pt.:pk.TFIGLISTTAG.:pv.x:epv.=':pv.ls,le,is,ie,:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should use when
+creating the figure list (&colon.FIGLIST) and the table list
+(&colon.TLIST).
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags when Folio-By-Chapter is :hp1.not:ehp1. in effect
+(:xph.FBC=NO:exph.)
+:dt.1
+:dd.&html. tags when Folio-By-Chapter :hp1.is:ehp1. in effect
+(:xph.FBC=YES:exph.)
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls
+:dd.List start
+:dt.le
+:dd.List end
+:dt.is
+:dd.Item start
+:dt.ie
+:dd.Item end
+:edl.
+.br;Default:
+:xmp.
+  TFIGLISTTAG.0='&lt.OL&gt.,&lt./OL&gt.,&lt.LI&gt.,&lt./LI&gt.'
+  TFIGLISTTAG.1='&lt.P&gt.,&lt.P&gt.,,&lt.BR&gt.'
+:exmp.
+.*-----
+:spot id=title2 xreftext='TITLE='.
+:pt.:pk.TITLE=':pv.text:epv.':epk.
+:pd.The title of the output &html. file.
+If omitted, the document's title is determined using the rules
+described in :hdref refid=doctit..
+This option should always be specified when processing a &flat. file.
+.seelay
+.br;Example: TITLE='How to play the piano'
+.*-----
+:spot id=tlist2 xreftext='TLIST='.
+:pt.:pk.TLIST=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Do you want to generate a list of tables when the
+:xph.&colon.TLIST.:exph. statement is encountered?  Some people do
+not want a table list in an &html. file and this option allows you
+to prevent one from being generated.  If :xph.FTSEP=NO:exph., the
+default is :xph.NO:exph.; otherwise the default is :xph.YES:exph..
+.br;Example: TLIST=YES
+.*-----
+:spot id=toc2 xreftext='TOC='.
+:pt.:pk.TOC=&lbrc. :pk def.YES:epk. | NO | :pv.num:epv. | &cont.
+*:pv.num:epv. &rbrc.:epk.
+:pd.Generate a Table-Of-Contents with hyperlinks to each section?
+If :hp1.not:ehp1. :xph.NO:exph.,
+include which &colon.H:pv.x:epv.. headers in it?
+:xph.TOC=12:exph. means include &colon.H1. and &colon.H2.,
+:xph.TOC=*3:exph. means include &colon.H1., &colon.H2 and &colon.H3.
+:xph.TOC=YES:exph. is equivalent to :xph.TOC=*3:exph..
+.dpopt
+.br;Default: :pk.TOC=YES:epk.
+.*-----
+:spot id=tocc2 xreftext='TOCC='.
+:pt.:pk.TOCC=&lbrc. YES | :pk def.NO:epk. &rbrc.:epk.
+:pd.Generate a :q.compressed:eq. Table-Of-Contents instead of a
+Table-Of-Contents with blank lines between &colon.H0., &colon.H1.
+and &colon.H2.?
+.br;Default: :pk.TOCC=NO:epk.
+.*-----
+:spot id=tocind2 xreftext='TOCINDENT='.
+:pt.:pk.TOCINDENT=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Should individual lines in the Table-Of-Contents be indented
+according to their header number (&colon.H:pv.x:epv..)?
+.br;Default: :pk.TOCINDENT=YES:epk.
+.*-----
+:spot id=tocret2 xreftext='TOCRET='.
+:pt.:pk.TOCRET=&lbrc. NO | TOC | :pk def.PTOC:epk. | &cont.
+PTOC:pv.x:epv. &rbrc.:epk.
+:pd.If a Table-Of-Contents is being generated with links to each
+section (:xph.TOC=:exph. parameter is :hp1.not:ehp1. NO), should the
+section header itself be a hyperlink to return back to the
+Table-Of-Contents?  And if so, should the link return to the main
+Table-Of-Contents (TOC) or to the most-recent
+Partial-Table-Of-Contents (PTOC)?
+:parml.
+:pt.TOCRET=NO
+:pd.The section header is not a hyperlink
+(assumed if :xph.TOC=NO:exph.)
+:pt.TOCRET=TOC
+:pd.The section header always links back to the main TOC, even if
+PTOCs are being generated.
+:pt.TOCRET=PTOC:pv.x:epv.
+:pd.The section header is a hyperlink back to the most-recent PTOC.
+If a :xph.&colon.PTOC:exph. tag has not yet been encountered or PTOC
+processing has been disabled by :xph.PTOC=NO:exph., then the
+hyperlink is back to the main TOC.  (For compatibility,
+:xph.TOCRET=YES:exph. is equivalent to TOCRET=PTOC.)
+:p.The different :xph.PTOC:pv.x:epv.:exph. values specify whether a
+PTOC itself should also contain a hyperlink back to the main TOC,
+and if so, the appearance and position of the hyperlink
+:parml.
+:pt.TOCRET=PTOC
+:pd.The PTOC's title is itself a hyperlink back to the main TOC
+(this is the default)
+:pt.TOCRET=PTOC0
+:pd.The PTOC will :hp1.not:ehp1. contain a hyperlink back to the
+main TOC
+:pt.TOCRET=PTOC1
+:pd.The hyperlink back to the main TOC is appended to the end of the
+PTOC's title.  The hyperlink's text is taken from the
+:xph.DEFTEXT.PTOCLT:exph. option (defaults to
+'(Go&rbl.to&rbl.main&rbl.Table-of-Contents)').
+:pt.TOCRET=PTOC2
+:pd.The hyperlink back to the main TOC is placed on the line
+immediately following the PTOC's title.  The hyperlink's text is
+taken from the :xph.DEFTEXT.PTOCLT:exph. option (defaults to
+'(Go&rbl.to&rbl.main&rbl.Table-of-Contents)').
+:pt.TOCRET=PTOC3
+:pd.The hyperlink back to the main TOC is placed on a separate line
+at the end of the PTOC.  The hyperlink's text is taken from the
+:xph.DEFTEXT.PTOCLT:exph. option (defaults to
+'(Go&rbl.to&rbl.main&rbl.Table-of-Contents)').
+:eparml.
+:eparml.
+.br;Default: If :pk.TOC=NO:epk., then :pk.TOCRET=NO:epk.,
+else :pk.TOCRET=PTOC:epk.
+.*-----
+:spot id=tocsup2 xreftext='TOCSUPPRESS='.
+:pt.:pk.TOCSUPPRESS=&lbrc. :pk def.0:epk. | :pv.number:epv. &rbrc.:epk.
+:pd.If you request a Table-of-Contents (:xph.TOC=:exph. is
+:hp1.not:ehp1. NO), this allows you to dynamically suppress it
+unless there are :hp1.more:ehp1. then the specified number of TOC
+entries.  Can be used to prevent a TOC from being generated with
+only one or two entries.
+:p.If omitted, zero is assumed meaning that a TOC will be generated
+if requested and it contains at least one entry.
+.br;Default: :pk.TOCSUPPRESS=0:epk.
+.*-----
+:spot id=toctag2 xreftext='TOCTAG='.
+:pt.:pk.TOCTAG=':pv.ls,le,is,ie:rev refid=r42.,ts,te:erev refid=r42.:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should use when
+generating a Table-Of-Contents.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.Start tag for a common level of headers (e.g. &colon.H1.)
+:dt.le :dd.End tag for a common level of headers (e.g. &colon.H1.)
+:dt.is :dd.Start tag for a specific header in the list
+:dt.ie :dd.End tag for a specific header in the list
+:rev refid=r42.
+:dt.ts :dd.Tag to start the Table-Of-Contents
+:dt.te :dd.Tag to end the Table-Of-Contents
+:erev refid=r42.
+:edl.
+.br;Default:
+:xph.TOCTAG='&lt.MENU&gt.,&lt./MENU&gt.,&lt.LI&gt.,&cont.
+:rev refid=r42.,&lt.HR&gt.,:erev refid=r42.':exph.
+.*-----
+:spot id=tophead xreftext='TOPHEAD= option'.
+:spot id=tophea2 xreftext='TOPHEAD='.
+:pt.:pk.TOPHEAD=&lbrc. :pk def.1:epk. | 2 | 3 | 4 | 5 | 6 | NO &rbrc.:epk.
+:pd.Should an initial &lt.H:pv.x:epv.&gt....&lt./H:pv.x:epv.&gt.
+containing the title of the document be inserted at the top of each
+physical &html. output file?  If a value from 1 to 6 is specified, a
+header tag (:xph.&lt.H:pv.x:epv.&gt.:exph.) of the specified level
+is used.  If :xph.TOPHEAD=NO:exph. is specified, no initial header
+is inserted.
+.seelay
+:p.This top-of-physical-file title can be very useful for:
+:ul compact.
+:li.Docs that are split, so each physical file shows the overall title
+:li.&script.-type files without formal title pages
+:li.&flat. files that have no title at all
+:eul.
+On the other hand, if you are converting a document with a formal
+title page :hp1.and:ehp1. the output is :hp1.not:ehp1. being split,
+then :xph.TOPHEAD=NO:exph. may be worth considering.
+.br;Default: :pk.TOPHEAD=1:epk.
+.*-----
+:spot id=ultag2 xreftext='ULTAG='.
+:pt.:pk.ULTAG.:pv.x:epv.=':pv.ls,le,is,ie:epv.':epk.
+:pd.Allows you to specify the &html. tags &sysname. should generate
+when processing a un-ordered list (&colon.UL) and it's associated
+tags.
+:dl termhi=0 compact tsize=3m.
+:dthd.:pv.x:epv.
+:ddhd.Used for:
+:dt.0
+:dd.&html. tags for a non-compact list
+:dt.1
+:dd.&html. tags for a compact list (e.g. &colon.UL COMPACT)
+:edl.
+.getw symbol=dhlen gmltype=hp1 text='C D S'
+:p.&html. tag values:
+:dl termhi=1 compact tsize=&dhlen..
+:dt.ls :dd.List start
+:dt.le :dd.List end
+:dt.is :dd.List item start
+:dt.ie :dd.List item end
+:edl.
+.br;Default:
+:xmp.
+  ULTAG.0='&lt.UL&gt.,&lt./UL&gt.,&lt.P&gt.&lt.LI&gt.,'
+  ULTAG.1='&lt.UL COMPACT&gt.,&lt./UL&gt.,&lt.LI&gt.,'
+:exmp.
+.*-----
+:pt.:pk.USERPROF=:epk.:pv.file:epv.
+:pd.Specifies a user profile:fnref refid=file. to be loaded at
+&sysname. execution time in addition to the system profile.  This
+option may be specified as many times as there are user profiles to
+process.
+.br;Default: :pk.USERPROF='':epk.
+.*-----
+:pt.:pk.USERSYM=:epk.:pv.file:epv.
+:pd.Specifies a user symbol file:fnref refid=file. to be loaded at
+&sysname. execution time in addition to the system symbol file.
+This option may be specified as many times as there are user symbol
+files to process.
+.br;Default: :pk.USERSYM='':epk.
+.*-----
+:pt.:pk.XEDITG=&lbrc. :pk def.YES:epk. | NO &rbrc.:epk.
+:pd.Specifies if &sysname. should recognize an imbed statement
+referencing XEDITG and turn formatting off or on as appropriate.
+If YES (the default), then when a file whose first six letters of
+the filename is :q.XEDITG:eq. is imbedded, the imbed statement is
+replaced by either
+:rev refid=r46.
+:xph.&lt.PRE&gt.:exph. or :xph.&lt./PRE&gt.:exph.,
+:erev refid=r46.
+as apppropriate.  If NO is specified,
+then the imbed statement is processed normally.
+.br;Default: :pk.XEDITG=YES:epk.
+:eparml.
+.*********************
+:h1 id=symbol.&sysname. Symbol Table
+:p.The symbol table is one of two control files for &sysname.
+(the profile is the other). A symbol table defines:
+:ul compact.
+:li.Substitution strings to be used for :q.&amp.symbols:eq.
+(the :xph.&colon.SYM.:exph. statement)
+:li.Processing rules for &script. commands and control words
+(the :xph.&colon.CMD.:exph. statement)
+:li.Processing rules for &bm. and GML macros
+(the :xph.&colon.CMD.:exph. statement)
+:li.Processing rules for &bm. and GML tags
+(the :xph.&colon.TAG.:exph. statement)
+:rev refid=r45.
+:li.Any character-to-character and character-to-string
+translations to be performed on the :hp1.input:ehp1. record
+(the :xph.&colon.XLATEI.:exph. statement)
+:li.Any character-to-character and character-to-string
+translations to be performed on the :hp1.output:ehp1. record
+(the :xph.&colon.XLATEO.:exph. statement)
+:erev refid=r45.
+:eul.
+:p.A :hp1.system:ehp1. symbol table is provided as part of the
+&sysname. package.  Any desired updates can be made either to the
+system symbol table or you can create :hp1.user:ehp1. symbol tables
+and add one or more :xph.USERSYM=:exph. options to the profile to
+point to the user symbol table(s).
+:rev refid=r45.
+:p.You can also include symbol table definitions within the source
+file itself.  See :hdref refid=b2hstmt. for more information on
+this technique.
+:erev refid=r45.
+.*-----
+:rev refid=r42.
+:h2.Syntax of a &sysname. Symbol Table record
+:erev refid=r42.
+:p.The general format of a symbol table record is:
+:lblbox.Format of a symbol table record
+:cgraphic.
+:rev refid=r42.&cont.
+&lbrk.(:pv.env:epv.)&rbrk. &colon.:pv.statementtype:epv..  &cont.
+:pv.name:epv.  &cont.
+:pv.parm:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. &cont.
+&lbrk. ... &cont.
+:pv.parm:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &rbrk.&cont.
+:erev refid=r42.
+:ecgraphic.
+:elblbox.
+:ul.
+:li.A parameter's :hp1.value:ehp1. must be specified immediately
+after the equal-sign (no blanks allowed).  If the parameter's value
+is a :hp1.string:ehp1., the string :hp5.must:ehp5. be enclosed using
+a delimiter character (any character not appearing in the string may
+be used as the delimiter).  For example:
+:xmp.
+  V='Document Number&colon.'
+  V="Murphy's Law"
+  V=/Bugs Bunny says "What's Up, Doc?"/
+:exmp.
+:li.Physical records with an asterisk in column one or records that
+are completely blank are considered comments and ignored.
+:li.Comments may also be placed on the definition record itself by
+preceding the comment with two dashes (--).
+:rev refid=r45.
+.br;Example:
+:xph.&colon.SYM. dollar   V='&amp.#36;'   -- US dollar sign:exph.
+:erev refid=r45.
+:rev refid=r42.
+:li.You can specify that a record is applicable only to certain
+environments by specifying the criteria within parentheses as the
+first item on the record.
+:erev refid=r42.
+For more information, see :hdref refid=platfrm.
+:eul.
+.*-----
+.cp
+:h3.Continuation
+:p.A logical definition can be split into multiple physical records
+by placing a comma at the end of the current physical record (prior
+to any comments) to indicate that the statement continues onto the
+next physical record.
+:xmp.
+  This:           &colon.TAG. CIT V='&lt.CITE&gt.' TV='&lt.CITE&gt.' &cont.
+-- a comment
+  is the same as: &colon.TAG. CIT V='&lt.CITE&gt.',            &cont.
+-- a comment
+                            TV='&lt.CITE&gt.'
+:exmp.
+The continuation comma may :hp1.not:ehp1. be specified in the middle
+of a delimited string.
+.*----------
+.cp
+:h2 id=symparm.Symbol Table Parameters
+.*-----
+:rev refid=r42.
+:h3 id=samp.Specifying '&amp.symbols'
+:erev refid=r42.
+:p.The :xph.&colon.SYM.:exph. statement defines replacement text for
+a symbol (sometimes called an :q.&amp.symbol:eq. or
+:q.&amp.variable:eq.).
+.br;For example: &amp.date  &amp.colon  &amp.rbrk
+:fig.
+:figcap.Specifying an '&amp.symbol'
+:cgraphic.
+:rev refid=r42.&cont.
+&lbrk.(:pv.env:epv.)&rbrk. &cont.
+:pk.&colon.SYM.:epk. :pv.symbol:epv. &lbrk. &cont.
+:pv.symbol:sub.2:esub.:epv. ... :pv.symbol:sub.x:esub.:epv. &cont.
+&rbrk.  :pk.V=:epk.':pv.text:epv.'&cont.
+:erev refid=r42.
+:ecgraphic.
+:efig.
+:parml.
+:pt.:pk.&colon.SYM.:epk.
+:pd.Specifies that this statement is defining a :q.&amp.symbol:eq..
+:pt.:pv.symbol:sub.1:esub.:epv. ... :pv.symbol:sub.x:esub.:epv.
+:pd.The symbol(s) being defined.
+Multiple symbol names may be specified.
+:pt.:pk.V=:epk.':pv.text:epv.'
+:pd.The value to be assigned to this symbol.  Any text can be
+provided here, including &html., normal text, even other &bm. or GML
+tags and commands.  If a value of :xph.=IGNORE:exph. is specified,
+then the &amp.symbol will be ignored and removed from the source
+line.
+:eparml.
+:p.&sysname. also dynamically assigns &amp.symbols when it
+encounters GML's :xph..SE:exph. control word, and &bm.'s
+:xph..NAMEIT:exph., :xph..NAMECTR:exph. and :xph..GETW:exph. macros.
+In addition, &sysname. defines some &amp.symbols for it's own use.
+These are described in :hdref refid=b2hvars..
+.*-----
+.cp
+:rev refid=r42.
+:h3 id=scmd.Specifying &script. control words and &bm./GML macros
+:erev refid=r42.
+:p.The :xph.&colon.CMD.:exph. statement defines replacement text for
+a &script. control word or &bm./GML macro.
+(These are the :q.dot:eq. commands.)
+.br;For example: .cp  .pa  .se
+:fig.
+:figcap.Specifying a &script. control word and/or &bm./GML macro
+:cgraphic.
+:rev refid=r42.&cont.
+&lbrk.(:pv.env:epv.)&rbrk. :pk.&colon.CMD.:epk. &cont.
+:pv.name:epv. &lbrk.... :pv.name:epv. &rbrk. &cont.
+:pk.V=:epk.':pv.text:epv.' &cont.
+&lbrk. :pk.TV=:epk.':pv.text:epv.' &rbrk.&cont.
+:erev refid=r42.
+:ecgraphic.
+:efig.
+:parml.
+:pt.:pk.&colon.CMD.:epk.
+:pd.Specifies that this statement defines a &script. control word or
+&bm./GML macro
+:pt.:pv.name:sub.1:esub. ... name:sub.x:esub.:epv.
+:pd.The control word(s) or macro(s) being defined.  Multiple names
+may be specified.
+:pt.:pk.V=:epk.':pv.text:epv.'
+:pd.The value to assign to this name.  Any text can be provided
+here, including &html., normal text, even other &bm. or GML tags and
+commands.:fnref refid=symtag2.
+:fn id=symtag2.
+Multiple :q.dot:eq. commands can be defined by separating each
+command with semi-colons.
+For example:  :xph.V='.ce&rbl.line&rbl.1;.ce&rbl.line&rbl.2':exph.
+:efn.
+:pt.:pk.TV=:epk.':pv.text:epv.'
+:pd.If &html. 2 output is being created, this is the value to be
+assigned to this name when it appears within a &bm. table.  Any text
+can be provided here, including &html., normal text, even other &bm.
+or GML tags and macros.
+:note.If a value of :xph.=NO:exph. is specified, it means that this
+markup is NOT supported within an &html. 2 table.  &sysname. will
+issue a warning message and ignore the markup.
+:note.This parameter is ignored if &html. 3 or higher is being
+generated.
+:eparml.
+.*-----
+.cp 18
+:h4 id=speccmd.Special replacement text values for &colon.CMD.
+:p.The following special values may be specified as replacement
+text:
+.getw symbol=dhlen gmltype=hp2 text='=IGNOREALLWM'
+:dl termhi=2 tsize=&dhlen..
+:dt.&amp.PGM
+:dd.Invoke an external program to process this control word or
+macro.  See :hdref refid=extpgm. for additional information.
+:dt.&amp.text
+:dd.If specified, it is dynamically replaced by any text following
+the control word or macro in the input source document.
+For example:
+:xmp.
+If the definition was:    &colon.CMD. ABC V='&lt.B&gt.&amp.text&lt./B&gt.'
+and source contained:     .abc How are you?
+the HTML output will be:  &lt.B&gt.How are you?&lt./B&gt.
+:exmp.
+:dt.=IGNORE
+:dd.Ignore the entire source line
+:dt.=IGNOREW
+:dd.Same as =IGNORE except a Warning message is also issued
+:dt.=INTERNAL
+:dd.The command or macro is handled by a routine within the program
+itself.  (This is provided strictly for documentation purposes and
+is an easy way to show which tags are handled internally.)
+:edl.
+.*-----
+.cp 30
+:rev refid=r42.
+:h3 id=stag.Specifying &bm./GML tags
+:erev refid=r42.
+:p.The :xph.&colon.TAG.:exph. statement defines a &bm. or GML tag.
+.br;For example: &colon.p.  &colon.h1.  &colon.table.
+:fig.
+:figcap.Specifying a &bm./GML tag
+:cgraphic.
+:rev refid=r42.&cont.
+&lbrk.(:pv.env:epv.)&rbrk. :pk.&colon.TAG.:epk. &cont.
+:pv.name:epv. &lbrk.... :pv.name:epv.&rbrk. &cont.
+:pk.IT=:epk.:pv.x:epv. &cont.
+:pk.VAT=:epk.:pv.x:epv. &cont.
+:pk.ATT=:epk.:pv.x:epv. &cont.
+:pk.SE=:epk.:pv.x:epv. &cont.
+:pk.V=:epk.':pv.text:epv.' &cont.
+&lbrk.:pk.TV=:epk.':pv.text:epv.'&rbrk.&cont.
+:erev refid=r42.
+:ecgraphic.
+:efig.
+:parml.
+:pt.:pk.&colon.TAG.:epk.
+:pd.Specifies that this statement defines a &bm. or GML tag
+:pt.:pv.name:sub.1:esub. ... name:sub.x:esub.:epv.
+:pd.The tag(s) being defined. Multiple tags may be specified.
+:pt.:pk.IT=&lbrc. Y | :pk def.N:epk. &rbrc.:epk.
+:pd.Does this tag require :q.immediate:eq. text, meaning text on the
+same line as the tag itself or the very next line?  (Or, using &bm.
+parlance, is this a :q.TOSL:eq. (text-on-same-line) tag?)
+:q.:xph.N:exph.:eq. (NO) is assumed if omitted.
+:pt.:pk.VAT=&lbrc. :pk def.Y:epk. | N &rbrc.:epk.
+:pd.Does this tag allow single-word :q.value:eq. attributes
+(e.g. :xph.COMPACT:exph.)?
+:q.:xph.Y:exph.:eq. (YES) is assumed if omitted.
+:pt.:pk.ATT=&lbrc. :pk def.Y:epk. | N. &rbrc.:epk.
+:pd.Does this tag allow attributes in the form of
+:q.:hp1.name=value:ehp1.:eq.?
+:q.:xph.Y:exph.:eq. (YES) is assumed if omitted.
+:pt.:pk.SE=&lbrc. Y | :pk def.N:epk. &rbrc.:epk.
+:pd.Is this a :q.start:eq.-type or :q.end:eq.-type tag?
+For example, :xph.&colon.FIG:exph., :xph.&colon.EFIG:exph.,
+:xph.&colon.HP2:exph., and :xph.&colon.EHP2:exph. are examples of
+these types of tags; :xph.&colon.H3:exph. is not.
+:q.:xph.N:exph.:eq. (NO) is assumed if omitted.
+:pt.:pk.V=:epk.':pv.text:epv.'
+:pd.The value to be assigned to this tag.  Any text can be provided
+here, including &html., normal text, even other &bm. or GML tags and
+commands.
+:pt.:pk.TV=:epk.':pv.text:epv.'
+:pd.If &html. 2 output is being created, this is the value to be
+assigned to this tag when it appears within a &bm. table.  Any text
+can be provided here, including &html., normal text, even other &bm.
+or GML tags and macros.
+:note.If a value of :xph.=NO:exph. is specified, it means that this
+tag is NOT supported within an &html. 2 table.  &sysname. will issue
+a warning message and ignore the tag.
+:note.This parameter is ignored if &html. 3 or higher
+is being generated.
+:eparml.
+.*-----
+.cp 32
+:h4 id=spectag.Special replacement text values for &colon.TAG.
+:p.The following special values may be specified as replacement text:
+.getw symbol=dhlen gmltype=hp2 text='=IGNOREALLWM'
+:dl termhi=2 tsize=&dhlen..
+:dt.&amp.PGM
+:dd.Invoke an external program to process this tag.
+See :hdref refid=extpgm. for additional information.
+:dt.&amp.text
+:dd.If specified, it is dynamically replaced by any :q.immediate:eq.
+text following the tag on the :hp1.logical:ehp1. line from the input
+source document.
+:dt.&amp.textall
+:dd.If specified, it is dynamically replaced by any :q.immediate:eq.
+text following the tag on the :hp1.physical:ehp1. line from the
+input source document.
+:xmp.
+Using :q.&amp.text:eq.&colon.
+If the definition was:    &colon.TAG. ABC  V='&lt.B&gt.&amp.text&lt./B&gt.'
+and source contained:     &colon.abc.How are you?&colon.hp1.I am fine!&colon.ehp1.
+the HTML output will be:  &lt.B&gt.How are you?&lt./B&gt.&lt.I&gt.I am fine!&lt./I&gt.
+ 
+Using :q.&amp.textall:eq.&colon.
+If the definition was:    &colon.TAG. ABC  V='&lt.B&gt.&amp.textall&lt./B&gt.'
+and source contained:     &colon.abc.How are you?&colon.hp1.I am fine!&colon.ehp1.
+the HTML output will be:  &lt.B&gt.How are you?&lt.I&gt.I am fine!&lt./I&gt.&lt./B&gt.
+:exmp.
+:dt.=IGNORE
+:dd.The tag, from the leading colon to the trailing period, is ignored.
+Any immediate text is retained.
+:dt.=IGNOREW
+:dd.Same as =IGNORE except a Warning message is also issued
+:dt.=IGNOREALL
+:dd.Same as =IGNORE, except that both the tag :hp1.and:ehp1. any
+immediate text is ignored
+:dt.=IGNOREALLW
+:dd.Same as =IGNOREALL except a Warning message is also issued
+:dt.=INTERNAL
+:dd.The tag is handled by a routine within the program itself.
+(This is provided strictly for documentation purposes and is an easy
+way to show which tags are handled internally.)
+:dt.&colon.IGNORE.
+:dd.Similar in function to =IGNORE, except that the tag :hp1.and all
+following source lines:ehp1. to the &colon.EIGNORE. end-tag are
+ignored
+:dt.&colon.IGNOREW.
+:dd.Same as &colon.IGNORE., except that a warning message is also
+issured
+:dt.&colon.EIGNORE.
+:dd.The end-tag for &colon.IGNORE. and &colon.IGNOREW.
+:edl.
+.*-----
+.cp
+:rev refid=r45.
+:rev refid=r42.
+:h3 id=sxlt.Translation of single-byte values
+:erev refid=r42.
+:p.The :xph.&colon.XLATEI.:exph. statement allows the translation
+of single-byte values to other values within :hp1.input:ehp1. records.
+The :xph.&colon.XLATEO.:exph. statement works similarly, except that
+it applies to &html. :hp1.output:ehp1. records.
+A single-byte character can be translated to either another single-byte
+character or to a string.
+:erev refid=r45.
+:p.These statements are useful if source documents have
+:q.hard-coded:eq. special characters for unique purposes, such as
+line drawings, diagrams or country-specific national language
+characters (see also :hdref refid=nls.).
+:fig.
+:figcap.Specifying a character translation
+:cgraphic.
+:rev refid=r42.
+:rev refid=r45.
+For input records:
+:erev refid=r45.
+     &lbrk.(:pv.env:epv.)&rbrk. &cont.
+:rev refid=r45.:pk.&colon.XLATEI.:epk.:erev refid=r45. &cont.
+:pv.from to:epv. &lbrk. &cont.
+:pv.from:sub.2:esub. to:sub.2:esub.:epv. ... &cont.
+:pv.from:sub.x:esub. to:sub.x:esub.:epv. &rbrk.
+ 
+:rev refid=r45.
+For output &html. records:
+     &lbrk.(:pv.env:epv.)&rbrk. :pk.&colon.XLATEO.:epk. &cont.
+:pv.from to:epv. &lbrk. &cont.
+:pv.from:sub.2:esub. to:sub.2:esub.:epv. ... &cont.
+:pv.from:sub.x:esub. to:sub.x:esub.:epv. &rbrk.
+:erev refid=r45.
+:ecgraphic.
+:efig.
+:parml.
+:rev refid=r45.
+:pt.:pk.&colon.XLATEI.:epk.
+:pd.Specifies that this statement defines character translation(s)
+for an input record.
+Any translations specified here are performed :hp1.prior:ehp1. to
+any translations specified within the source document
+via the :xph.&period.TI:exph. control word.
+(For compatability with older releases of &sysname.,
+:xph.&colon.XLATE.:exph. is recognized as a synonym of
+:xph.&colon.XLATEI.:exph..)
+:pt.:pk.&colon.XLATEO.:epk.
+:pd.Specifies that this statement defines character translation(s)
+for an output &html. record
+Any translations specified here are performed :hp1.after:ehp1.
+any translations specified within the source document
+via the :xph.&period.TR:exph. control word.
+:erev refid=r45.
+:pt.:pv.from:epv.
+:pd.Source character to be translated.  It can be a single character
+or a 2-character hexadecimal code.
+:pt.:pv.to:epv.
+:pd.The character or text string to replace the source character.
+The replacement can be specified as:
+.getw symbol=dhlen gmltype=hp2 text='V = "...TEXT..."'
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:pv.c:epv.
+:dd.A single character
+:dt.:pv.hh:epv.
+:dd.A 2-character hexadecimal code
+:dt.V=':pv.text string:epv.'
+:dd.The text string to replace the source character.  Any text can
+be provided here, including &html., normal text, even &bm. tags and
+commands.
+:edl.
+:eparml.
+Multiple pairs of translation sets can be specified on a single
+statement.
+:p.Example 1:
+:rev refid=r45.
+On each input record,
+:erev refid=r45.
+translate all :hex.34:ehex. characters to :hex.5D:ehex. and all
+:q.number signs:eq. (&numsign.) to :hex.24:ehex.&colon.
+:xmp.
+  :rev refid=r45.&colon.XLATEI.:erev refid=r45. 34 5D &numsign 24
+:exmp.
+:p.Example 2:
+:rev refid=r45.
+On each input record,
+:erev refid=r45.
+translate all :hex.93:ehex. characters to an &html. entity name.
+:xmp.
+  :rev refid=r45.&colon.XLATEI.:erev refid=r45. 93 V='&amp.lbrk&semi.'
+:exmp.
+:rev refid=r45.
+:p.Example 3: On each output &html. record, translate all
+:hex.AA:ehex. characters to a green exclamation point:
+:xmp.
+  &colon.XLATEO. AA &cont.
+V='&lt.font color="#00FF00"&gt.&amp.#33&semi.&lt./font&gt.'
+:exmp.
+:erev refid=r45.

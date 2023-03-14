@@ -1,0 +1,610 @@
+  COPYRIGHT (c) Copyright 2001-2002 AT&T
+ 
+  B2H - Convert Bookmaster, GML, Script/VS and "flat" files to HTML
+ 
+  Background:
+  -----------
+ 
+  If your organization is like mine, establishing a presence on the
+  Internet by using a World-Wide-Web server and defining a Home Page is
+  the "thing to do".  You can either use someone else's WEB server or
+  install your own.
+ 
+  We had plenty of documents to place on the server.  Some were written
+  using BookMaster, GML and Script/VS markup, while others existed as
+  normal "flat" files.  Even though the WEB's HTML language is conceptually
+  simple, the thought of manually converting the desired files from their
+  source format to HTML was daunting.
+ 
+  Although there are a few HTML converters around, none met all our major
+  requirements. So we ended up writing our own, called it B2H, and are
+  making it available for other organizations.  (John Dorval provided the
+  source for BookHype, which was used as a starting point.  Thanks John!)
+ 
+  Gary L. Richtmeyer
+  AT&T Global Network Services
+  grichtmeyer@att.com
+ 
+  ***********************************************************************
+ 
+  What does B2H do?
+  -----------------
+  B2H reads files written in Bookmaster, Generalized Markup Language (GML),
+  Script/VS, and even "flat" files, and converts them into HTML format
+  suitable for use in an Internet World-Wide-Web environment.
+ 
+  B2H Highlights:
+  ---------------
+ 
+  o  Converts most commonly-used tags, control words, macros and symbols
+     of BookMaster, GML and Script/VS (DCF)
+ 
+  o  Supports conversion of "flat" files
+ 
+  o  Output conforms to HTML Release 2, 3 or 4, as specified at
+     execution time
+ 
+  o  Can generate full and partial tables-of-contents; and if generated,
+     options are available for specifying the table-of-content's format
+ 
+  o  Can generate an index; and if generated, options are available for
+     specifying the index's format
+ 
+  o  Can generate figure and table lists
+ 
+  o  Can automatically generate hypertext links within the file itself:
+     -  Table-of-Contents (TOC):
+        o  From the TOC to each section
+        o  From each section back to the main TOC
+        o  If a partial TOC is available:
+           -  From a partial TOC to each associated section
+           -  From each section back to the most-recent partial TOC
+           -  From each partial TOC back to the main TOC
+     -  Figure Lists and Table Lists:
+        o  From the List of Figures to each figure
+        o  From the List of Tables to each table
+        o  From each Figure or Table back to it's associated list
+     -  Footnotes:
+        o  From a footnote's reference to it's definition
+        o  From each footnote definition back to it's initial reference
+     -  Index (if generated):
+        o  From the index back to each referenced item
+        o  An optional Index TOC for the index itself can be generated
+     -  Cross-references (e.g. :hdref, :figref) are converted into a
+        hypertext link to the target
+     -  From a question's answer back to the original question
+ 
+  o  Supports cross-referencing of multi-volume documents
+ 
+  o  "Boilerplate" records can be automatically inserted into the beginning
+     and/or end of the output HTML file (which could be used to ensure that
+     standard navigational links are at the bottom of all files)
+ 
+  o  "Mast Head" information can be included in the output
+ 
+  o  Explicit HTML statements can be included in the source file to
+     support specialized requirements
+ 
+  o  The output HTML file can be split into multiple HTML files,
+     useful for large source files -- allowing the reader to retrieve
+     only sections which are of interest, reducing document load time
+ 
+  o  Bookmaster tables are supported. If HTML 3 output is being generated
+     (the default), HTML 3 table tags are used; for HTML 2 output, B2H
+     switches to a monospaced font and builds the table manually
+ 
+  o  Supports line drawings created by XEDITG and CHARGES
+ 
+  o  Supports syntax ("railroad") diagrams
+ 
+  o  Supports Script's conditional sections (.cs), BookMaster's "vanilla"
+     DVCF macros (.config and .when) and process controls (:PSC) for
+     dynamically altering the content of the document
+ 
+  o  Supports BookMaster Question and Answer tags and can generate either
+     textual output (as Bookmaster does) or interactive HTML FORMs which
+     can be used with an installation-provided CGI program to verify the
+     user's answers
+ 
+| o  Runs on AIX, Linux, MVS (OS/390), OS/2, VM/ESA, Windows 95/98/ME,
+|    Windows NT/2000/XP and Unix.  On VM/ESA, B2H can run either as a
+     stand-alone EXEC or as a CMS Pipeline filter.  On MVS, B2H can run
+     either as a stand-alone program or as an MVS/BatchPipeWorks
+     pipeline filter. B2H is Year2000 ready.
+ 
+  o  Conversion can be performed on one platform (e.g. VM/ESA) and the
+     output transferred, stored and used on another platform (e.g. AIX
+     or Windows NT)
+ 
+  o  On MVS, the HTML output can be either sequential files or members
+     of a partitioned data set (PDS); if using OpenEdition, the files
+     can then optionally be transferred to a Hierarchical File System
+     (HFS) directory
+ 
+  o  A symbol control file defines how symbols, control words, macros and
+     tags are handled.  User-provided symbol control files can be used to
+     support installation-specific symbols, control words, macros and tags.
+ 
+  o  Installation-provided exit routines can be invoked to provide custom
+     processing for designated control words, macros and tags
+ 
+  o  The output HTML file can contain many META-type statements to
+     support HTTP search queries (e.g. keywords, owner, contact,
+     document review and expiration dates)
+ 
+  o  Execution can be customized by use of profiles; options can be
+     assigned based on the current and/or destination platform
+ 
+  o  Large number of options are available for controlling the conversion
+     and customizing the output
+ 
+ 
+  Software Requirements:
+  ----------------------
+ 
+| REXX
+|    B2H is written in REXX and requires that REXX be installed on the
+|    machine on which it is executed.
+|    Two different "flavors" of REXX can be used:
+|
+|    o  IBM's REXX
+|       IBM provides REXX for a variety of platforms.
+|       -  On VM and MVS (OS/390), a REXX interpreter is "built-in".
+|          An optional REXX compiler is available for a fee.
+|       -  For PC platforms, IBM has a variety of Object REXX fee products
+|          available. Each PC operating system requires its own REXX product.
+|          More information on these is available at
+|          http://www2.hursley.ibm.com/orexx
+|
+|    o  Regina REXX
+|       Regina is a free REXX interpreter that has been ported to most
+|       Unix platforms (Linux, FreeBSD, Solaris, AIX, HP-UX, etc.)
+|       and also to OS/2, eCS, DOS, Win9x/Me/NT/2k/XP, Amiga, QNX,
+|       BeOS, MacOS X, EPOC32, AtheOS, OpenVMS and OpenEdition.
+|       More information on Regina REXX is available at
+|       http://regina-rexx.sourceforge.net
+ 
+ 
+  PLATFORMS
+  Any of the following platforms on which to run B2H:
+ 
+  o  AIX
+ 
+|    AIX support requires REXX to be installed.
+|    For IBM's Object REXX for AIX, check out the Object REXX home page at
+|    http://www2.hursley.ibm.com/orexx
+|    For Regina REXX, check out the Regina REXX home page at
+|    http://regina-rexx.sourceforge.net
+ 
+ 
+  o  Linux
+ 
+|    Linux support requires REXX to be installed.
+|    For IBM's Object REXX for Linux., check out the Object REXX home page
+|    at http://www2.hursley.ibm.com/orexx
+|    For Regina REXX, check out the Regina REXX home page at
+|    http://regina-rexx.sourceforge.net
+ 
+ 
+  o  TSO/E under MVS or OS/390
+ 
+     REXX compiler run-time libraries to run the compiled version
+ 
+  o  OS/2 2.1 or OS/2 Warp (3 or 4), using either FAT or HPFS file systems
+     (B2H may run on earlier versions of OS/2, but it has not been tested)
+ 
+|    You can either use IBM's REXX provided with OS/2 or you can use
+|    Regina REXX. For Regina REXX, check out its home page at
+|    http://regina-rexx.sourceforge.net
+ 
+ 
+  o  VM/ESA
+ 
+     REXX compiler run-time libraries to run the compiled version
+ 
+| o  Windows 95/98/ME or Windows NT/2000/XP
+|
+|    Support for Windows 95/98/ME and Windows NT/2000/XP requires REXX to be
+|    installed.  For IBM's Object REXX for Windows 95/NT, check out the
+|    Object REXX home page at http://www2.hursley.ibm.com/orexx
+|    For Regina REXX, check out the Regina REXX home page at
+|    http://regina-rexx.sourceforge.net
+ 
+ 
+| o  Unix
+|
+|    Support for Unix requires REXX to be installed.  For Regina REXX, check
+|    out the Regina REXX home page at http://regina-rexx.sourceforge.net
+ 
+ 
+ 
+  ***********************************************************************
+ 
+ 
+  Obtaining B2H
+  -------------
+ 
+  o  CUSTOMERS AND OTHERS ON THE INTERNET:
+ 
+     B2H is available on IBM's VM download page on the Internet at
+     "http://www.vm.ibm.com/download/".  Follow the directions on the
+     download page on how to download and extract the files.
+ 
+ 
+  o  IBM EMPLOYEES
+ 
+     B2H resides on the VMTOOLS disk.  If your site supports the VM "TOOLCAT"
+     command, the following will request a copy:
+ 
+        TOOLCAT VMTOOLS GET B2H PACKAGE
+ 
+     If "TOOLCAT" is not available in your environment, you can request B2H
+     from the VMTOOLS master disk (note that it may "batch" your request with
+     others and deliver the files on an overnight basis):
+ 
+        TOOLS SENDTO RALVM17 VMTOOLS VMTOOLS GET B2H PACKAGE
+ 
+ 
+     If you would like to subscribe to B2H so updates are automatically sent
+     to you, enter:
+ 
+        TOOLCAT VMTOOLS SUBSCRIBE B2H PACKAGE
+             (or)
+        TOOLS SENDTO RALVM17 VMTOOLS VMTOOLS SUBSCRIBE B2H PACKAGE
+ 
+ 
+  ***********************************************************************
+ 
+ 
+  INSTALLATION:
+  -------------
+  B2H is easy to install and use right "out-of-the-box".  The B2H User's
+  Guide has detailed information on installation and customization, but
+  the following shortened versions should get you up and running.
+ 
+  Later on, you may wish to do some customization to tailor B2H's operation
+  to your environment and to take advantage of some of the more powerful B2H
+  and HTML features.
+ 
+ 
+| Quick Install-and-Go (AIX, Linux, OS/2, Windows and Unix)
+  ---------------------------------------------------------
+  o  If you downloaded the ZIP file from the Internet directly onto your PC,
+|    unzip it and then proceed to the "If installing on AIX/Linux/Unix" step.
+ 
+     If you retrieved the VMARC file from the Internet, follow the
+     instructions on the web page to upload the VMARC file to VM and
+     then "extract" the component pieces onto a read/write disk
+     (typically your A-disk).
+ 
+     If you ordered the package from an internal IBM tools disk, receive
+     the files to a read/write disk (typically your A-disk).
+ 
+  o  There are two ways to get the B2H files onto your workstation:
+ 
+     o  Download the B2H ZIP file and use one of the UNZIP-type programs
+        to extract the files. THIS IS THE RECOMMENDED METHOD!  (On AIX, you
+        may need to use the "-a" parameter when unzipping the ZIP file)
+ 
+        or
+ 
+     o  Download the individual files using the suggested naming convention
+        shown below (NOT THE RECOMMENDED METHOD!).
+        If you *must* download the individual files, please note:
+ 
+        o  For the main program, ensure that you download B2H SEXEC and
+           *not* the other EXEC-type files (they are the compiled versions
+           for other platforms).
+ 
+        o  The files were created on a U.S. system.  If downloading to
+           a non-U.S. system, be careful to ensure you use the correct
+           translate table.  An incorrect translate table during download
+           can often cause "Invalid character in program" error messages
+           when trying to execute B2H.
+ 
+|       VM/CMS              AIX/Linux/Unix ** OS/2 **      Windows **
+        ----------------    ------------      -----------  ----------------
+        B2H ANNOUNCE        b2h.announce      B2H.ANN      B2H.ANN
+        B2H SEXEC (source)  b2h.exec          B2H.CMD      B2H.CMD or B2H.REX
+        B2H HELPCMS         b2h.helpcms       B2H.HLP      B2H.HLP
+        B2H NEWS            b2h.new           B2H.NEW      B2H.NEW
+        B2H PROFILE         b2h.profile       B2H.PRO      B2H.PRO
+        B2H HTML            b2h.html          B2H.HTM      B2H.HTM
+        B2HR2 HTML          b2hr2.html        B2HR2.HTM    B2HR2.HTM
+        B2Hxxx SCRIPT       b2hxxx.script     B2Hxxx.SCT   B2Hxxx.SCT
+        B2H SYMBOLS         b2h.symbols       B2H.SYM      B2H.SYM
+        B2HLINK GIFBIN      b2hlink.gif       B2HLINK.GIF  B2HLINK.GIF
+        B2HIBM FOOTER       b2hibm.footer     B2HIBM.FOT   B2HIBM.FOT
+        B2HUSER EXEC        B2HUSER.EXEC      B2HUSER.CMD  B2HUSER.CMD
+        B2HUSER SYMBOLS     b2huser.symbols   B2HUSER.SYM  B2HUSER.SYM
+ 
+| o  If installing on AIX/Linux/Unix:
+ 
+     o  Ensure that REXX is available as listed previously in
+        "Software Requirements"
+ 
+     o  If you downloaded the ZIP file and unzipped it, you may want to
+|       rename the files to their AIX/Linux/Unix equivalent
+ 
+     o  The "B2HNAME" script will do the necessary renames and "fix-up"
+|       to allow easy execution of B2H in an AIX/Linux/Unix environment.
+        In the subdirectory into which you placed the files, run the
+        following two commands:
+           chmod +x b2hname
+          ./b2hname
+ 
+| o  If installing on Windows 95/98/ME or Windows NT/2000/XP:
+ 
+     o  Ensure that REXX is available as listed previously in
+        "Software Requirements"
+ 
+     o  Depending on how ObjectREXX is installed, you may need to rename
+        B2H.CMD to B2H.REX
+ 
+  o  Try converting a test file which is typical of the Bookmaster/GML
+     source files you will be processing:
+ 
+       AIX:   B2H file
+       Linux: B2H file
+       OS/2:  B2H fn.ext
+       Win95: REXX B2H fn.ext
+       WinNT: REXX B2H fn.ext
+|      Unix:  B2H file
+ 
+|    Point your browser at the resulting HTML file ("fn.HTM" on OS/2 or
+|    Windows, or "fn.html" on AIX/Linux/Unix).
+ 
+  o  Try running B2H again, this time using different options to vary
+     the output format.  For example, specify your own title and do not
+     generate a table-of-contents:
+ 
+       AIX:   B2H file        ( TOC=NO TITLE='My sample title'
+       Linux: B2H file        ( TOC=NO TITLE='My sample title'
+       OS/2:  B2H fn.ext      ( TOC=NO TITLE='My sample title'
+       Win95: REXX B2H fn.ext ( TOC=NO TITLE='My sample title'
+       WinNT: REXX B2H fn.ext ( TOC=NO TITLE='My sample title'
+|      Unix:  B2H file        ( TOC=NO TITLE='My sample title'
+ 
+     Point your browser at the HTML output file.
+ 
+  o  Try converting the "flat" file C:\CONFIG.SYS
+ 
+       AIX:   B2H C:\CONFIG.SYS      ( SOURCE=FLAT TOC=NO TITLE='My Config.Sys'
+       Linux: B2H C:\CONFIG.SYS      ( SOURCE=FLAT TOC=NO TITLE='My Config.Sys'
+       OS/2:  B2H C:\CONFIG.SYS      ( SOURCE=FLAT TOC=NO TITLE='My Config.Sys'
+       Win95: REXX B2H C:\CONFIG.SYS ( SOURCE=FLAT TOC=NO TITLE='My Config.Sys'
+       WinNT: REXX B2H C:\CONFIG.SYS ( SOURCE=FLAT TOC=NO TITLE='My Config.Sys'
+|      Unix:  B2H C:\CONFIG.SYS      ( SOURCE=FLAT TOC=NO TITLE='My Config.Sys'
+ 
+  o  To see the online help:
+ 
+       AIX:   B2H ?         (or browse B2H.HLP)
+       Linux: B2H ?         (or browse B2H.HLP)
+       OS/2:  B2H ?         (or browse B2H.HLP)
+       Win95: REXX B2H ?    (or browse B2H.HLP)
+       WinNT: REXX B2H ?    (or browse B2H.HLP)
+|      Unix:  B2H ?         (or browse B2H.HLP)
+ 
+  o  Customize B2H to your needs either by updating the "B2H.PRO" system
+     profile or by creating a user profile and using the USERPROF=
+     option to process it
+ 
+ 
+  Quick Install-and-Go (MVS)
+  -------------------------
+  o  If you downloaded the ZIP file from the Internet directly onto your
+     PC, unzip it and upload the files to your TSO id.
+ 
+     Note: The files were created on a U.S. system.  If uploading to
+           a non-U.S. system, be careful to ensure you use the correct
+           translate table.  An incorrect translate table during upload
+           can often cause "Invalid character in program" error messages
+           when trying to execute B2H.
+ 
+     If you retrieved the VMARC file from the Internet, follow the
+     instructions on the web page to upload the VMARC file to VM and
+     then "extract" the component pieces onto a read/write disk
+     (typically your A-disk). Then send the files to the TSO user ID doing
+     the installation.
+ 
+     If you ordered the package from an internal IBM tools disk, have the
+     files sent directly to your TSO user ID.
+ 
+  o  The User's Guide has more information on installation and customization
+     to make B2H easier to use in an MVS (OS/390) environment, but this
+     shortened version will get you up and running.
+ 
+     Note: The MVS version of B2H was tested using MVS/ESA 5.2.2 and
+           TSO/E R2.05
+ 
+     1. INSTALL THE B2H PROGRAM ITSELF:
+        Two versions of the B2H program are available for MVS: "B2H SEXEC"
+        is the REXX source code and "B2H MVSCEXEC" is the MVS REXX compiled
+        version. The compiled version runs much faster but requires the
+        REXX compiler run-time libraries. The source code runs slower, but
+        has no additional dependencies. Select the version that best meets
+        your needs.  (Note: if you retrieved just the ZIP file from the
+        Internet, only the REXX source code (B2H.CMD) is provided within
+        the ZIP file.)
+ 
+        Determine the partitioned data set (PDS) to hold the B2H program.
+        If you have a PDS already containing other REXX execs, you may
+        wish to use that one. Place the selected program file into the
+        PDS using a member name of "B2H"
+ 
+     2. INSTALL THE B2H SYSTEM FILES:
+        o  Place the B2H system profile (B2H PROFILE) into a sequential
+           file, such as 'userid.B2H.PROFILE'
+        o  Place the B2H system symbol table (B2H SYMBOLS) into a
+           sequential file, such as 'userid.B2H.SYMBOLS'
+        o  Place the B2H help file (B2H HELPCMS) into a sequential file,
+           such as 'userid.B2H.HELP'
+ 
+     3. THE OPTIONAL FILES
+        The remainder of the files in the B2H package are optional.
+        These consist of such files as the User's Guide (in source,
+        LIST3820 and HTML formats) and various sample files.
+        Whether they should be received and saved is at your discretion.
+ 
+  o  On your TSO userid, allocate B2H's system files using the following:
+       ALLOC FI(B2HPROF) DA(profile-dataset-name)      SHR REUSE
+       ALLOC FI(B2HSYM)  DA(symbol-table-dataset-name) SHR REUSE
+       ALLOC FI(B2HHELP) DA(help-dataset-name)         SHR REUSE
+ 
+     To allow you to invoke B2H by just entering it's name, allocate the
+     "SYSEXEC" file to the PDS into which you saved the B2H program:
+       ALLOC FI(SYSEXEC) DA(pds-dataset-name) SHR REUSE
+ 
+  o  Try converting a test file which is typical of the Bookmaster/GML
+     source files you will be processing:
+ 
+       B2H filespec
+ 
+     Examples using files stored under your userid:
+       B2H test1.script
+       B2H proj23.script(chap1)
+ 
+     Examples using files NOT stored under your userid:
+       B2H 'SYS3.ISO9000.SCRIPT'
+       B2H 'mvs1.org.text(guide)'
+ 
+     Convert the sequential dataset(s) allocated to DD "FILEIN":
+       B2H DD:FILEIN
+ 
+     Convert member MEM1 within the partition dataset(s) allocated
+     to DD "FILEIN":
+       B2H DD:FILEIN(MEM1)
+ 
+     If you have an MVS-based web browser, point it at the HTML output
+     file, e.g. filespec.HTML, TEST1.HTML, PROJ23.SCRIPT.CHAP1.HTML
+ 
+     Note: if you will be transferring the HTML output to a platform other
+     than MVS and browsing it there, you can tell B2H to customize it's
+     output for that platform, like:
+ 
+       B2H filespec ( DESTSYS=AIX
+       B2H filespec ( DESTSYS=LINUX
+       B2H filespec ( DESTSYS=OS2
+       B2H filespec ( DESTSYS=VM
+       B2H filespec ( DESTSYS=WIN95
+       B2H filespec ( DESTSYS=WINNT
+|      B2H filespec ( DESTSYS=UNIX
+ 
+  o  Try running B2H again, this time using different options to vary
+     the output format.  For example, specify your own title and do not
+     generate a table-of-contents:
+ 
+       B2H filespec ( TOC=NO TITLE="My sample title"
+ 
+  o  Try converting the "flat" file SYS1.PROCLIB(TSO):
+ 
+       B2H 'SYS1.PROCLIB(TSO)' ( SOURCE=FLAT TITLE="Member TSO"
+ 
+  o  To see the online help (requires ISPF to be active):
+ 
+       B2H ?
+ 
+  o  Customize B2H to your needs either by updating the "B2H.PROFILE"
+     system profile or by creating a user profile and using the USERPROF=
+     option to process it
+ 
+ 
+  Quick Install-and-Go (VM)
+  -------------------------
+  o  If you retrieved the VMARC file from the Internet, follow the
+     instructions on the web page to upload the VMARC file to VM and
+     then "extract" the component pieces onto a read/write disk
+     (typically your A-disk).
+ 
+     If you downloaded the ZIP file from the Internet directly onto your
+     PC, unzip it and upload the files to your VM id.
+ 
+     Note: The files were created on a U.S. system.  If uploading to
+           a non-U.S. system, be careful to ensure you use the correct
+           translate table.  An incorrect translate table during upload
+           can often cause "Invalid character in program" error messages
+           when trying to execute B2H.
+ 
+     If you ordered the package from an internal IBM tools disk, receive
+     the files to a read/write disk (typically your A-disk).
+ 
+  o  Two versions of the B2H program are available for VM: "B2H SEXEC"
+     is the REXX source code and "B2H EXEC" is the VM REXX compiled
+     version.  The compiled version runs much faster but requires the
+     REXX compiler run-time libraries.  The source code runs slower,
+     but has no additional dependencies.  Ensure that the filetype of
+     the desired version is "EXEC".
+ 
+  o  Try converting a test file which is typical of the Bookmaster/GML
+     source files you will be processing:
+ 
+       B2H fn ft fm
+ 
+     If you have a VM-based web browser, point it at the HTML output
+     file "fn HTML A".  For example:  WWW FILE://fn.HTML
+ 
+     Note:  if you will be browsing the HTML output on a platform other
+     than VM/CMS, you can tell B2H to customize it's output for that
+     platform, like:
+ 
+       B2H fn ft fm ( DESTSYS=AIX
+       B2H fn ft fm ( DESTSYS=LINUX
+       B2H fn ft fm ( DESTSYS=MVS
+       B2H fn ft fm ( DESTSYS=OS2
+       B2H fn ft fm ( DESTSYS=WIN95
+       B2H fn ft fm ( DESTSYS=WINNT
+|      B2H fn ft fm ( DESTSYS=UNIX
+ 
+     Transfer the HTML output file to the desired platform and point your
+     web browser at it.
+ 
+  o  Try running B2H again, this time using different options to vary
+     the output format.  For example, specify your own title and do not
+     generate a table-of-contents:
+ 
+       B2H fn ft fm ( TOC=NO TITLE='My sample title'
+ 
+  o  Try converting the "flat" file PROFILE EXEC:
+ 
+       B2H PROFILE EXEC A ( SOURCE=FLAT TOC=NO TITLE='My Profile Exec'
+ 
+  o  To see the online help:
+ 
+       B2H ?
+ 
+  o  Customize B2H to your needs either by updating the "B2H PROFILE"
+     system profile or by creating a user profile and using the USERPROF=
+     option to process it
+ 
+ 
+ 
+  ***********************************************************************
+ 
+ 
+  B2H User's Guide
+  ----------------
+  Print the provided B2H LIST3820 file or format/print the BookMaster
+  source (B2H SCRIPT).
+ 
+  Or better yet, point your browser at one of the HTML versions of the
+  User's Guide: "B2H HTML" uses HTML 3 tags, "B2HR2 HTML" contains only
+  HTML 2 tags.
+ 
+ 
+  If you would like, try converting the BookMaster source for the User's
+  Guide to HTML.  Since the document may be larger than anything you'll be
+  placing on a WEB server, if your environment has the resources to
+  convert it successfully, then you should be able to convert most
+  anything!
+ 
+  Examples:  (shown using VM naming convention)
+ 
+    Convert the User's Guide into a single, large HTML file:
+       B2H b2h script ( log=yes
+ 
+    Convert the User's Guide and split the HTML output into smaller
+    files to allow easier loading:
+       B2H b2h script ( log=yes autosplit='*1 bypass=1'
+ 
+ 
+-- Gary L. Richtmeyer, 20 May 2002

@@ -1,0 +1,44 @@
+# B2H
+
+This is the B2H package from the z/VM Download site
+    http://www.vm.ibm.com/download/packages/descript.cgi?B2H
+
+## Originally from Gary Richmeyer
+
+## Updated from Lionel Dyck
+   Member B2H
+   - Treat z/OS dataset as fully qualified
+     formerly assume PROFILE NOPREFIX
+   - split records longer than 1000 so that the resulting
+     html file can be emailed using smtp
+   Member SYM
+   - updates to the symbolic (sym) file to support HCD generated symbols
+
+## Members:
+
+$README    - what you're reading
+ANN        - Announcement info
+B2H        - REXX Exec
+B2HAPP     - Script Appendix file
+B2HEXA     - Script Examples file
+B2HINF     - Script General Info file
+B2HMSG     - Script Message file
+B2HNAME    - AIX Shell script to rename files
+B2HPDF     - User's Guide in PDF (download in binary)
+B2HR2      - Script Users Guide in HTML2
+B2HSETUP   - Script Setup file
+B2HSYS     - Script Profile and Symbols file
+B2HUSE     - Script FAQ file
+HTM        - User's Guide in HTML format
+LINKGIF    - GIF (download in binary)
+NEW        - Original change history
+PKG        - Original package info (not accurate or complete)
+PRO        - B2H Profile file
+SCT        - Script Users Guide (main - imbeds the other script files)
+SYM        - B2H SYM (symbols) file
+
+# Installation:
+
+   1. Copy member B2H into a SYSPROC or SYSEXEC library
+   2. Edit member B2H to change the dataset names for the HLP, PRO and
+      SYM datasets.

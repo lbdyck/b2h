@@ -1,0 +1,2622 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HUSE: Using B2H, converting "flat" files, Caveats & Restrictions,
+.*         Troubleshooting and Frequently-Asked-Questions (FAQ)
+.*         Imbedded by B2H SCRIPT
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+.setup b2hsetup
+.*--------------------
+:h1 id=useb2h.Using &sysname
+:ptoc.
+.*-----
+:h2 id=srcfmt.Specifying the input file's format
+:p.The :xph.SOURCE=:exph. option specifies the format of the input
+file.
+.*-----
+:h3 id=conbm.Converting &bm. and GML files (SOURCE=SCRIPT)
+:p.It does not matter to &sysname. whether your documents are
+written using :hp1.&bm.:ehp1. markup or :hp1.Generalized Markup
+Language:ehp1. (GML) markup because &bm. and GML tags do not
+conflict with each other and the processing rules are the same.
+When :xph.SOURCE=SCRIPT:exph. is specified (the default value),
+&sysname. treats the input simply as a :q.script:eq.-type document.
+:p.&bm. tags and processing rules are described fully in
+:cit.IBM BookMaster User's Guide:ecit., order number SC34-5009.
+GML tags and processing rules are described fully in
+:cit.IBM Document Composition Facility Generalized Markup Language
+Starter Set Reference:ecit., order number SH20-9187.
+:p.&script. control words (e.g. :xph.&period.br:exph.,
+:xph.&period.cp:exph.) may be freely intermixed within your text and
+markup.  Although GML and &bm. have restrictions on :hp1.which:ehp1.
+&script. control words may be used, &sysname. makes no such
+distinction and will process whatever is present in your source
+document.
+:p.The use of a control word :hp1.separator:ehp1.
+:rev refid=r45.
+(normally a semi-colon unless changed using :xph.&period.DC:exph.)
+:erev refid=r45.
+is supported, but only if a &script. control word starts in column one.
+:xmp.
+  This is OK:
+    &period.br&semi.This sentence starts on a new line
+    &period.sk&semi.&period.sk&semi.Text after two line skips
+ 
+  The following is treated as a single line of text:
+    Vocal music is best sung acapella&semi.&period.br
+:exmp.
+.*-----
+:h3 id=conscr.Converting &script. files (SOURCE=SCRIPTONLY)
+:p.Documents written using only &script. control words tend to be
+more difficult to convert to &html..  Whereas GML and &bm. tags
+describe a document's :hp1.content:ehp1. and therefore convert
+fairly easily to &html.'s content-oriented language, &script.
+control words are precise formatting directives specifying exactly
+how the output document is to appear on a particular output device.
+&html. does not provide this level of formatting granularity.
+:p.Depending on how your document is written and the control words
+used, it may convert correctly using :xph.SOURCE=SCRIPT:exph. as
+described previously in :hdref refid=conbm..  It is suggested that
+you try this approach first.
+:p.If the &html. output is not acceptable, it may be because the
+processing rules for :q.pure:eq. &script. documents are slightly
+different than for &bm. or GML.  These rules are described fully in
+:cit.IBM Document Composition Facility Script/VS Language Reference
+Guide:ecit., order number SH35-0070.  To tell &sysname. to use these
+processing rules, specify :xph.SOURCE=SCRIPTONLY:exph..
+This causes the following changes.
+:ul compact.
+:li.Lines with a leading blank cause a line-break
+:li.A control word :hp1.separator:ehp1.
+:rev refid=r45.
+(normally a semi-colon unless changed using :xph.&period.DC:exph.)
+:erev refid=r45.
+always causes a line to be divided
+:li.Colons are treated as text and not the start of a tag; therefore,
+:q.&colon.p.:eq. is processed simply as three characters and not a
+paragraph tag
+.* :li.:xph.&period.FN ON/&period.FN OFF:exph. is not supported
+.* :li.Splitting the output &html. (as discussed in
+.* :hdref refid=split.) is :hp1.not:ehp1. available
+:eul.
+:p.If the &html. output is still not acceptable, you will need to
+either edit the &html. output to get what you want or update your
+input source.
+.*-----
+:h3 id=conflat.Converting &flat. files (SOURCE=FLAT)
+:p.To indicate that a &flat. file is being processed, just specify
+:xph.SOURCE=FLAT:exph.
+:p.By default, the entire file is enclosed within a pair of
+:q.&pre.:eq. and :q.&epre.:eq. &html. tags causing the browser to
+switch to a mono-spaced font and display the file :q.as-is:eq..
+:p.Because many &flat. files are simple paragraphs of text with a
+blank line between the paragraphs, two additional operands on the
+:xph.SOURCE=:exph. option allow specialized processing. For these
+types of files, try specifying :xph.SOURCE='FLAT,NOPRE,YES':exph..
+See the description of the :spotref refid=source. for other
+processing possibilities.
+:p.In addition to the :xph.SOURCE=:exph. option, you will normally
+also specify :xph.TITLE=:exph.':pv.text:epv.' since no &bm., GML or
+&script. markup will be present for &sysname. to recognize as the
+title.  If :xph.TITLE=:exph. is :hp1.not:ehp1. specified for a
+&flat. file, the first non-blank line is used as the title.
+:p.Example:
+:xmp.
+  &PGMCMD PIANO HOW-TO ( TITLE='How to play the piano' &cont.
+SOURCE=FLAT
+:exmp.
+:p.:hp2.VM Example: Convert your PROFILE EXEC:ehp2.
+:xmp.
+  B2H PROFILE EXEC A ( SOURCE=FLAT TITLE='My Profile Exec'
+:exmp.
+:p.:hp2.PC Example: Convert your C&colon.&bsl.CONFIG.SYS:ehp2.
+:xmp.
+  B2H C&colon.&bsl.CONFIG.SYS &cont.
+( SOURCE=FLAT TITLE='My Config.Sys'
+:exmp.
+:p.:hp2.MVS Example: Convert a member from SYS1.PROCLIB::ehp2.
+:xmp.
+  B2H 'SYS1.PROCLIB(TSO)' &cont.
+( SOURCE=FLAT TITLE='This is SYS1.PROCLIB(TSO)'
+:exmp.
+.*-----
+:h2 id=outfmt.Specifying the output file
+:p.&sysname. keeps track of :hp1.two:ehp1. algorithms for the output
+file:  the :hp1.physical:ehp1. file name created on the current
+platform and the :hp1.logical:ehp1. file name used by the &html.
+:xph.HREF=:exph. parameter (which must match the physical name when the
+&html. file is handled by the server).
+This is discussed in more detail in :hdref refid=xplat..
+:p.:hp3.In most situations, you will not need to specify these names
+as &sysname. will determine them based on the input file and the
+platform(s) involved:ehp3..  But if you wish to specify them, use
+the :xph.OUTPUTP=:exph. option to specify the physical file name and
+the :xph.OUTPUTL=:exph. option to specify the logical file name.
+:p.When might you want to specify the output file names?
+:ul compact.
+:li.You do not want to use &sysname.'s default output names
+:li.You want the physical output file(s) placed in a different location
+(e.g. another directory or mini-disk)
+:li.On MVS, you want to place the output into one or more members of
+a partitioned data set (PDS) or you want to write the output to a DD
+card
+:eul.
+:p.The following table contains examples of the relationship between
+the input and output file names.
+:tdef  id=xrfmain
+       width=page
+       rotate=270
+       split=yes
+       frame=box.
+:tdef  id=xrfone
+       cols='*'
+       align=left
+       valign=top
+       hp=2
+       refid=xrfmain.
+:table id=ioname
+       cols='* * * * *'
+       refid=xrfmain.
+:tcap.Input/Output Naming Conventions
+:tdesc.
+The :q.2nd File:eq. value refers to the file name used when
+:q.splitting:eq. the output &html. file.  See :hdref refid=split.
+for more information.
+:etdesc.
+:thd.
+:c.Input File
+:c.Value specified for :xph.OUTPUTP=:exph.
+:c.1st Physical File
+.br;2nd Physical File
+:c.Value specified for :xph.OUTPUTL=:exph.
+:c.1st Logical File
+.br;2nd Logical File
+:ethd.
+:row refid=xrfone temp.
+:c.On AIX, Linux, OS/2 HPFS,
+:rev refid=r47.
+UNIX
+:erev refid=r47.
+:row.
+:c.abc.script
+:c.(none)
+:c.abc.html
+.br;abc02.html
+:c.(none)
+:c.abc.html
+.br;abc02.html
+:row.
+:c.abc.script
+:c.def.html
+:c.def.html
+.br;def02.html
+:c.(none)
+:c.def.html
+.br;def02.html
+:row.
+:c.abc.script
+:c.def.html
+:c.def.html
+.br;def02.html
+:c.xyz.html
+:c.xyz.html
+.br;xyz02.html
+:row.
+:c.abc.longerthan.script
+:c.(none)
+:c.abc.longerthan.html
+.br;abc.longerthan02.html
+:c.(none)
+:c.abc.longerthan.html
+.br;abc.longerthan02.html
+:row.
+:c.abc.longerthan.script
+:c.def.twothree.html
+:c.def.twothree.html
+.br;def.twothree02.html
+:c.(none)
+:c.def.twothree.html
+.br;def.twothree02.html
+:row.
+:c.abc.longerthan.script
+:c.def.twothree.html
+:c.def.twothree.html
+.br;def.twothree02.html
+:c.xyz.twothree.html
+:c.xyz.twothree.html
+.br;xyz.twothree02.html
+:row refid=xrfone temp.
+:c.On OS/2 FAT, Windows 9x/ME, Windows NT/2000
+:row.
+:c.abc.scr
+:c.(none)
+:c.abc.htm
+.br;abc02.htm
+:c.(none)
+:c.abc.htm
+.br;abc02.htm
+:row.
+:c.abc.scr
+:c.defghij.htm
+:c.defghij.htm
+.br;defghi02.htm
+:c.(none)
+:c.defghij.htm
+.br;defghi02.htm
+:row.
+:c.abc.scr
+:c.defghij.htm
+:c.defghij.htm
+.br;defghi02.htm
+:c.xyz.htm
+:c.xyz.htm
+.br;xyz02.htm
+:row refid=xrfone temp.
+:c.On MVS
+:row.
+:c.ABC.DEF.SCRIPT
+:c.(none)
+:c.ABC.DEF.HTML
+.br;ABC.DEF02.HTML
+:c.(none)
+:c.abc.def.html
+.br;abc.def02.html
+:row.
+:c.ABC.DEF.SCRIPT
+:c.DEF.TWOTHREE.HTML
+:c.DEF.TWOTHREE.HTML
+.br;DEF.TWOTHR02.HTML
+:c.(none)
+:c.def.twothree.html
+.br;def.twothr02.html
+:row.
+:c.ABC.DEF.SCRIPT
+:c.DEF.TWOTHREE.HTML
+:c.DEF.TWOTHREE.HTML
+.br;DEF.TWOTHR02.HTML
+:c.xyz.twothree.html
+:c.xyz.twothree.html
+.br;xyz.twothr02.html
+:row.
+:c.ABC.DEF.SCRIPT(MEM5)
+:c.(none)
+:c.ABC.DEF.MEM5.HTML
+.br;ABC.DEF.MEM502.HTML
+:c.(none)
+:c.abc.def.mem5.html
+.br;abc.def.mem502.html
+:row.
+:c.ABC.DEF.SCRIPT(MEM5)
+:c.ABC.XYZ.HTML
+:c.ABC.XYZ.HTML
+.br;ABC.XYZ02.HTML
+:c.(none)
+:c.abc.xyz.html
+.br;abc.xyz02.html
+:row.
+:c.ABC.DEF.SCRIPT(MEM5)
+:c.ABC.XYZ.HTML
+:c.ABC.XYZ.HTML
+.br;ABC.XYZ02.HTML
+:c.def.xyz.html
+:c.def.xyz.html
+.br;def.xyz02.html
+:row.
+:c.ABC.DEF.SCRIPT
+:c.ONE.TWO(MEM5)
+:c.ONE.TWO(MEM5)
+.br;ONE.TWO(MEM502)
+:c.(none)
+:c.one.two(mem5)
+.br;one.two(mem502)
+:row.
+:c.ABC.DEF.SCRIPT
+:c.ONE.TWO(MEM5)
+:c.ONE.TWO(MEM5)
+.br;ONE.TWO(MEM502)
+:c.abc.xyz.html
+:c.abc.xyz.html
+.br;abc.xyz02.html
+:row refid=xrfone temp.
+:c.On VM
+:row.
+:c.ABC SCRIPT A
+:c.(none)
+:c.ABC HTML A
+.br;ABC02 HTML A
+:c.(none)
+:c.abc.html
+.br;abc02.html
+:row.
+:c.ABC SCRIPT A
+:c.DEFGHIJ HTML B
+:c.DEFGHIJ HTML B
+.br;DEFGHI02 HTML B
+:c.(none)
+:c.defghij.html
+.br;defghi02.html
+:row.
+:c.ABC SCRIPT A
+:c.DEFGHIJ HTML B
+:c.DEFGHIJ HTML B
+.br;DEFGHI02 HTML B
+:c.xyz.html
+:c.xyz.html
+.br;xyz02.html
+:etable.
+.*-----
+:h3.Specifying the output file under MVS
+:p.Just as the input file can be specified either by dataset name or
+by DD, the physical output file can also be specified either by
+dataset name or by DD
+:rev refid=r44.
+(see :hdref refid=mvsfile.).
+:erev refid=r44.
+.*-----
+:h3 id=ofcmvs.Output file considerations under MVS
+:p.By default, &sysname. creates one or more sequential output files
+when converting a source document.
+:p.Under MVS, you can instead have &sysname. create one or more
+members in a partitioned data set (PDS).  To do this, just ensure
+that the :xph.OUTPUTP=:exph. option references both a dataset name
+and an initial member name.
+:rev refid=r44.
+(See also :hdref refid=mvsfile..)
+:erev refid=r44.
+Here are the different ways to do it:
+:table id=xx
+       cols='5* 2* 2* 5*'
+       width=page
+       split=yes
+       frame=box.
+:tcap.Using OUTPUTP= under MVS
+:thd.
+:c.Specified
+:c.Output dataset
+:c.Initial member
+:c.Comments
+:ethd.
+:row.
+:c.:xph.&PGMCMD ... ( OUTPUTP=PROJ1.HTML(MEM1):exph.
+:c.:xph.PROJ1.HTML:exph.
+:c.:xph.MEM1:exph.
+:c.When the dataset name is explicitly specified like this, then if
+the dataset exists prior to invoking &sysname., the member(s) will
+be added to it; if the dataset does not exist prior to invoking
+&sysname., the dataset will be created.
+(See the :spotref refid=mvsall. for how to specify the allocation
+values.)
+:row.
+:c.:xph.ALLOC FI(DD1) DA(PROJ1.HTML(MEM1)):exph.
+.br;:xph.&PGMCMD ... ( OUTPUTP=DD&colon.DD1:exph.
+:c.:xph.PROJ1.HTML:exph.
+:c.:xph.MEM1:exph.
+:row.
+:c.:xph.ALLOC FI(DD1) DA(PROJ1.HTML):exph.
+.br;:xph.&PGMCMD ... ( OUTPUTP=DD&colon.DD1(MEM1):exph.
+:c.:xph.PROJ1.HTML:exph.
+:c.:xph.MEM1:exph.
+:row.
+:c.:xph.ALLOC FI(DD1) DA(PROJ1.HTML(MEM1)):exph.
+.br;:xph.&PGMCMD ... ( OUTPUTP=DD&colon.DD1(MEM2):exph.
+:c.:xph.PROJ1.HTML:exph.
+:c.:xph.MEM2:exph.
+:c.Note that the member name specified for
+:xph.OUTPUTP=:exph. overrides the member name on the file
+allocation
+:etable.
+.*---
+:h4.Creating Hierarchical File System (HFS) files
+:p.If you are running OpenEdition, you may wish to have the output
+file(s) placed into an HFS directory.  This can be easily done using
+the following three-step process:
+:ol.
+:li.Run &sysname. specifying that the :hp1.physical:ehp1. output
+should be one or more members of a temporary PDS and that the
+:hp1.logical:ehp1. output filename includes the HFS directory where
+you will ultimately place the files.  For example:
+.br;:xph.&PGMCMD :pv.filespec:epv. ( OUTPUTP=temp.pds(mydoc) &cont.
+OUTPUTL=/usr/htmlfiles/mydoc.html:exph.
+:li.Use the :xph.OPUTX:exph. command to copy the member(s) to the
+same HFS directory as specified for the :xph.OUTPUTL=:exph. option.
+For example:
+.br;:xph.OPUTX temp.pds '/usr/htmlfiles/' LC SUFFIX(html):exph.
+:li.Erase the temporary PDS
+:eol.
+:p.For example:  if we assume that into the temporary PDS, &sysname.
+created the :xph.MYDOC:exph., :xph.MYDOC02:exph. and
+:xph.MYDOC03:exph. members, then :xph.OPUTX:exph. would copy those
+members as :xph./usr/htmlfiles/mydoc.html:exph.,
+:xph./usr/htmlfiles/mydoc02.html:exph. and
+:xph./usr/htmlfiles/mydoc03.html:exph..
+.*----------
+:h2 id=xplat.Cross-Platform considerations
+:p.If you are running &sysname. on a platform different than what
+your web server uses (e.g. you are running &sysname. on VM and then
+downloading the &html. output to a Linux server), you should be
+aware of some file naming considerations.
+:p.&sysname. keeps track of :hp1.two:ehp1. algorithms for file
+naming:  the :hp1.physical:ehp1. name(s) created on the current
+platform, and the :hp1.logical:ehp1. name(s) used by the &html.
+:xph.HREF=:exph. parameter (which must match the physical name when
+the &html. file is handled by the server).  If the current platform
+(:q.currsys:eq.) is the same as the destination platform
+(:q.destsys:eq.) specified by the &sysname :xph.DESTSYS=:exph.
+option, then the two sets of file names are equivalent.  But if the
+:q.currsys:eq. platform is :hp1.not:ehp1. the same as the
+:q.destsys:eq. platform, the file names
+:hp1.may:ehp1. be different.
+:p.&sysname. sets the :q.currsys:eq.-related values based on the
+current platform and the :q.destsys:eq.-related values based on the
+:xph.DESTSYS=:exph. option, but you can override any of these values
+using the appropriate option:
+:ul.
+:li.The :q.P:eq.-type options specify the :hp1.physical:ehp1.
+(:q.currsys:eq.) values, e.g. :xph.HTMPEXT=, OUTPUTP=, OUTPUTP83=,
+OUTPUTPCASE=:exph., etc.
+:li.The :q.L:eq.-type options specify the :hp1.logical:ehp1.
+(:q.destsys:eq.) values, e.g. :xph.HTMLEXT=, OUTPUTL=, OUTPUTL83=,
+OUTPUTLCASE=:exph., etc.
+:eul.
+:p.Here's an example: if you convert :q.project1.script:eq. on AIX with
+:xph.DESTSYS=OS2:exph., the default physical output file is
+:q.project.html:eq. (because AIX supports long file names) and the
+logical name is :q.project1.htm:eq. (because OS/2 FAT does not
+support long file names).  If you want to force the
+:hp1.physical:ehp1. file extension to also be :q.htm:eq., then just
+specify :xph.HTMPEXT=htm:exph.
+.*-----
+:rev refid=r42.
+:h2 id=layout.Layout of the output &html. file
+:p.You have considerable control over the layout and content of the
+output &html..  Each output &html. file consists of three major
+sections:  the header, the body and the footer.
+:tdef id=lay1 cols='*' hp=2 align=l.
+:table id=layout
+       cols='* 6* 6*'
+       align='c l'
+       width=page
+       split=yes
+       frame=box.
+:tcap.Layout of the output &html. file
+:thd.
+:c.&rbl.
+:c.Record(s)
+:c.Obtained from where?
+:ethd.
+:row refid=lay1 temp.
+:c.Header section of the &html. file
+:row.
+:c.1.
+:c.File content identifier
+:c.:xph.DEFTEXT.HTMLHEAD=:exph. and
+:xph.HTMLDOCID.:pv.htmlrel:epv.=:exph. options
+:row.
+:c.2.
+:c.:xph.&lt.HTML&gt.&lt.HEAD&gt.:exph.
+:c.Generated by &sysname.
+:row.
+:c.3.
+:c.:xph.&lt.TITLE&gt.:exph.:pv.title:epv.:xph.&lt./TITLE&gt.:exph.
+:c.Document's title (see :hdref refid=doctit.)
+:row.
+:c.4.
+:c.&sysname. identifier (optional)
+:c.:xph.COMMENTHEAD=:exph. option
+:row.
+:c.5.
+:c.User comment records(s) (optional)
+:c.:xph.COMMENT=:exph. option(s)
+:row.
+:c.6.
+:c.Various meta-type records (optional)
+:ol compact.
+:li.Abstract of file (optional)
+:li.Security information (optional)
+:li.Contact information (optional)
+:li.File owner (optional)
+:li.Content-type (optional)
+:li.File updated
+:li.Review date
+:li.Expires date
+:li.Keywords (optional)
+:eol.
+:c.Controlled by :xph.META=:exph. option
+:ol compact.
+:li.:xph.ABSTRACT=:exph. option
+:li.:xph.SECURITY=:exph. option
+:li.:xph.CONTACT=:exph. option
+:li.:xph.OWNER=:exph. option
+:li.:xph.CHARSET=:exph. option
+:li.Date/time of the input file
+:li.:xph.REVDATE=:exph. option
+:li.:xph.EXPDATE=:exph. option
+:li.:xph.METAKEYS=:exph. option
+:eol.
+:row.
+:c.7.
+:c.Any other records to include in the header section (optional)
+:c.:xph.HEADREC=:exph. and :xph.HEADREC.:pv.x:epv.=:exph. option(s)
+:row.
+:c.8.
+:c.:xph.&lt./HEAD&gt.:exph.
+:c.Generated by &sysname.
+:row refid=lay1 temp.
+:c.Body section of the &html. file
+:row.
+:c.1.
+:c.:xph.&lt.BODY&gt.:exph. statement
+:c.:xph.BODYTAG=:exph. option
+:row.
+:c.2.
+:c.Mast head image (optional)
+:c.:xph.MASTHEAD=:exph. and :xph.MASTALT=:exph. options
+:row.
+:c.3.
+:c.User header records (optional)
+:c.:xph.HEADER=:exph. option(s)
+:row.
+:c.4.
+:c.:xph.&lt.H:pv.x:epv.&gt.:pv.title:epv.&lt./H:pv.x:epv.&gt.:exph.
+.br;(optional top-of-page title)
+:c.:xph.TOPHEAD=:exph. option
+:row.
+:c.5.
+:c.Top-of-page navigation links if splitting the &html. output
+(optional)
+:c.:xph.SPLITLINK=:exph. and :xph.SPLITLINK.:pv.x:epv.:exph. options
+:row.
+:c.6.
+:c.The text of the document itself
+:c.Input file
+:row refid=lay1 temp.
+:c.Footer section of the &html. file
+:row.
+:c.1.
+:c.List of footnotes
+:c.Any footnotes accumulated within the current physical file
+:row.
+:c.2.
+:c.Bottom-of-page navigation links if splitting the &html. output
+(optional)
+:c.:xph.SPLITLINK=:exph. and :xph.SPLITLINK.:pv.x:epv.:exph. options
+:row.
+:c.3.
+:c.User footer records (optional)
+:c.:xph.FOOTER=:exph. option(s)
+:row.
+:c.4.
+:c.:xph.&lt./BODY&gt.&lt./HTML&gt.:exph.
+:c.Generated by &sysname.
+:etable.
+:erev refid=r42.
+.*-----
+:rev refid=r42.
+:h2 id=b2hstmt.Controlling &sysname. using statements within the source file
+:erev refid=r42.
+:p.You can include statements within the source file to influence
+how &sysname. performs the conversion.  You can specify &sysname. options
+:rev refid=r45.
+and symbol table definitions,
+:erev refid=r45.
+provide explicit &html. text to be passed directly to the
+output, indicate where the output file should be :q.split:eq., and
+other functions.
+:p.The statement has two acceptable syntaxes:
+:parml.
+:rev refid=r42.
+:pt.:xph.:pk.&period.*B2H &lbrk.(:pv.env:epv.)&rbrk. &cont.
+:pv.type:epv.  &lbrk. :pv.options:epv. &rbrk.:epk.:exph.
+:erev refid=r42.
+:pd.This is the preferred syntax and explicitly identifies that the
+statement is intended for use by &sysname..  This syntax also allows
+you to specify that the statement is applicable only to certain
+:rev refid=r42.
+environment(s)
+:erev refid=r42.
+by indicating the
+:rev refid=r42.
+environment
+:erev refid=r42.
+name(s) within parentheses immediately after
+the :q.:xph.&period.*B2H:exph.:eq..
+See :hdref refid=platfrm. for further information on specifying the
+desired selection criteria.
+:p.If the :xph.B2HREQ=YES:exph. option is specified (the default
+value), this is the only syntax that &sysname. recognizes.
+:pt.:xph.:pk.&period.*:pv.type:epv.  &cont.
+&lbrk. :pv.options:epv. &rbrk.:epk.:exph.
+:pd.This syntax has a less-obvious intent and might cause confusion
+between &sysname. and other programs which also :q.look:eq. at your
+source.  :xph.B2HREQ=NO:exph. must be specified for &sysname. to
+recognize this syntax.
+:eparml.
+Since the statements :q.look:eq. like &script. comments (they start
+with a period-asterisk), you can leave them in the source file
+without harm.
+:p.The following statement types are available:
+:fig place=inline.
+Provide explicit &html. text:
+:xmp.
+   :rev refid=r42.&period.*B2H  &lbrk.(:pv.env:epv.)&cont.
+&rbrk.  HTML  :pv....html-text...:epv.:erev refid=r42.
+:exmp.
+:rev refid=r42.Issue a message
+:xmp.
+   &period.*B2H  &lbrk.(:pv.env:epv.)&rbrk.  &cont.
+MSG   :pv.type:epv. &cont.
+&lbrk. :pv.identifier:epv. &rbrk., :pv.message-text:epv.
+:exmp.:erev refid=r42.
+Specify &sysname. options:
+:xmp.
+   :rev refid=r42.&period.*B2H  &lbrk.(:pv.env:epv.)&cont.
+&rbrk.  OPTION  :pv.option:epv.=:pv.value:epv.  &lbrk. &cont.
+:pv.option:sub.2:esub.:epv.=:pv.value:sub.2:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &rbrk.&cont.
+:erev refid=r42.
+:exmp.
+:rev refid=r45.
+Specify &sysname. a symbol table definition:
+:xmp.
+   &period.*B2H  &lbrk.(:pv.env:epv.)&cont.
+&rbrk.  SYMBOL  :pv.symbol-table-statement:epv.
+:exmp.
+:erev refid=r45.
+Force a split of the output &html. file:
+:xmp.
+   :rev refid=r42.&period.*B2H  &lbrk.(:pv.env:epv.)&cont.
+&rbrk.  SPLIT   &cont.
+&lbrk. :pv.physical-file:epv. &rbrk., &cont.
+&lbrk. :pv.logical-file:epv. &rbrk.:erev refid=r42.
+:exmp.
+:figcap.&period.*B2H statements
+:efig.
+:parml.
+.*-----
+:rev refid=r42.
+:spot id=b2html xreftext='.*B2H&rbl.HTML statement'.
+:pt.:xph.:pk.&period.*B2H &lbrk.(:pv.env:epv.)&cont.
+&rbrk.  HTML  :pv....html-text...:epv.:epk.:exph.
+:erev refid=r42.
+:pd.This statement allows you to insert explicit &html. statements
+into the source file to support specialized requirements.
+:p.Example:
+:xmp.
+  &colon.p.You can download it from my homepage at
+  &colon.psc proc=html.
+  &period.*b2h html &lt.A HREF="http&colon.//www.abc.com/myhome"&gt.
+  &period.*b2h html http&colon.//www.abc.com/myhome&lt./A&gt.
+  &colon.epsc.
+  &colon.psc xproc=html.
+  &colon.xph.http&amp.colon.//www.abc.com/myhome&colon.exph.
+  &colon.epsc.
+:exmp.
+:p.See :hdref refid=platfrm. for further information on specifying the
+desired selection criteria.
+.*-----
+:rev refid=r42.
+:spot id=b2hmsg xreftext='.*B2H&rbl.MSG statement'.
+:pt.:xph.:pk.&period.*B2H &lbrk.(:pv.env:epv.)&rbrk.  &cont.
+MSG  :pv.type:epv. &cont.
+&lbrk. :pv.identifier:epv. &rbrk. , :pv.message-text:epv.:epk.:exph.
+:pd.This statement allows you to issue messages (and set the
+&sysname. return code) from within the document.  Can also be
+returned from a user exit program supporting a user tag to reflect
+any warning or error conditions.
+:parml.
+:pt.:pv.env:epv.
+:pd.See :hdref refid=platfrm. for further information on specifying
+the desired selection criteria.
+:pt.:pv.type:epv.
+:pd.The :q.type:eq. of message to be issued
+.getw symbol=dhlen gmltype=hp2 text='W A R N I N G'
+:dl compact termhi=2 tsize=&dhlen..
+:dt.:pk.INFO:epk.
+:dd.The message is for :q.informational:eq. purposes only.
+The return code is not altered.
+:dt.:pk.WARNING:epk.
+:dd.The message describes a warning.
+The return code is set to 4, if not already higher.
+:dt.:pk.ERROR:epk.
+:dd.The message describes an error condition.
+The return code is set to 8, if not already higher.
+:dt.:pk.TERM:epk.
+:dd.The message describes a termination condition.
+The return code is set to 8 and &sysname. is immediately terminated.
+:edl.
+:pt.:pv.identifier:epv.
+:pd.An optional message number or identifier.
+:ul compact.
+:li.If omitted, no message identifier is shown
+:li.If a numeric value, it is shown as the message number in
+:q.:xph.&sysname.:pv.nnn:epv.:exph.:eq.,
+e.g. :q.:xph.&sysname.987:exph.:eq..
+:li.Any other value is shown as the entire message identifier
+:eul.
+:pt.:pv.message-text:epv.
+:pd.The message to display. &amp.symbol substitution is supported.
+:eparml.
+:p.Examples:
+:xmp.
+  &period.*B2H MSG info, This is an info-type message
+  &period.*B2H MSG warning 980, A warning message
+:exmp.
+:erev refid=r42.
+.*-----
+:rev refid=r42.
+:pt.:xph.:pk.&period.*B2H &lbrk.(:pv.env:epv.)&rbrk.  &cont.
+OPTION  :pv.option:epv.=:pv.value:epv.  &lbrk. &cont.
+:pv.option:sub.2:esub.:epv.=:pv.value:sub.2:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &rbrk.:epk.:exph.
+:erev refid=r42.
+:pd.This statement allows you to specify &sysname. processing
+options.  Options specified here override options in a profile
+or on the command line (see :hdref refid=spcopts. for additional
+information).
+:notel.
+:li.There can be multiple &optioncmd2 statements in a source file
+:li.It is generally recommended that &optioncmd2 statements be at
+the :hp1.beginning:ehp1. of the input file.  Changing the value of
+certain options in the middle of a conversion may cause unexpected
+results. Options that set paths should always be specified first!
+:li.&amp.symbol substitution is supported, both within an option's
+:hp1.value:ehp1. and an option's :hp1.operand:ehp1., such as:
+:xmp.
+  &period.se mytitle = 'How To Play The Piano'
+  &colon.title.&amp.mytitle
+  &period.*B2H option title='&amp.mytitle'
+ 
+  &period.nameit symbol=revcode    text='v11'
+  &period.nameit symbol=revcolor   text='red'
+  &period.*B2H option revtag.&amp.revcode=&cont.
+'&lt.font color=&amp.revcolor&gt.,&lt./font&gt.'
+:exmp.
+:li.See :hdref refid=platfrm. for further information on specifying
+the desired selection criteria.
+:li.:hp2.Certain options require special handling by &sysname..:ehp2.
+:spot id=optspec xreftext='options requiring special handling'.
+If you wish to specify them within the source file, the &optioncmd2
+statement(s) on which they are coded must :hp1.precede:ehp1. the
+first non-comment record in the input file.  If one of these options
+is specified :hp1.after:ehp1. the first non-comment record, the
+option is ignored and a warning message is issued.  The following
+options fall into this special-handling category:
+:xmp.
+  DESTSYS=    OUTPUTFM=       OUTPUTP=
+  HTMLEXT=    OUTPUTL=        OUTPUTP83=
+  HTMPEXT=    OUTPUTL83=      OUTPUTPCASE=
+  LOG=        OUTPUTLCASE=    SOURCE=
+:exmp.
+:enotel.
+:p.Examples:
+:xmp.
+  &optioncmd2 imbpath='' title="ABC Project User's Guide"
+  &optioncmd2 toc=*3 tocret=toc fnlink=both
+  &optioncmd2 header=no footer=no
+  &period.*B2H (pc) OPTION imbft=sct
+:exmp.
+:p.See the beginning of the &bm. source for this document for
+additional examples.
+.*-----
+:rev refid=r45.
+:pt.:xph.:pk.&period.*B2H &lbrk.(:pv.env:epv.)&rbrk.  &cont.
+SYMBOL  :pv.symbol-table-statement:epv.:epk.:exph.
+:pd.This statement allows you to specify a &sysname. symbol table
+statement.  See :hdref refid=symbol. for what types of statements
+are available.
+:notel.
+:li.There can be multiple &optionsym2 statements in a source file
+:li.See :hdref refid=platfrm. for further information on specifying
+the desired selection criteria.
+:enotel.
+:p.Examples:
+:xmp.
+  &optionsym2 &colon.tag.  HP1  IT=N VAT=N ATT=N SE=Y &cont.
+V='<font color="red">'
+  &optionsym2 &colon.tag. EHP1  IT=N VAT=N ATT=N SE=Y &cont.
+V='</font>'
+:exmp.
+:erev refid=r45.
+.*-----
+:rev refid=r42.
+:pt.:xph.:pk.&period.*B2H &lbrk.(:pv.env:epv.)&cont.
+&rbrk.  SPLIT  &cont.
+&lbrk. :pv.physical-file:epv. &rbrk., &cont.
+&lbrk. :pv.logical-file:epv. &rbrk.:epk.:exph.
+:erev refid=r42.
+:pd.This statement forces the output &html. to be :q.split:eq. at
+this point.
+:notel.
+:li.For information about splitting the output &html. file,
+see :hdref refid=split.
+.* :li.If :xph.SOURCE=SCRIPTONLY:exph. is specified,
+.* this statement is ignored
+:li.See :hdref refid=platfrm. for further information on specifying
+the desired selection criteria.
+:li.The optional file name values are normally not specified
+(see :hdref refid=splitx. for overriding the location and name
+given to the output &html. file part created at this point)
+:rev refid=r42.
+:li.For compatibility with older releases of &sysname., a statement
+type of :q.:xph.BREAK:exph.:eq. is also recognized,
+.br;e.g. :xph.&period.*B2H&rbl.BREAK&rbl....:exph.
+:erev refid=r42.
+:enotel.
+:eparml.
+.*----------
+:h2 id=doctit.Recognizing and displaying the document's title
+:p.&sysname. inserts the document's title into the output &html. file:
+:ul compact.
+:li.:xph.&lt.TITLE&gt.:exph.:pv.title:epv.:xph.&lt./TITLE&gt.:exph.
+is inserted into the :xph.&lt.HEADER&gt.:exph. section
+:li.If :xph.TOPHEAD=1:exph. (the default), then
+:xph.&lt.H1&gt.:exph.:pv.title:epv.:xph.&lt./H1&gt.:exph. is placed
+at the beginning of the file (see the discussion on the
+:spotref refid=tophead.)
+:eul.
+:rev refid=r42.
+(See also :hdref refid=layout.)
+:erev refid=r42.
+:p.:hp2.What determines the document's title?:ehp2.
+:ol.
+:li.If &sysname.'s :xph.TITLE=:exph. option is specified, the value
+is used as the title, otherwise
+:li.If a :q.flat:eq. file is being processed (e.g.
+:xph.SOURCE=FLAT:exph.), then the first non-blank line is used as
+the title
+:li.If the document is not a :q.flat:eq. file, then:
+:ol.
+:li id=tli1.If the document contains a :xph.&colon.TITLE.:exph. or
+:xph.&colon.TITLEP.:exph. tag, then that is used, otherwise
+:li.If the document contains a :xph.&colon.TOPIC.:exph. tag, then
+that is used, otherwise
+:li.If the document contains a :xph.&colon.LIBRARY.:exph. tag, then
+that is used, otherwise
+:li.The text for the first header tag
+(e.g. :xph.&colon.H:pv.x:epv..:exph.) is used, otherwise
+:li id=tli2.The title is empty
+:li.If, at the end of steps :liref refid=tli1. through
+:liref refid=tli2., the title is either empty or exceeds 50
+characters :hp1.and:ehp1. the :xph.STITLE=:exph. option was
+specified on a :xph.&colon.TITLE.:exph. or :xph.&colon.TITLEP.:exph.
+tag, then the :xph.STITLE=:exph. value is used as the title
+:eol.
+:eol.
+.*----------
+:h2 id=b2hxhtm.Including explicit &html. statements
+:p.Explicit &html. statements to support specialized requirements
+can be included in the source file by using the &htmlcmd2 statement.
+Since it :q.looks:eq. like a &script. comment, you can leave it in
+the source file without harm.  The syntax is:
+:xmp.
+  &htmlcmd2  ...&html. statement...
+:exmp.
+See :hdref refid=b2hstmt. for further information about this feature.
+.*----------
+:rev refid=r42.
+:h2 id=psc.Including/excluding text when converting to &html.
+:erev refid=r42.
+:rev refid=r45.
+It is often desirable to dynamically include (or exclude) text
+depending on whether or not it is being converted to &html..
+&sysname. allows you to accomplish this using the same methods
+consistent with what you normally use to include/exclude text.
+:h3.Within &bm.
+:erev refid=r45.
+:p.&bm.'s :xph.&colon.PSC:exph. tag allows you to control which text
+in your document is processed for a particular type of output
+device.  It allows you to say, :q.do this :hp1.only:ehp1. when
+formatting my document for this particular processing class.:eq.
+:p.For example,
+:xmp.
+  &colon.psc proc=char.
+  &colon.p.this text is printed or displayed only when printing
+  on a character device.
+  &colon.epsc.
+:exmp.
+:p.&sysname. supports the :xph.&colon.PSC:exph. tag, and in addition
+to any :q.process:eq. names defined using the :xph.PSC=:exph.
+option, &sysname. also defines
+:rev refid=r42.
+the generic :q.:xph.HTML:exph.:eq. process to signify that &html.
+output is being generated.  Additional process names are also
+defined based on the specific :hp1.type:ehp1. of &html. being
+generated (see the :spotref refid=html2. option).
+.getw symbol=dhlen gmltype=hp2 text='H T M L 4 +'
+:dl termhi=2 compact tsize=&dhlen..
+:dthd.Process
+:ddhd.When set
+:dt.:xph.HTML:exph.
+:dd.Always (signifies that &html. is being generated)
+:dt.:xph.HTML2:exph.
+:dd.&html. 2 is being generated
+:dt.:xph.HTML2+:exph.
+:dd.&html. 2 (or higher) is being generated
+:dt.:xph.HTML3:exph.
+:dd.&html. 3 is being generated
+:dt.:xph.HTML3+:exph.
+:dd.&html. 3 (or higher) is being generated
+:dt.:xph.HTML4:exph.
+:dd.&html. 4 is being generated
+:dt.:xph.HTML4+:exph.
+:dd.&html. 4 (or higher) is being generated
+:edl.
+:erev refid=r42.
+.cp 28
+:p.Here are some examples:
+:xmp.
+  &colon.psc proc=html.
+  &colon.p.Include me ONLY when converting this text to HTML
+  &colon.epsc.
+ 
+  &colon.psc xproc=html.
+  &colon.p.Do NOT include me when converting this text to HTML
+  &colon.epsc.
+ 
+  &colon.psc proc=html3.
+  &colon.p.Include me ONLY when converting this text to HTML 3
+  &colon.epsc.
+ 
+  :rev refid=r42.&colon.psc proc=html4.
+  &colon.p.Include me ONLY when converting this text to HTML 4
+  &colon.epsc.
+ 
+  &colon.psc proc='html2 html3'.
+  &colon.p.Include me ONLY when converting this text to HTML 2
+  or HTML 3
+  &colon.epsc.
+ 
+  &colon.psc proc='html3+'.
+  &colon.p.Include me ONLY when converting this text to HTML 3
+  or higher.
+  &colon.epsc.:erev refid=r42.
+:exmp.
+:p.See the source for this User's Guide for additional examples.
+.*-----
+:rev refid=r45.
+:h3.Within Script/VS
+:p.&sysname. sets Script/VS's :xph.&amp.$LDEV:exph. (logical output
+device) and :xph.&amp.$PDEV:exph. (physical output device) symbols
+to the same value specified for the :xph.HTML=:exph. option
+(e.g. :xph.HTML2:exph., :xph.HTML3:exph., :xph.HTML4:exph.).
+By examining either of these symbols, you can determine
+whether &html. is being generated and act appropriately.
+:p.Example 1: Insert a sentence if &html. 3 is being generated
+:xmp.
+  .if &amp.$LDEV = HTML3
+  .th Add this sentence if generating HTML3 output
+:exmp.
+:p.Example 2: Imbed a file if HTML (any release) is being generated
+:xmp.
+  .se temp = SUBSTR &amp.$LDEV 1 4
+  .if &amp.temp = HTML .th .im htmlonly
+:exmp.
+:erev refid=r45.
+.*----------
+:h2 id=split.Splitting the output &html. file into multiple files
+:p.&sysname. supports :q.splitting:eq. the output &html. into
+multiple physical files.  This is useful for large source documents,
+since it allows the reader to retrieve only those sections which are
+of interest -- reducing document load time.  If requested, &sysname.
+will also dynamically insert next/previous hyperlinks into the
+output &html files to aid in navigation.
+:note.Splitting the output &html. file is :hp1.not:ehp1. available
+:rev refid=r45.
+if :xph.SOURCE=FLAT:exph. is specified
+:erev refid=r45.
+or if &sysname. is running as a pipeline filter.
+:p.The first output &html. file part is named :q.normally:eq.
+(e.g. :xph.abc.htm:exph.).
+Subsequent parts have a suffix attached to the filename
+(e.g. :xph.abc02.htm, abc03.htm, abc04.htm:exph., etc)
+:fn.
+See :hdref refid=splitx. for overriding the location and names given
+to each output &html. file part.
+:efn.
+The :hp1.number:ehp1. and :hp1.type:ehp1. of digits in the suffix is
+controlled by the
+:rev refid=r42.
+:xph.SPLITDIGITS=:exph.
+:erev refid=r42.
+option (default is two decimal digits).
+:p.If the :xph.OUTPUTP=:exph. option (and/or the
+:xph.OUTPUTFM=:exph. option, if running on VM) is specified to
+direct the output file to a specific location, :hp1.all:ehp1. output
+file parts are written to the same location.
+(See :hdref refid=splitx. for overriding this behavior.)
+:p.The location within the source document where a split is to occur
+is specified using any combination of the following methods:
+:ul.
+:li.A split will occur at each occurance of the
+:xph.&colon.H:pv.x:epv.:exph. heading level(s) specified by the
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+option
+:li.A split will occur at each occurance of a :xph.&colon.LEN:exph.
+tag whose equivalent heading level(s) is specified by the
+:rev refid=r42.
+:xph.AUTOSPLIT=LEN=:exph.:pv.num:epv.
+:erev refid=r42.
+option
+:li.If
+:rev refid=r42.
+:xph.AUTOSPLIT=LEN=SEP:exph.
+:erev refid=r42.
+is specified, a split will occur at each occurance of a
+:xph.&colon.LEN:exph. tag (regardless of equivalent heading level)
+when encountered within a :xph.&colon.LERS/&colon.ELERS:exph. block
+when the :xph.&colon.LERS&rbl.SEP=:exph. value is neither
+:q.:xph.NORMAL:exph.:eq. or :q.:xph.RULE:exph.:eq.
+:li.A split may occur whenever a file is imbedded using the
+:xph..im:exph. or :xph..'im:exph. macro
+:li.A split may occur when a file is imbedded using the
+:xph..setup:exph. macro
+:li.The
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement within the source file forces a split at the specified
+location
+:fn.
+See :hdref refid=splitx. for overriding the location and name
+given to the output &html. file part created at this point.
+:efn.
+(see :hdref refid=b2hstmt. for further information about this
+statement).
+:eul.
+:rev refid=r42.
+:p.The effect of the :xph.AUTOSPLIT=:exph. option:
+:erev refid=r42.
+.getw symbol=hl1 gmltype=xmp text='AUTO SPLIT = BY PASS= NUM'
+:dl termhi=0 break=fit tsize=&hl1..
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=NO:exph.
+:erev refid=r42.
+:dd.The output is a single file.  Any
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statements within the source are ignored.  This is the default.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=YES:exph.
+:erev refid=r42.
+:dd.The output is split into multiple files :hp1.only:ehp1. when a
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement is encountered.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=:pv.num:epv.:exph.
+:erev refid=r42.
+:dd.The output is split into multiple files with each split ocurring
+when an :xph.&colon.H:pv.x:epv.:exph. header at the specified level
+is encountered.  (Example: if
+:rev refid=r42.
+:xph.AUTOSPLIT=1:exph.
+:erev refid=r42.
+is specified, each :xph.&colon.H1.:exph. causes a split.) If a
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement is encountered, it too will cause a split.  The heading
+level specified for :pv.num:epv. should be the most-significant
+level heading used in the source document.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=:pv.*num:epv.:exph.
+:erev refid=r42.
+:dd.The output is split into multiple files with each split ocurring
+when a header from &colon.H0. to the specified level is encountered.
+(Example: if
+:rev refid=r42.
+:xph.AUTOSPLIT=*2:exph.
+:erev refid=r42.
+is specified, each
+:xph.&colon.H0.:exph., :xph.&colon.H1.:exph. and :xph.&colon.H2.:exph.
+causes a split.)  If a
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement is encountered, it too will cause a split.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=LEN=:pv.value:epv.:exph.
+:erev refid=r42.
+:dd.Specifies that a separate output file may also occur when a
+:xph.&colon.LEN:exph. tag is encountered
+.getw symbol=hl3 gmltype=xmp text='LEN = N U M'
+:dl termhi=0 tsize=&hl3..
+:dt.:xph.LEN=:exph.:pv.num:epv.
+:dd.Output split at each occurrence of a :xph.&colon.LEN:exph. tag
+where the :xph.LEHD=:exph. value is :q.:pv.num:epv.:eq., e.g.
+:xph.LEN=4:exph. creates a separate &html. file for each
+:xph.&colon.LEN&rbl.LEHD=4.:exph.
+:dt.:xph.LEN=*:exph.:pv.num:epv.
+:dd.Output split at each occurrence of a :xph.&colon.LEN:exph. tag
+where the :xph.LEHD=:exph. value is :q.:pv.num:epv.:eq. or
+:q.higher:eq., e.g. :xph.LEN=*2:exph. creates a separate &html. file
+for each :xph.&colon.LEN&rbl.LEHD=0.:exph.,
+:xph.&colon.LEN&rbl.LEHD=1.:exph. and
+:xph.&colon.LEN&rbl.LEHD=2.:exph.
+:dt.:xph.LEN=SEP:exph.
+:dd.Output split at each occurrence of a :xph.&colon.LEN:exph. tag
+(regardless of the :xph.LEHD=:exph. value) when encountered within a
+:xph.&colon.LERS/&colon.ELERS:exph. block when the
+:xph.&colon.LERS&rbl.SEP=:exph. value is neither
+:q.:xph.NORMAL:exph.:eq. or :q.:xph.RULE:exph.:eq.
+:edl.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=BYPASS=:exph.:pv.num:epv.
+:erev refid=r42.
+:dd.If splitting the output by :xph.&colon.H:pv.x:epv.:exph. or
+:xph.&colon.LEN LEHD=:pv.x:epv.:exph., this attribute
+allows you to specify how many :xph.&colon.H:pv.x:epv.:exph. or
+:xph.&colon.LEN LEHD=:pv.x:epv.:exph. tags to bypass
+after a more significant header before splitting takes place.
+If omitted, :xph.BYPASS=0:exph. is assumed.
+:p.For example, the amount of text occuring between an
+:xph.&colon.H0:exph. and it's first :xph.&colon.H1:exph. is usually
+minimal, so it is often desirable to include the first
+:xph.&colon.H1:exph. in the same file as the
+:xph.&colon.H0:exph..
+Specifying
+:rev refid=r42.
+:xph.AUTOSPLIT="*1&rbl.BYPASS=1":exph.
+:erev refid=r42.
+allows you to split the file at each :xph.&colon.H0:exph. and each
+:xph.&colon.H1:exph. :hp1.except:ehp1. that the file is NOT split at
+the :hp1.first:ehp1. :xph.&colon.H1:exph. after an
+:xph.&colon.H0:exph..
+:p.A more general example should illustrate the principle: assume
+:rev refid=r42.
+:xph.AUTOSPLIT="*2&rbl.BYPASS=1":exph.
+:erev refid=r42.
+:xmp.
+   &colon.H0
+    &colon.H1
+     &colon.H2
+   (split)
+     &colon.H2
+   (split)
+     &colon.H2
+   (split)
+    &colon.H1
+     &colon.H2
+   (split)
+     &colon.H2
+   (split)
+   &colon.H0
+    &colon.H1
+     &colon.H2
+   (split)
+     &colon.H2
+:exmp.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=IMBED:exph.
+:erev refid=r42.
+:dd.The output is split into multiple files with each split ocurring
+when a file is imbedded using the :xph..im:exph. or :xph..'im:exph.
+macro.
+:rev refid=r42.
+:dt.:xph.AUTOSPLIT=SETUP:exph.
+:erev refid=r42.
+:dd.The output is split when a file is imbedded using the
+:xph..setup:exph. macro.
+:edl.
+:p.If multiple values are specified for
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.,
+:erev refid=r42.
+you must enclose them in either single or double-quote characters.
+:rev refid=r42.
+.br;Example: :xph.AUTOSPLIT='0 IMBED LEN=SEP':exph.
+.br;Example: :xph.AUTOSPLIT='*2 BYPASS=1':exph.
+:erev refid=r42.
+:p.For an example, try processing this document using
+:rev refid=r42.
+:xph.AUTOSPLIT='*1&rbl.BYPASS=1':exph.
+:erev refid=r42.
+and view the result.
+.*----------
+:h3 id=navig.Navigation when splitting the &html. output file
+:p.If you split the output file, there are some other &sysname.
+options you should consider to make document navigation easier for
+the user&colon.
+.getw symbol=hl1 gmltype=xmp text='SPL I T LINK= ( YES | NO )'
+:dl termhi=0 break=fit tsize=&hl1..
+:dt.:xph.TOC=YES:exph.
+:dd.This ensures that a table-of-contents is generated and and that
+links are created from the table-of-contents to each section header
+:dt.:xph.TOCRET=:exph.
+:dd.This controls whether each section header should link back to a
+table-of-contents
+:rev refid=r42.
+:dt.:xph.SPLITLINK=&lbrc.YES|NO&rbrc.:exph.
+:dd.:xph.SPLITLINK=YES:exph.
+:erev refid=r42.
+requests &sysname. to :hp1.automatically:ehp1. insert hyperlink text
+into the output &html. files for jumping to the
+previous-page/next-page/table-of-contents.  The actual text inserted
+is defined by the
+:rev refid=r42.
+:xph.SPLITLINK.:pv.x:epv.=:exph.
+:erev refid=r42.
+options.
+:rev refid=r42.
+:p.:xph.SPLITLINK=NO:exph.
+:erev refid=r42.
+specifies that &sysname. should :hp1.not:ehp1. automatically insert
+hyperlink text into the output &html. files for jumping to the
+previous-page/next-page/table-of-contents.  However, you can use the
+:q.&amp.b2hparttop:eq. symbol within a header file and the
+:q.&amp.b2hpartbot:eq. symbol within a footer file to allow
+custom placement of the hyperlink text for navigation.
+See :hdref refid=b2hvars. for more information on these two symbols.
+:rev refid=r42.
+:dt.:xph.SPLITLINK.:pv.x:epv.=:exph.
+:erev refid=r42.
+:dd.This specifies the content of the hyperlink text and the
+location within each &html. output file where it should be placed.
+:p.By default, hyperlink text is inserted at the :hp1.bottom:ehp1.
+of each &html. file for linking to the previous page, next page, the
+table-of-contents and the index (if an index is generated).  No
+default hyperlink text is inserted at the :hp1.top:ehp1. of each
+&html. file.
+:edl.
+:p.For more information about the above options,
+see :hdref refid=cmdparm..
+.*----------
+:h3 id=splitx.
+Specifying the location and file names when splitting the &html. output
+:p.As mentioned previously, when splitting the output &html. file,
+the first output &html. file part is named :q.normally:eq. and
+subsequent parts have a numeric suffix attached to the filename
+(e.g. :xph.abc.htm, abc02.htm, abc03.htm, abc04.htm:exph., etc).
+The physical and logical :hp1.location:ehp1. of the split files are
+the same as the main output file.  This behavior will satisfy the
+vast majority of situations.
+:p.:hp1.(The following discussion is intended for advanced users):ehp1.
+:p.In special circumstances, you may want to explicitly specify the
+location and/or name for one or more of the :q.split:eq. files.
+You can do this using any of the following methods:
+:ul.
+:li.If you use the
+:rev refid=r42.
+:q.:xph.&period.B2H&rbl.SPLIT:exph.:eq.
+:erev refid=r42.
+statement to force a split, you can also specify the physical and
+logical name for the new file, like this:
+:rev refid=r42.
+:xmp.
+  &period.*B2H SPLIT :pv.physical-file:epv., &cont.
+:pv.logical-file:epv.
+:exmp.
+:erev refid=r42.
+:li.You can use the
+:rev refid=r42.
+:xph.SPLITNAME.:pv.x:epv.=:exph.
+:erev refid=r42.
+option to specify the physical and logical file of one or more split
+files (regardless of whether the split was caused by the
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement or via the
+:rev refid=r42.
+:xph.AUTOSPLIT=:exph.
+:erev refid=r42.
+option), like this:
+:rev refid=r42.
+:xmp.
+  SPLITNAME.4=':pv.physical-file:epv.,&cont.
+:pv.logical-file:epv.'
+:exmp.
+:erev refid=r42.
+which specifies the physical and logical file for the fourth output
+file.  See the :spotref refid=partnam. for details on the syntax.
+:li.You can specify the physical and logical :hp1.location:ehp1.
+of a split file (also known as the file's :hp1.directory:ehp1.)
+using any of the following methods:
+:ul compact.
+:li.If the directory is explicitly specified on a
+:rev refid=r42.
+:xph.&period.*B2H&rbl.SPLIT:exph. statement
+:erev refid=r42.
+or
+:rev refid=r42.
+:xph.SPLITNAME=:exph.
+:erev refid=r42.
+option, it is used; otherwise,
+:li.If the directory is specified using the
+:rev refid=r42.
+:xph.SPLITDIR=:exph.
+:erev refid=r42.
+option (see the :spotref refid=partdir. for details on it's syntax),
+it is used; otherwise,
+:li.If none of the above, the split file's location is the same as
+the main file
+:eul.
+:eul.
+:rev refid=r42.
+:p.Both the :xph.SPLITDIR.:pv.x:epv.=:exph. and
+:xph.SPLITNAME.:pv.x:epv.=:exph. options allow you to name
+the output files on either a static or dynamic basis.
+:ul.
+:li.If :q.:pv.x:epv.:eq. is a number, then the naming is done by
+specific file, regardless of the content of that file.
+:li.If :q.:pv.x:epv.:eq. is :q.:xph.NEXT:exph.:eq., then the name is
+associated with the next split file created, whenever and wherever
+it occurs.  This is normally done by including an
+:xph.&optioncmd2.:exph. statement within the source file:
+:xmp.
+  &optioncmd2 SPLITNAME.NEXT='CMDBEG.HTM,cmdbeg.htm'
+  &colon.H1.The BEGIN command
+  (discussion of the BEGIN command)
+    .
+    .
+  &optioncmd2 SPLITNAME.NEXT='CMDLOGO.HTM,cmdlogo.htm'
+  &colon.H1.The LOGOFF command
+  (discussion of the LOGOFF command)
+    .
+    .
+:exmp.
+This technique allows you to name the output file associated with
+the following text, regardless of what actually causes the file to
+be split.  Plus, if you insert a new section between the BEGIN
+section and the LOGOFF section, the names of the associated split
+files remain the same.
+:eul.
+:erev refid=r42.
+:notel.
+:li.:q.:pv.physical-file:epv.:eq. refers to the file created on the
+platform on which &sysname. is being run.
+:q.:pv.logical-file:epv.:eq. refers to the file as it will be known
+on the server's platform.  See :hdref refid=xplat. for further
+information about this distinction.
+:li.If the
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement is used to split the output and both the
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement :hp1.and:ehp1. a
+:rev refid=r42.
+:xph.SPLITNAME.:pv.x:epv.=:exph.
+:erev refid=r42.
+option specify a file name, the name on the
+:rev refid=r42.
+&splitcmd2.
+:erev refid=r42.
+statement is used.
+:li.For a given split file, if you do not specify it's physical
+and/or logical location and name, the location and name normally
+generated by &sysname. is used.
+:li.&sysname. does :hp3.NOT:ehp3. check the syntax or completeness
+of the locations and names nor does it verify that their syntax is
+valid for the current platform.  It is up to you to ensure that the
+syntax for the physical and logical locations and names match the
+appropriate platforms!
+:li.Because the physical location and/or name you specify must
+conform to the requirements of the platform on which you are running
+&sysname., using this feature can potentially :q.lock:eq. you into
+requiring that a particular file be converted only on a specific
+platform
+:rev refid=r42.
+unless you specify the environment on which a particular option
+should be processed, like this:
+:xmp.
+  &period.*B2H (PC)  OPTION SPLITNAME.NEXT='CMDBEG.HTM,cmdbeg.htm'
+  &period.*B2H (CMS) OPTION SPLITNAME.NEXT='CMDBEG HTM,cmdbeg.htm'
+  &colon.H1.The BEGIN command
+  (discussion of the BEGIN command)
+    .
+    .
+  &period.*B2H (PC)  OPTION SPLITNAME.NEXT='CMDLOGO.HTM,cmdlogo.htm'
+  &period.*B2H (CMS) OPTION SPLITNAME.NEXT='CMDLOGO HTM,cmdlogo.htm'
+  &colon.H1.The LOGOFF command
+  (discussion of the LOGOFF command)
+    .
+    .
+:exmp.
+:erev refid=r42.
+:enotel.
+:p.This capability is intended for advanced users and should be used
+with caution!
+.*----------
+:h2 id=nls.National Language Support (NLS) considerations
+:p.&sysname. does not do anything specific for National Language
+Support, but you can easily configure it to handle documents written
+in languages other than English.
+.*-----
+:h3.Converting NLS characters
+:p.If your document uses the appropriate &amp.symbols for special
+characters (e.g. &amp.Agrave, &amp.euml), than all should be fine as
+&sysname. will convert them to their &html. equivalent.  You can
+also use the :spotref refid=charset. to specify the language of the
+coded character set.
+:p.If you have documents with language-specific characters entered
+as a single character, you can use the
+:rev refid=r45.
+:xph.&colon.XLATEO.:exph.
+:erev refid=r45.
+symbol table statement to convert that single-character to a string.
+For example, if you determine that a document uses the :hex.A5:ehex.
+single-character for an umlaut, you can have &sysname. convert it to
+:q.&amp.uml&semi.:eq. by specifying the following symbol table
+statement:
+:xmp.
+  :rev refid=r45.&colon.XLATEO.:erev refid=r45. A5 V='&amp.uml&semi.'
+:exmp.
+Note that the hex value for a specific character may be different on
+a mainframe (EBCDIC encoding) than on a PC workstation (ASCII
+encoding).  Here's a hypothetical example of defining an umlaut
+translation based on the current platform:
+:xmp.
+  (CMS) :rev refid=r45.&colon.XLATEO.:erev refid=r45. A5 V='&amp.uml&semi.'
+  (MVS) :rev refid=r45.&colon.XLATEO.:erev refid=r45. A5 V='&amp.uml&semi.'
+  (PC)  :rev refid=r45.&colon.XLATEO.:erev refid=r45. B7 V='&amp.uml&semi.'
+:exmp.
+See :hdref refid=sxlt. for more information on the
+:rev refid=r45.
+:xph.&colon.XLATEO.:exph.
+:erev refid=r45.
+statement.
+:p.If you determine that quite a few translation definitions are
+needed, you may find it simpler to place them in a :hp1.user:ehp1.
+symbol table and then load the table as needed.
+.*-----
+:h3.Generating non-English text from &bm. tags and functions
+:p.If your document is written in a language other than English and
+you have followed the items listed in the previous section, there
+may still be some English in the &html. output caused by the default
+text generated by various &bm. tags, such as :q.Table of
+Contents:eq. for the :xph.&colon.TOC.:exph. tag and :q.Abstract:eq.
+for the :xph.&colon.ABSTRACT.:exph. tag.
+:p.&sysname. provides the :xph.DEFTEXT.:pv.name:epv.=:exph. option
+to allow you to specify the default text desired for various &bm.
+tags and functions.  For example, to have the default output be in
+Spanish for the above tags, you might specify:
+:xmp.
+  DEFTEXT.ABSTRACT='Sumario'
+  DEFTEXT.TOC='Tabla de Materias'
+:exmp.
+Many other options can be modified to generate non-English text.
+:p.Once you have determined all the options that need to be
+specified to generate the appropriate text, you will probably want
+to place them in a :hp1.user:ehp1. profile and then load the profile
+as needed.
+.*-----
+:h3 id=idxsrtd.Ensuring the index is sorted appropriately
+:p.If your document is written in a language other than English and
+also has an index, the index may be sorted incorrectly.
+:p.The first character of each index entry determines the section of
+the index into which the entry is placed.  By default, if the first
+character is numeric (:q.0:eq.-:q.9:eq.), the entry is placed in the
+:q.Numerics:eq. section; if the first character is a letter of the
+English alphabet (:q.A:eq.-:q.Z:eq.), the entry is placed into the
+section for that character; otherwise the entry is placed into the
+:q.Special Characters:eq. section.  If the document's language
+contains letters other than :q.A:eq.-:q.Z:eq., the index might
+contain a significant number of entries in the :q.Special
+Characters:eq. section.
+:p.The :xph.INDEXSORT:exph. option allows you to change the rule.
+You could, for example, specify that the &Aa. (A-acute) and &Ig.
+(I-grave) characters are :q.letters:eq. and each should have their
+own section consisting of index entries whose first character is
+&Aa. or &Ig..  The following is one way you might do it:
+:xmp.
+  INDEXSORT.LETTER='&Aa. &Ig.'
+:exmp.
+See the :spotref refid=idxsort. for syntactical and usage
+information.
+:p.Once you have determined the :xph.INDEXSORT:exph. options needed,
+you will probably want to place them in a :hp1.user:ehp1. profile
+and then load the profile as needed.
+.*-----
+:h3.Putting it all together
+:p.If you have done the previous three sections, then you probably
+have a user symbol table with a number of
+:rev refid=r45.
+:xph.&colon.XLATEO.:exph.
+:erev refid=r45.
+statements and a user profile with a variety of options defined to
+generate text in the desired language.  Finally, add a
+:xph.USERSYM=:exph. option to the user profile to point to the user
+symbol table.  Now all you have to do is to point to the user
+profile when invoking &sysname. and everything is loaded
+automatically.
+.cp 20
+:p.Here's a hypothetical example (using VM naming conventions) for
+converting Spanish documents:
+:xmp.
+  In the user profile: B2HSPAN PROFILE
+    DEFTEXT.ABSTRACT='Sumario'
+    DEFTEXT.DAYS='Dom Lun Mar Mie Jue Vie Sab'
+    DEFTEXT.GLOSSARY='Glosario'
+       "       "        "
+    DEFTEXT.TOC='Tabla de Materias'
+    :rev refid=r42.&cont.
+SPLITLINK.16='&lt.A HREF="&amp.b2htoc"&gt.Tabla de Materias&cont.
+&lt./A&gt. &amp.&numsign.124&semi.':erev refid=r42.
+    USERSYM="B2HSPAN SYMBOL"
+ 
+  In the user symbol table: B2HSPAN SYMBOL
+    (CMS) :rev refid=r45.&colon.XLATEO.:erev refid=r45. A5 V='&amp.uml&semi.'
+             "     "      "
+    (PC)  :rev refid=r45.&colon.XLATEO.:erev refid=r45. B7 V='&amp.uml&semi.'
+ 
+  Invoke &sysname. and load both files automatically:
+    &PGMCMD sample script ( USERPROF='B2HSPAN PROFILE'
+:exmp.
+This type of setup can be replicated for as many languages as desired.
+.*----------
+:h2 id=qanda.Question and Answer tags
+:p.&sysname. provides two methods for supporting the &bm. Question and
+Answer tags (:xph.&colon.QUESTION:exph., :xph.&colon.EQUESTION:exph.,
+:xph.&colon.BLANK:exph., :xph.&colon.CHOICE:exph.,
+:xph.&colon.MATCH:exph., :xph.&colon.QITEM:exph.,
+:xph.&colon.ANSWER:exph., :xph.&colon.QREF:exph. and
+:xph.&colon.ANSREF:exph.):
+:ul.
+:li.Normal text output can be generated (similar to what &bm. produces)
+:li.Interactive &html. FORMs can be generated for use with a
+CGI program (provided by you) to verify the user's answers
+:eul.
+The :xph.QUESTION=:exph. option controls what type of output is generated.
+:xmp.
+  QUESTION='&lbrc:pk def.TEXT:epk.|FORM&rbrc.,&cont.
+&lbrk.:pv.method:epv.&rbrk.,&cont.
+:pv.url-of-cgi:epv.,&cont.
+&lbrk:pv.answer-action:epv.&rbrk.,&cont.
+&lbrk:pv.optdata:epv.&rbrk.'
+:exmp.
+:p.:hdref refid=samques. has examples of both text and &html. FORMs
+if this is the &html. version of this User's Guide; the non-&html
+version contains only the text output.
+.*-----
+:h3.Generating normal text
+:p.If :xph.QUESTION=TEXT:exph., the Question and Answer tags are
+converted to blocks of text and appear similar to the familiar &bm
+output. This is the default mode.  See :hdref refid=samques. for an
+example of this.
+.*-----
+:h3.Generating &html. forms
+:p.If :xph.QUESTION=FORM:exph., each
+:xph.&colon.QUESTION/&colon.EQUESTION:exph. block is converted to an
+&html. form.
+:psc proc='html'.
+(See :hdref refid=samque2. for an example.)
+:epsc.
+:ul.
+:li.The form's :hp1.format:ehp1. is based on the type of question as
+specified by the :xph.FORM=:exph. attribute on the
+:xph.&colon.QUESTION:exph. tag.
+.getw symbol=dhlen gmltype=hp2 text='FORM = ORD ER '
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:xph.FORM=FILLIN:exph.
+:dd.Each :xph.&colon.BLANK:exph. tag is converted to a
+TEXT input field
+:dt.:xph.FORM=TF:exph.
+:dd.True/False selectable using a RADIO button
+:dt.:xph.FORM=MC:exph.
+:dd.Each :xph.&colon.CHOICE:exph. tag is converted to a CHECKBOX,
+multiple answers can be selected
+:dt.:xph.FORM=MATCH:exph.
+:dd.:xph.&colon.CHOICE:exph. tags are shown as an ordered list and each
+:xph.&colon.MATCH:exph. is converted to a TEXT input field
+:dt.:xph.FORM=ORDER:exph.
+:dd.Each :xph.&colon.QITEM:exph. is converted to a TEXT input field
+:edl.
+:li.All user input fields have the name :xph.inp:exph., like this:
+.br;:xph. &lt.INPUT TYPE=... NAME=INP ...&gt.:exph.
+:li.At the bottom of each form the following buttons are displayed:
+.getw symbol=dhlen gmltype=hp2 text='SEND ANSWER '
+:dl termhi=0 compact tsize=&dhlen..
+:dt."Send Answer"
+:dd.Submits form input
+:dt."Reset"
+:dd.Resets input fields to defaults
+:dt."Help"
+:dd.Submits form with value :q.:xph.help=Help:exph.:eq.
+:edl.
+:li.The following HIDDEN input fields are always generated:
+.getw symbol=dhlen gmltype=0 text='DING BAT '
+:dl termhi=0 compact tsize=&dhlen..
+:dt.id
+:dd.The :xph.ID=:exph. attribute from the
+:xph.&colon.QUESTION:exph. tag
+.br;:xph. &lt.INPUT TYPE=HIDDEN NAME=ID VALUE="ID-value"&gt.:exph.
+:dt.form
+:dd.The :xph.FORM=:exph. attribute from the :xph.&colon.QUESTION:exph.
+tag (e.g. FILLIN)
+.br;:xph. &lt.INPUT TYPE=HIDDEN NAME=FORM VALUE="FORM-value"&gt.:exph.
+:dt.dingbat
+:dd.Either the question's number or the value from the
+:xph.DINGBAT=:exph. attribute from the :xph.&colon.QUESTION:exph. tag
+.br;:xph. &lt.INPUT TYPE=HIDDEN NAME=DINGBAT VALUE="data"&gt.:exph.
+:edl.
+:li.The second parameter of the :xph.QUESTION=:exph. option
+specifies whether GET or POST is used for the HTTP method when a
+submit button is pressed.
+:li.The third parameter of the :xph.QUESTION=:exph. option
+identifies the URL of the CGI program verifying the user's answers.
+The program should validate the input fields, display help if
+requested, and compare the user input (the :xph.inp=:exph. field
+data) to the answer -- using either the data in the hidden
+:xph.ans=:exph. field or the optional answer file, discussed below.
+:li.The fourth parameter of the :xph.QUESTION=:exph. option
+specifies what &sysname. should do with each question's answer(s).
+:dl termhi=0 compact tsize=&dhlen..
+:dt.:xph.HIDDEN:exph.
+:dd.An additional hidden field containing the answer data is added
+to the form created for each question.
+.br;:xph.  &lt.INPUT TYPE=HIDDEN NAME=ANS VALUE="...."&gt.:exph.
+.br;The answer data is calculated from the :xph.&colon.QUESTION:exph.,
+:xph.&colon.BLANK:exph., :xph.&colon.MATCH:exph. and
+:xph.&colon.QITEM:exph. tags.
+This is a blank-delimited list of values. :xph.ANSID:exph.s are
+converted to choice numbers.
+:dt.:pv.file:epv.
+:dd.An answer file of this name:fnref refid=file. is generated with
+each record containing the answer(s) to a specific question.  It is
+assumed that this file will be transferred to the server where it
+will be used by the CGI program to verify the user's answer.  The
+format of each record (using a colon as the field delimiter) is:
+:xmp.
+  form&colon.id&colon.dingbat&colon.ans
+:exmp.
+.getw symbol=dhlen3 gmltype=hp0 text='DI NG BA T'
+:dl termhi=0 compact tsize=&dhlen..
+:dt.form
+:dd.The :q.type:eq. of question (e.g. TF, FILLIN, MC), taken from the
+:xph.FORM=:exph. attribute on the :xph.&colon.QUESTION:exph. tag
+:dt.id
+:dd.The :q.id:eq. of the question, taken from the
+:xph.ID=:exph. attribute on the :xph.&colon.QUESTION:exph. tag
+:dt.dingbat
+:dd.The question's :q.dingbat:eq., which is either the question's
+number or the value specified for the :xph.dingbat=:exph. attribute
+on the :xph.&colon.QUESTION:exph. tag
+:dt.ans
+:dd.The answer(s) for the question using the same format as
+described previously for the HIDDEN field
+:edl.
+:dt.:xph.NONE:exph.
+:dd.No answer data will be written anyplace.  The CGI program must
+define an alternative method of verifying the user input.
+:edl.
+:li.The fifth parameter of the :xph.QUESTION=:exph. option specifies
+any optional data to insert into a hidden field for each question.
+.br;:xph.  &lt.INPUT TYPE=HIDDEN NAME=OPTDATA VALUE="...."&gt.:exph.
+.br;Often used to pass information to the CGI about where to find a
+question's answer, such as the name of the answer file or a database
+name.
+:eul.
+:p.A typical QUERY_STRING passed to the CGI program by a GET method
+might look like:
+:xmp.
+  form=MC&amp.id=boy&amp.inp=4&amp.inp=5&amp.ans=4+5
+:exmp.
+The CGI program
+:fn.
+A sample CGI script is provided in the zip file that you can use as
+an example.  :xph.QUEST.KSH:exph. is designed as a KORN shell to be
+run under AIX using IBM's Internet Connection Server.
+:efn.
+should compare each value of :xph.inp=:exph. to each word in the
+value of :xph.ans=:exph..
+:note.The :hp1.order:ehp1. in which the answer is specified (in the
+:xph.ANS=:exph. or :xph.ANSID=:exph. attributes on the
+:xph.&colon.QUESTION:exph., :xph.&colon.BLANK:exph.,
+:xph.&colon.MATCH:exph. and :xph.&colon.QITEM:exph. tags)
+:hp1.must:ehp1. be the same as the order of the input fields, for a
+value-by-value comparison to work.
+.*-----
+:h3.Hyperlinks
+:p.:xph.&colon.QREF:exph. and :xph.&colon.ANSREF:exph. tags are
+converted to &html. links.  The :xph.&colon.ANSWER:exph. tag just
+lists the answer values (as in &bm.), but the :q.dingbat:eq.
+(question number) on each :xph.&colon.ANSWER:exph. tag is converted
+to a link back to the question.
+.*-----
+:h3.Question and Answer appearance
+:p.The appearance of the Question and Answer tags is affected by the
+setting of the :xph.DLFMT=:exph. and :xph.DLTAG=:exph. options.
+.*----------
+:h2 id=interd.Interdocument linking (&bmgr tags)
+:p.You can mark up your &bm. files with link tags that specify the
+hypertext links you want &bmgr to create within and between online
+documents.  Hypertext links connect elements in one part of an
+online document to elements in another part of the same document or
+separate online document.  For more information on this subject, see
+the chapter entitled :q.Tags for hypertext links in online
+documentation:eq. in the &bm. User's Guide.
+:p.For &bmgr., the :xph.&colon.DOCDESC:exph. tag is used to identify
+an external document and the :xph.&colon.LDESC.:exph. tag describes
+the information you want &bmgr to create a link to.  For example:
+:xmp.
+  &colon.prolog.
+  &colon.title.
+  Walden Systems User Guide
+  &colon.etitle.
+  &invellip.
+  &colon.docdesc id=prog
+           num='PRG-1234'
+           level='2'
+           title='Walden Systems Programmer Guide'.
+  &colon.ldesc   id=xyz1  docid=prog  object=how2mod  objtype=head.
+  &invellip.
+  &colon.eprolog.
+  &invellip.
+  &colon.p.First, you must &colon.l lid=xyz1.modify the POND SCRIPT &cont.
+file&colon.el..
+  &invellip.
+  &colon.p.For further information, see the &colon.cit docid=prog.Walden Systems
+  Programmer's Guide&colon.ecit..
+:exmp.
+:p.The :xph.&colon.DOCDESC:exph. tag has little meaning in an
+&html. environment, so &sysname. ignores the tag and provides the
+:xph.DOCDESC.:pv.id:epv.=:exph. option for you to specify the name
+of the file containing the &html. version of the document.  The
+:pv.id:epv. value in :xph.DOCDESC.:pv.id:epv.=:exph. must be the
+same as that specified for the :xph.ID=:exph. parameter on the
+:xph.&colon.DOCDESC:exph. tag.
+:p.So, using the above example, you might specify:
+:xmp.
+  &PGMCMD ... ( docdesc.prog='prg1234.htm'
+:exmp.
+:p.The :xph.DOCDESC.:pv.id:epv.=:exph. option can be specified as
+many times as necessary.  If the option is omitted for a particular
+document, then no interdocument links are generated.
+:p.If the :pv.id:epv. qualifier is omitted, then the specified &html
+file is associated with :hp1.all:ehp1. :xph.&colon.DOCDESC:exph.
+tags.  The following example points all interdocument links to one
+file:
+:xmp.
+  &PGMCMD ... ( docdesc='prg1234.htm'
+:exmp.
+.*----------
+:rev refid=r43.
+:h2 id=mvxref.Cross-referencing multi-volume documents
+:erev refid=r43.
+:p.If your document is one book in a multivolume library, you may
+want to refer the reader to information in another volume of the
+library.  Both &bm. and &sysname. provide an extended
+cross-reference facility, allowing you to refer to information in
+any volume of the library.  The &bm. User's Guide contains detailed
+information on this facility.
+:p.The following steps lead you through the multivolume
+cross-referencing procedure.  For this procedure, each item you
+refer to (heading, table, figure, and so on) must have an ID that is
+:hp1.unique:ehp1. in the library.  You use these IDs for your
+multivolume cross-references just as you would for cross-references
+in a single volume.
+:ol.
+:li.Run &sysname. against one of the documents and save the extended
+cross-reference information by specifying
+:xph.SYSVAR='W&rbl.:pv.file:epv.':exph.. For example:
+:xmp.
+  B2H book1 script ( sysvar='w book1'
+:exmp.
+:li.Do the same for the other documents in the library as described
+in step 1. When you are finished, you will have as many
+cross-reference files as you have documents in the library, each
+named:
+:xmp.
+  :pv.file:epv..b2hxrefs           (AIX)
+  :pv.file:epv..b2hxrefs           (LINUX)
+  :pv.userid:epv..:pv.file:epv..B2HXREFS    (MVS)
+  :pv.file:epv..B2X                (OS/2)
+  :pv.file:epv. B2HXREFS           (VM)
+  :pv.file:epv..B2X                (WIN95)
+  :pv.file:epv..B2X                (WINNT)
+:rev refid=r47.
+  :pv.file:epv..b2hxrefs           (UNIX)
+:erev refid=r47.
+:exmp.
+:li.In the prolog of the other document(s), use a
+:xph..namefile:exph. and :xph..im:exph. to imbed the saved
+cross-reference information from the first document.  For example:
+:xmp.
+  &colon.prolog.
+  &invellip.
+  &period.namefile name=b1stuff cms='book1 dsmrefs'
+  &period.im b1stuff
+  &invellip.
+  &colon.eprolog.
+:exmp.
+:note.Always use the :q.CMS:eq. parameter specifying a filetype of
+:q.:xph.DSMREFS:exph.:eq. on the :xph..namefile:exph. macro.
+&sysname. recognizes the filetype as containing extended
+cross-referencing information and will :q.map:eq. the file using the
+same naming convention used for :xph.SYSVAR&rbl.W:exph..
+:li.Run &sysname. against each document as normal
+:rev refid=r43.
+:p.Note: if running on a PC platform, you should specify
+:xph.IBMFTEXT='YES,LC':exph. to ensure that the :q.:xph.DSMREFS:exph.:eq.
+filetype is mapped appropriately when the :xph..im:exph. macro is
+processed.
+:erev refid=r43.
+:eol.
+.*----------
+:h2 id=custtag.Supporting custom tags, control words, macros or symbols
+:p.If your documents contain custom tags, control words, macros or
+symbols, they can be easily supported by defining them in a separate
+symbol table, and then causing &sysname. to load that symbol table
+using the :xph.USERSYM=:exph. option.
+:p.In most cases, the custom tag, command, macro or symbol can be
+supported using standard facilities available in a symbol table.  If
+necessary, you can define that an external program be invoked to
+handle the custom markup.
+.*----------
+:rev refid=r42.
+:h2 id=extpgm.Invoking an external program
+:erev refid=r42.
+:p.You can request that an external program be invoked to custom
+process a control word, macro or tag.  Just specify the following
+for the appropriate value on a &colon.CMD. or &colon.TAG. statement
+in a user symbol file.
+:xmp.
+  &colon.CMD. :pv.mytag:epv.  &cont.
+V='&amp.PGM :pv.pgmname:epv.  &lbrk. &cont.
+:pv.parm:sub.1:esub. parm:sub.2:esub. ... &cont.
+parm:sub.x.:esub.:epv. &rbrk.'
+ 
+  &colon.TAG. :pv.mytag:epv.  &cont.
+V='&amp.PGM :pv.pgmname:epv.  &lbrk. &cont.
+:pv.parm:sub.1:esub. parm:sub.2:esub. ... &cont.
+parm:sub.x.:esub.:epv. &rbrk.'
+:exmp.
+:p.:hp2.Note&colon:ehp2. for technical reasons, the name of the
+program invoked will be in upper-case.  If the platform you are
+using allows programs and files in both upper and lower-case, the
+name of the external program itself must be stored in upper-case.
+:p.The specified program is invoked by &sysname. as a function, like
+this:
+:xmp.
+string = pgmname(type,tagtext,parms,stext)
+:exmp.
+:parml.
+:pt.:pv.type:epv.
+:pd.A string denoting the type of construct being handled:
+:dl tsize=4m.
+:dt.:xph.CMD:exph.
+:dd.Invoked via a &colon.CMD. definition (e.g. a control word or
+macro)
+:dt.:xph.TAG:exph.
+:dd.Invoked via a &colon.TAG definition (e.g. a tag)
+:edl.
+:pt.:pv.tagtext:epv.
+:pd.If invoked via a &colon.CMD. definition, this is the control
+word or macro name (excluding the leading period).  If via a
+&colon.TAG. definition, this is the text starting with the leading
+GML character (normally a colon) to the ending character (normally a
+period).
+:pt.:pv.parms:epv.
+:pd.Any parameters specified in the &colon.CMD. or &colon.TAG.
+definition (the :q.:pv.parm:sub.1:esub. parm:sub.2:esub. ... &cont.
+parm:sub.x:esub.:epv.:eq. shown above).
+:pt.:pv.stext:epv.
+:pd.This is the text from the source line following the control
+word, macro or tag.
+:eparml.
+:p.Text line(s) returned by the external program can consist of any
+or all of the following:  normal text, &script. control words, GML
+and/or &bm. tags,
+:rev refid=r42.
+:xph.&period.*B2H:exph. statements,
+:erev refid=r42.
+&html. markup, etc.
+The text to be inserted into the data stream is returned to
+&sysname. using either or both of two methods:
+:ul compact.
+:li.One or more lines can be returned via the function return itself
+with multiple lines separated by a newline character (:hex.15:ehex.)
+:li.If the platform supports an external data queue (such as VM's
+stack), records can be placed there also
+:eul.
+:rev refid=r42.
+See the :spotref refid=b2hmsg. on how to pass information back to
+&sysname. for displaying messages and setting a return code.
+:erev refid=r42.
+:p.For an example, see the B2HUSER symbol table and program provided
+as part of the &sysname. package.
+.************************************************************************
+:h1 id=caveat.Caveats and restrictions (what's supported and what's not!)
+:p.&sysname. supports most commonly-used Script/VS (DCF), GML, and
+&bm. control words, macros and tags (:hdref refid=taglist. contains
+support information for each specific control word, macro and tag).
+But there are some areas which you should be aware:
+:ul.
+:li.Control words and tags relative to page numbering and
+vertical spacing are ignored
+:li.Conditional sections (:xph.&period.cs:exph.) and &bm.'s
+:q.vanilla:eq. DVCF macros (:xph.&period.CONFIG:exph. and
+:xph.&period.WHEN:exph.) :hp1.are:ehp1. supported, but
+:hp1.not:ehp1. &bm.'s :q.mocha:eq. DVCF macros (e.g.
+:xph.&period.USING, &period.INCLUDE:exph.).
+:li.Most processes in a :xph.&colon.PSC:exph. (Process-Specific
+Control) tag are not relevant in &html..  But if encountered,
+&sysname. will process the records within a set of
+:xph.&colon.PSC/&colon.EPSC:exph. tags for those processes specified
+by the :spotref refid=psc1..
+:rev refid=r42.
+&sysname. also turns :q.on:eq. additional process names
+corresponding to the &html. level being generated.  This allows you
+to include/exclude text based on &html. level.  For more
+information, see :hdref refid=psc..
+:li.&bm.'s :q.style:eq. files are not processed
+:erev refid=r42.
+:li.The &script. :q.:xph.&period.GO:exph.:eq. control word is
+supported, but only when branching to a label :hp1.later:ehp1. in
+the input file.  :q.:xph.&period.GO:exph.:eq. control words that
+branch to a label :hp1.earlier:ehp1. in the input file are ignored.
+:li.The following :q.families:eq. of &bm. tags are ignored:
+:ul compact.
+:li.Mathematical formulas
+:li.Grids
+:li.Cover letters
+:li.Maintenance Analysis Procedures (MAPs)
+:li.Parts catalog lists
+:li.Hypertext linking tags for BookManager support
+.br;(However, interdocument linking :hp1.is:ehp1. supported,
+see :hdref refid=interd.)
+:li.Tags for replacement-page updates and marked collection of changes
+:eul.
+:rev refid=r45.
+:li.If the source records contain line numbers, make sure you specify
+the :spotref refid=linenum. so that &sysname. will look for and
+discard the line numbers
+:erev refid=r45.
+:eul.
+:p.Although the what's-not-supported list may seem large, it
+actually represents a very small percentage of the markup used in
+most documents.
+.*-----
+:rev refid=r43.
+:h2 id=spect.Special information about tables
+:p.Support for &html. tables was introduced in &html. 3 and most
+modern browsers support &html. 3.
+:p.However, there are still some
+people using old or unconventional browsers that understand only
+&html. 2 (specifically IBM's Web Explorer prior to Release 1.03).
+Since tables are so common in &bm. documents, &sysname. provides
+special built-in support when generating &html. 2 output.  Most
+table options are handled, including dynamically changing the number
+of columns on a row-by-row basis.
+:erev refid=r43.
+.*----
+:h3 id=th2.Table support with &html. Release 2
+:p.Since &html. 2 does not support tables, &sysname. switches to a
+monospaced font and manually builds the table itself with the
+following restrictions:
+:ul compact.
+:li.Using the :xph.ARRANGE=:exph. parameter to specify vertical
+cells is accepted, but the cells are laid out horizontally
+:li.Cells can not contain markup other than paragraph, spacing and
+cross-reference tags.  (Since most table cells contain other tags,
+the &sysname. symbol table provides the :xph.TV=:exph. parameter to
+:q.map:eq. tags unsupported in an &html. 2 table to supported tags.)
+:li.A cell can not contain a hyperlink.  If a cross-reference tag is
+encountered (e.g. &colon.HDREF, &colon.FIGREF) only the text itself
+is included in the cell, using the following rule:
+:ul compact.
+:li.If the cross-referenced tag is defined prior to it's reference,
+the actual text is included
+:li.If the cross-referenced tag is referenced prior to it's
+definition, the text defined for the :xph.DEFTEXT.T2XREF:exph.
+option is used
+(defaults to :q.:hp1.the appropriate section:ehp1.:eq.)
+:eul.
+:li.Unless explicitly forced wider, the width of the table is set
+using the :xph.LINEWIDTH=:exph. option (defaults to 78 characters)
+:li.The &bm. :xph.VALIGN=:exph. table parameter is ignored
+:eul.
+:p.The :xph.TABLE2=:exph. option allows you to specify the
+characters used for the frame, cell gutters, etc.
+.*-----
+:h3 id=th3.Table support with &html. Release 3 and higher
+:p.Because &html. 3 and higher supports tables directly, &sysname.
+generates the appropriate :xph.&lt.TABLE&gt., &lt.TR&gt.,
+&lt.TH&gt.:exph. and :xph.&lt.TD&gt.:exph. tags and leaves the
+actual formatting of the table to the user's Web browser.
+:p.Be aware that &bm.'s table support is more robust and flexible
+than that provided by &html..  Some &bm. table features (such as
+text rotation) are not available in &html..  Other &bm. table
+features are available, but restrictions apply.
+:p.&html. table cells may contain other tags, such as lists,
+figures, even cross-references and hyperlinks.  However, a
+table-within-a-table is not supported.
+:note.&html. table and cell widths are determined dynamically by the
+browser.  In most cases, this is fine.  However, if you have a table
+which changes the number of columns on a row-by-row basis, please be
+aware of the following items:
+:ul.
+:li.The :hp1.maximum:ehp1. number of columns possible within a table
+should be defined on the :xph.&colon.TABLE:exph. tag (or by a
+:xph.&colon.TDEF:exph. tag referenced by the :xph.&colon.TABLE:exph.
+tag). Formatting problems may occur if the maximum number of columns
+initially defined is exceeded later in the table.
+:li.&html. supports overlapping columns using the concept of
+:hp1.spanning:ehp1., which does not directly map to &bm.'s column
+widths.  Therefore, tables with a varying number of columns may
+appear differently in &html. than they do with &bm..
+:eul.
+.*-----
+.cp 6
+:spot id=tblcell xreftext='table cell alignment'.
+:p.:hp2.Specifying horizontal and vertical cell alignment:ehp2.
+:p.As mentioned previously, &bm.'s table support is more robust
+and flexible than that provided by &html..  Although &html. can
+handle horizontal and vertical cell alignment, :hp1.how you specify
+it:ehp1. is less flexible than what &bm. allows, resulting in the
+following restrictions:
+:ul.
+:li.&bm. allows you to provide the cell data out of order by
+specifying the cell number on the &colon.C. tag.  You can not do
+that in &html. 3; cell data must be provided in :hp1.ascending:ehp1.
+order:  data for cell 1, followed by the data for cell 2, followed
+by the data for cell 3, etc.
+:p.For example, &bm. allows this:
+:xmp.
+  &colon.C 1.cell-1-data
+  &colon.C 3.cell-3-data
+  &colon.C 2.cell-2-data
+:exmp.
+:p.But &html. does not support it, so you will need to physically
+move the order of the data to:
+:xmp.
+  &colon.C 1.cell-1-data
+  &colon.C 2.cell-2-data
+  &colon.C 3.cell-3-data
+:exmp.
+&sysname. will issue a warning message if it detects out-of-order
+cell data.
+:li.Similar to &html. accepting cell data only in ascending
+sequence, cell :hp1.numbers:ehp1. in &bm.'s :xph.ARRANGE=:exph.
+table parameter must also be specified in ascending sequence, not
+only left-to-right, but also top-to-bottom.  In the following
+example, the cells in the first ARRANGE are in left-to-right
+ascending sequence, whereas the cells in the second ARRANGE are not.
+:xmp.
+This is OK:                     This is not:
+ 
+  ARRANGE='1 2 3 4'               ARRANGE='1 2 4 3'
+:exmp.
+In the next example, although the cells in the second group are
+ascending left-to-right, they are out of sequence top-to-bottom
+(cell 5 is defined prior to cell 3).
+:xmp.
+This is OK:                     This is not:
+ 
+  ARRANGE='1 2 2 3 3 4 4 4'       ARRANGE='1 2 2 5 5 6 6 6'
+  ARRANGE='1 5 6 3 3 7 8 9'       ARRANGE='1 3 4 5 5 7 9 9'
+:exmp.
+:eul.
+:p.The &html. requirement that cell data be in ascending sequence
+may cause to you restructure your table definitions.
+.************************************************************************
+:rev refid=r43.
+:h1 id=faq.Troubleshooting and Frequently-Asked-Questions (FAQ)
+:erev refid=r43.
+:tdef id=faq cols='.5i *' frame=none.
+:p.The following is a synopsis of commonly-occuring problems and
+questions.
+.*-----
+:h3.FAQ 1&colon. Links jumping to top-of-file
+:table refid=faq.
+:row.:c.Q1:
+:c.:hp1.:q.When using my browser to view the &html. created by
+&sysname., most of the links work fine.  But some links just jump to
+the TOP of the file instead of to the named anchor within the file.
+Why is this happening?:eq.:ehp1.
+:row.:c.A1:
+:c.This is a browser problem.  Some older browsers mistakenly ignore
+a link's :q.anchor:eq. if the anchor has no text
+(e.g. :xph.&lt.A&rbl.NAME="ABC"&gt.&lt./A&gt.:exph. as opposed to
+:xph.&lt.A&rbl.NAME="ABC"&gt.this&rbl.is&rbl.some&rbl.text&lt./A&gt.:exph.).
+This causes the browser to jump to the top of the page instead of to
+the anchor itself.  Common occurances of this problem include
+bottom-of-file links, links for index references and certain links
+for :xph.&colon.SPOT:exph..
+:p.If your browser exhibits this behavior, you can use &sysname.'s
+undocumented :xph.ANCHORTEXT=:exph. option to specify a text string
+to be used whenever a link's anchor would otherwise be null.
+:xph.ANCHORTEXT='&amp.nbsp;':exph. has worked well for some people.
+Link anchors that would normally be empty would now be
+:xph.&lt.A&rbl.NAME="ABC"&gt.&amp.nbsp;&lt./A&gt.:exph..
+This will generally circumvent the browser problem, but note that
+extra blanks may now appear in your text.
+:etable.
+.*-----
+:h3.FAQ 2&colon. Why aren't revision codes showing?
+:table refid=faq.
+:row.:c.Q2:
+:c.:hp1.:q.Why aren't revision codes showing when I browse my
+document?:eq.:ehp1.
+:row.:c.A2:
+:c.Although &sysname. recognizes the
+:xph.&colon.REV/&colon.EREV:exph. tags and :xph.&period.rc:exph.
+control word, &html. itself doesn't provide the ability to show a
+revision character.  So you must tell &sysname. what &html. to
+generate for identifying revised text.  The :spotref refid=revtag.
+allows you to do just that.
+:p.One technique that works well is to display the revised text in
+color
+:psc proc=html.
+(the technique used by this user's guide).
+:epsc.
+:psc xproc=html.
+(the &html. version of the user's guide uses this technique).
+:epsc.
+The following example, using &bm.'s
+:xph.&colon.REV/&colon.EREV:exph. tags, illustrates how to display
+revised text in green (assuming your browser understands the
+:xph.&lt.FONT&rbl.COLOR=#:pv.rrggbb:epv.&gt.:exph. tag).
+:xmp.
+  .*B2H option revtag.v2='&lt.font color="#00FF00"&gt.,&lt./font&gt.'
+  &colon.revision id=v2  char='%' run=yes.
+  Version 1 uses method A and
+  &colon.rev refid=v2.
+  Version 2 uses method B.
+  &colon.erev refid=v2.
+  So be sure to specify the correct version.
+:exmp.
+Which results in:
+:xmp.
+  Version 1 uses method A and
+  &lt.font color="#00FF00"&gt.
+  Version 2 uses method B.
+  &lt./font&gt.
+  So be sure to specify the correct version.
+:exmp.
+:psc proc='html'.
+.*B2H option revtag.v2='<font color="#00FF00">,</font>'
+:revision id=v2  char='%' run=yes.
+:p.And looks like this: :q.Version 1 uses method A and
+:rev refid=v2.
+Version 2 uses method B.
+:erev refid=v2.
+So be sure to specify what you want.:eq.
+:epsc.
+:p.Here's the same example using the
+:q.:xph.&period.RC:exph.:eq. control word:
+:xmp.
+  .*B2H option revtag.1='&lt.font color="#00FF00"&gt.,&lt./font&gt.'
+  &period.rc 1 &vbar
+  Version 1 uses method A and
+  &period.rc 1 on
+  Version 2 uses method B.
+  &period.rc 1 off
+  So be sure to specify the correct version.
+:exmp.
+:etable.
+.*-----
+:h3.FAQ 3&colon. *OPTION record in source causing problems
+:table refid=faq.
+:row.:c.Q3:
+:c.:hp1.:q.An :xph.&period.*OPTION:exph. record in the source
+(it's used by another program) is causing &sysname. to generate
+error messages.  How can I make &sysname. ignore this
+record?:eq.:ehp1.
+:row.:c.A3:
+:c.Some documents contain :xph.&period.*OPTION:exph. statements for
+use by other programs -- print preprocessors are a common example.
+If you don't want the record inspected for &sysname. options, ensure
+that :xph.B2HREQ=YES:exph. is specified (the default value).  This
+is described in more detail in :hdref refid=b2hstmt..
+:etable.
+.*-----
+:h3.FAQ 4&colon. Including text so it appears ONLY when converted
+:table refid=faq.
+:row.:c.Q4:
+:c.:hp1.:q.How do I include text so that it appears ONLY when my
+document is converted to &html.?:eq.:ehp1.
+:row.:c.A4:
+:c.There are two ways to accomplish this:
+:ul compact.
+:li.To insert :hp1.&html:ehp1. text itself directly into the output,
+see :hdref refid=b2hxhtm..
+:li.To process/bypass source text based on whether your document is
+being converted to &html., see :hdref refid=psc..
+:eul.
+:etable.
+.*-----
+:h3.FAQ 5&colon. Changing &html. tags generated by &sysname.
+:table refid=faq.
+:row.:c.Q5:
+:c.:hp1.:q.How can I change the &html. tags generated by
+&sysname.?:eq.:ehp1.
+:row.:c.A5:
+:c.Depends on what you want to change:
+:ul.
+:li.If &sysname. handles a specific control word, macro or tag via a
+simple one-for-one mapping (e.g. :q.:xph.&colon.HP1:exph.:eq. is
+simply changed to :q.:xph.&lt.I&gt.:exph.:eq.), just update the
+definition in the symbol table.
+:hdref refid=taglist. contains a list of all control words, macros
+and tags and how they are supported.
+:hdref refid=symbol. describes the symbol table itself.
+:li.Some tags cause &sysname. to generate different types of &html.,
+depending on how and in what context the tag is used.  Many of the
+commonly-used tags have &sysname. options specifically for defining
+the &html. to generate in a variety of situations.  For example, the
+:xph.DLTAG.:pv.name:epv.=:exph. option allows you to specify the
+&html. to support the :xph.&colon.DL:exph. tag.
+See also :spotref refid=custhtm.
+:li.In some cases, &sysname. generates the &html. based on a large
+number of factors, so it is not possible to specify what you want in
+advance.  However, the :xph.HTMLATT.:pv.name:epv.=:exph. option
+allows you to provide attributes for certain &html. tags whenever
+they are generated.  See the :spotref refid=htmlatt. for more
+information.
+:eul.
+:etable.
+.*-----
+:h3.FAQ 6&colon. Can't create multiple vertical table cells
+:table refid=faq.
+:row.:c.Q6:
+:c.:hp1.:q.In a &bm. table, my script creates two vertical cells in
+a single row by specifying multiple occurances of the
+:xph.&colon.C:exph. tag, like this&colon.:ehp1.
+:xmp.
+  &colon.table cols='* *'.
+  &colon.row.
+  &colon.c 1.Cell 1A
+  &colon.c 1.Cell 1B
+  &colon.c 2.next horizontal cell
+:exmp.
+:hp1.But &sysname. is not generating the two vertically-stacked cells.
+Why not? (I'm also getting an error message about out-of-sequence
+table cells):eq.:ehp1.
+:row.:c.A6:
+:c.You are generating rows with vertically-aligned cells
+:hp1.without:ehp1. using the :xph.&colon.TABLE:exph. tag's
+:xph.ARRANGE=:exph. attribute to describe the layout.
+(Whether this is a :q.good:eq. markup practice is a different
+discussion!) &sysname. does not support the idiom of not using
+:xph.ARRANGE=:exph. for vertically arranging cells.  The error
+message is because &sysname. detected two definitions for the same
+cell.
+:etable.
+.*-----
+:h3.FAQ 7&colon. Overriding attributes on the &colon.DOCPROF tag
+:table refid=faq.
+:row.:c.Q7:
+:c.:hp1.:q.I'm trying to override some of the attributes coded on my
+document's :xph.&colon.DOCPROF:exph. tag, but
+:xph.&colon.DOCPROF:exph. is overriding the &sysname. options
+regardless of whether they are on the command line or in a profile.
+How can I override the :xph.&colon.DOCPROF:exph.
+attributes?:eq.:ehp1.
+:row.:c.A7:
+:c.:hdref refid=spcopts. documents the hierarchy of how options are
+handled.  But the bottom line is that statements :hp1.within:ehp1.
+the document itself always override any &sysname. command-line or
+profile options.  If you include a &optioncmd2. statement within
+your document :hp1.after:ehp1. the :xph.&colon.DOCPROF:exph. tag,
+that will do it.
+:etable.
+.*-----
+:h3.FAQ 8&colon. Suppressing &sysname. messages on the terminal
+:table refid=faq.
+:row.:c.Q8:
+:c.:hp1.:q.I know I can use the :xph.LOG=:exph. option to save the
+console messages to disk.  But can I tell &sysname. to NOT display
+the messages on the terminal itself?:eq.:ehp1.
+:row.:c.A8:
+:c.Yes. During a conversion, &sysname. generates messages showing
+the status of the conversion.  The :xph.LOG=:exph. option specifies
+if you want a copy of these messages saved to a disk file.  The
+:xph.QUIET:exph. and :xph.NOISY:exph. options control whether the
+messages are displayed on the terminal.
+See :spotref refid=quiet. for more information.
+:etable.
+.*-----
+:h3 id=faqx.FAQ 9&colon. XEDITG line drawing characters don't look right
+:table refid=faq.
+:row.:c.Q9:
+:c.:hp1.:q.I have an XEDITG line drawing (inside an
+:xph.&colon.XMP/&colon.EXMP:exph.) that contains nice graphic arrows
+and box characters when I print it on the mainframe.  But when I
+view the &html. output using a browser, there's no graphic
+characters, just asterisks and plus signs.  Why?:eq.:ehp1.
+:row.:c.A9:
+:c.This is a World-Wide-Web limitation.  Web browsers display text
+using the characters defined in various code pages (the most common
+being ISO-Latin-1).  None of the available code pages contain the
+drawing characters, such as box corners, intersections and arrows.
+So &sysname. defines these characters (via the system symbol table)
+as asterisks and plus signs as the best approximation.
+Your alternatives are:
+:ul.
+:li.Create a separate GIF or JPEG file for each graphic character
+and define the appropriate file for the appropriate symbol, or
+:li.Convert the entire drawing into a one big GIF or JPEG file, or
+:rev refid=r42.
+:li.If you have a monospaced font that contains the drawing
+characters you need, you can use the :spotref refid=settag. to load
+the font and then redefine the drawing symbols to reference the the
+appropriate character.  Assume you have a font called
+:q.:xph.courierx:exph.:eq. that contains the up-arrow and down-arrow
+characters at positions 99 and 100, respectively.  Further assume
+that your drawing uses the :q.:xph.&amp.Au:exph.:eq. and
+:q.:xph.&amp.Ad:exph.:eq. symbols to represent the up and down
+arrows.  First, change the symbol table definitions for
+:q.:xph.&amp.Au:exph.:eq. and :q.:xph.&amp.Ad:exph.:eq. to reference
+the appropriate character:
+:xmp.
+  &colon.SYM. Au    V='&amp.#99;'   -- Define the up-arrow
+  &colon.SYM. Ad    V='&amp.#100;'  -- Define the down-arrow
+:exmp.
+Then, use the :xph.SETUPTAG:exph. option to load the font
+for examples:
+:xmp.
+  SETUPTAG.XMP='&lt.font face="courierx"&gt.','&lt./font&gt.'
+:exmp.
+:erev refid=r42.
+:eul.
+:etable.
+.*-----
+:rev refid=r42.
+:h3 id=faqsn.FAQ 10&colon. Syntax diagram characters don't look right
+:table refid=faq.
+:row.:c.Q10:
+:c.:hp1.:q.My document has a number of syntax diagrams and although
+they format OK, they don't include the box corners, intersections
+and arrow characters that show when I print the document on the
+mainframe.  Is this something I can customize?:eq.:ehp1.
+:row.:c.A10:
+:c.This is similar to :hdref refid=faqx..  None of the standard code
+pages available via web browsers contain drawing characters, such as
+box corners, intersections and arrows.  So &sysname. generates
+asterisks, plus signs and greater-than/less-than characters as the
+best approximation.
+:p.The actual characters used in a syntax diagram are specified
+using the appropriate :spotref refid=deftext..  For each part of a
+syntax diagram, you can specify the character(s) you desire,
+including plain text, &html. symbols, even GIF files.  Note that if
+you display a GIF, the GIF's vertical/horizontal size must be a
+multiple of a character's vertical/horizontal size in the current
+font, otherwise alignment problems may occur.
+:p.Additionally, if you have a monospaced font that contains the
+drawing characters you need, you can use the :spotref refid=settag.
+to load the font and then use :pk.DEFTEXT:epk. to reference the the
+appropriate character.  Assume you have a font called
+:q.:xph.courierx:exph.:eq. that contains the top-left and top-right
+box characters at positions 192 and 193, respectively.
+The following options show how the font could be loaded and the
+appropriate characters referenced:
+:xmp.
+  SETUPTAG.SYNTAX='&lt.font face="courierx"&gt.','&lt./font&gt.'
+  DEFTEXT._UPPERLEFT='&amp.#192;',1
+  DEFTEXT._UPPERRIGHT='&amp.#193;',1
+:exmp.
+:etable.
+.*-----
+:h3 id=faqh4.FAQ 11&colon. Will &sysname. generate &html. 4 tags?
+:table refid=faq.
+:row.:c.Q11:
+:c.:hp1.:q.I see that &sysname.'s :xph.HTML=:exph. option
+allows me to specify &html. 4. Does this mean that &sysname. will
+generate &html. 4 tags?:eq.:ehp1.
+:row.:c.A11:
+:c.The vast majority of &html. 4-only tags are not needed to support
+the conversion process.  But, if you specify :xph.HTML=4:exph.,
+&sysname. will generate a few tags that are exclusive to &html. 4
+(such as
+:xph.&lt.SPAN&rbl.STYLE="font-size&colon.:pv.xx:epv.%"&gt.:exph.
+to provide enhanced support for the :xph.SCALE=:exph. attribute).
+:p.In addition, since &sysname. allows you to specify profile options
+and symbol table entries based on the &html. level, you can specify
+&html. 4-specific items yourself.  For example, you might want to
+define the table-of-contents layout using &html. specific to the
+&html. level being generated -- something like this:
+:xmp.
+  (HTML=2) TOCTAG=" ... &html. 2 markup for a TOC ... "
+  (HTML=3) TOCTAG=" ... &html. 3 markup for a TOC ... "
+  (HTML=4) TOCTAG=" ... &html. 4 markup for a TOC ... "
+:exmp.
+:etable.
+:erev refid=r42.
+.*-----
+:rev refid=r43.
+:h3.FAQ 12&colon. REXX error messages under AIX handling the index
+:table refid=faq.
+:row.:c.Q12:
+:c.:hp1.:q.We're getting error messages from IBM's AIX REXX while
+&sysname. is processing an index entry
+(e.g. :xph.&colon.ih1:exph., :xph.&colon.ih2:exph.,
+:xph.&colon.ih3:exph.). Some of our index references are fine,
+whereas others are incorrect.:eq.:ehp1.
+:row.:c.A12:
+:c.&sysname. uses the three index levels (i1, i2 and i3) combined
+together as the index's :q.pointer:eq. (technically speaking, it's
+the :q.tail:eq. of a stemmed variable).  On most platforms, REXX
+does not limit the length of this pointer; but
+:rev refid=r47.
+using IBM's REXX
+:erev refid=r47.
+on AIX, the length can not exceed 240 characters.
+There's nothing that &sysname. can do about this restriction.
+When running on AIX
+:rev refid=r47.
+using IBM's REXX
+:erev refid=r47.
+and converting a document with extremely long index levels,
+you may have to update the index level text.
+:etable.
+:erev refid=r43.
+.*-----
+:rev refid=r45.
+:h3 id=faqh13.FAQ 13&colon. Using Cascading Style Sheets (CSS)
+:table refid=faq.
+:row.:c.Q13:
+:c.:hp1.:q.How do I use Cascading Style Sheets (CSS) within &sysname.?
+I would like some definitions to affect all aspects of the
+document and other definitions to be used specifically,
+e.g. :xph.&colon.hp3:exph. to display red text on a yellow
+background using the Arial font.  Is this possible?:eq.:ehp1.
+:row.:c.A13:
+:c.Yes. CSS enables you to control almost any aspect of a page's
+appearance. Without going into the details of how CSS works, in
+essence you place the CSS definitions into the header section of the
+&html. file.  Each definition specifies a :hp1.selector:ehp1. and
+it's associated :hp1.properties:ehp1..  Any text associated with the
+selector is displayed using the specified properties.
+:p.For example, the following &html. segment uses CSS to define the
+color and font-size properties for all H1 and H2 elements:
+:xmp.
+  &lt.HEAD&gt.
+  &lt.STYLE TYPE="text/css"&gt.
+    H1 &lbrc. font-size: x-large; color: red &rbrc.
+    H2 &lbrc. font-size: large; color: blue &rbrc.
+  &lt./STYLE&gt.
+  &lt./HEAD&gt.
+  &lt.BODY&gt.
+:exmp.
+:p.To cause :xph.&colon.HP3:exph. to display text using specific
+properties, first define a CSS selector (using a name of your
+choice) with the desired properties.  Then update the &sysname.
+symbol table definition for :xph.&colon.HP3:exph. to reference
+the CSS selector (normally using &lt.SPAN&gt.).
+:p.The following example puts it all together.  To simplify this
+example, the :xph.HEADREC=:exph. option (which inserts records into
+the header section of an output &html. file) and the symbol table
+updates are included within the source file:
+:xmp.
+  .*----- do the CSS definitions -----
+  .*b2h option headrec.text='&lt.style type="text/css"&gt.'
+  .*b2h option headrec.text='H1    &lbrc. font-size: x-large; color: red  &rbrc.'
+  .*b2h option headrec.text='H2    &lbrc. font-size: large;   color: blue }'
+  .*b2h option headrec.text='.app1 &lbrc. background-color: yellow; color: red;'
+  .*b2h option headrec.text='        font-family: arial, helvetica }'
+  .*b2h option headrec.text='&lt./style&gt.'
+  .*----- update the &colon.HP3/&colon.EHP3 symbol table definitions -----
+  .*b2h symbol &colon.TAG.  HP3 IT=N VAT=N ATT=N SE=Y V='&lt.span class="app1"&gt.'
+  .*b2h symbol &colon.TAG. EHP3 IT=N VAT=N ATT=N SE=Y V='&lt./span&gt.'
+ 
+  &colon.h1.Start the CSS example (this line in red)
+  &colon.p.Text in &colon.hp1.(italic)&colon.ehp1. mode.
+  &colon.p.Text in &colon.hp2.(bold)&colon.ehp2. mode.
+  &colon.p.Text in &colon.hp3.(red on yellow)&colon.ehp3. mode.
+  &colon.p.Text in &colon.hp4.(monospaced)&colon.ehp4. mode.
+:exmp.
+:p.p.s. Here's a productivity tip:
+if you have a quite a few CSS statements, including them
+individually can get bulky.  CSS allows you to place the definitions
+into a separate file (called an :q.external style sheet:eq.) and
+then link it into the document using &html.'s
+:xph.&lt.LINK&gt.:exph. tag within the header section, like so:
+:xmp.
+  &lt.HEAD&gt.
+  &lt.link rel="stylesheet" type="text/css" href=":hp1.filespec:ehp1."&gt.
+  &lt./HEAD&gt.
+  &lt.BODY&gt.
+:exmp.
+:p.If we place the following CSS statements into the file
+:q.common.css:eq.:
+:xmp.
+  H1      &lbrc. font-size: x-large; color: red  &rbrc.
+  H2      &lbrc. font-size: large;   color: blue }
+  .app1   &lbrc. background-color: yellow; color: red;
+            font-family: arial, helvetica }
+:exmp.
+Then the following would cause the CSS records to be loaded dynamically
+at browse time:
+:xmp.
+  .*b2h option headrec.text='&cont.
+&lt.link rel="stylesheet" type="text/css" href="common.css"&gt.'
+:exmp.
+:etable.
+.*-----
+:h3 id=faqh14.FAQ 14&colon. Creating a "clickable" web link
+:table refid=faq.
+:row.:c.Q14:
+:c.:hp1.:q.My document contains a sentence like this&colon.:ehp1.
+.br;&rbl.&rbl.&rbl.:xph.For more information, go to
+http&colon.//www.acme.com:exph.
+.br;:hp1.When the document is printed, I want the website URL to be
+listed :q.as-is:eq., but when the document is converted to &html.,
+I want the URL to be a hyperlink so the user can click on it.
+How do I do that?:eq.:ehp1.
+:row.:c.A14:
+:c.This is easy to do based on the techniques described
+in :hdref refid=psc..
+ 
+:p.:hp2.Solution using &bm. tags&colon.:ehp2.
+:xmp.
+  For more information, go to
+  &colon.psc proc=html.
+  .*b2h html <a href="http&colon.//www.acme.com">http&colon.//www.acme.com</a>
+  &colon.epsc.
+  &colon.psc xproc=html.
+  http&colon.//www.acme.com
+  &colon.epsc.
+:exmp.
+It's often easier and simpler to have a macro for this rather than
+coding all those lines each time.  This User's Guide uses the
+:q.website:eq. macro for just this reason and it looks like this:
+:xmp.
+  .dm website on
+  &colon.psc proc=html.
+  .*B2H HTML <A HREF="http&colon.//&amp.*">http&colon.//&amp.*</A>
+  &colon.epsc.
+  &colon.psc xproc=html.
+  http&colon.//&amp.*
+  &colon.epsc.
+  .dm off
+:exmp.
+Your example can now be written like this:
+:xmp.
+  For more information, go to
+  .website www.acme.com
+:exmp.
+ 
+:p.:hp2.Solution using &script. control words::ehp2.
+:xmp.
+  For more information, go to
+  &period.se temp = SUBSTR &amp.$LDEV 1 4
+  &period.if &amp.temp = HTML
+  &period.th .*b2h html <a href="http&colon.//www.acme.com">http&colon.//www.acme.com</a>
+  &period.el http&colon.//www.acme.com
+:exmp.
+As before, you may wish to use a macro to do the work for you.
+:xmp.
+  .dm website on
+  &period.se temp = SUBSTR &amp.$LDEV 1 4
+  &period.if &amp.temp = HTML
+  &period.th .*B2H HTML <A HREF="http&colon.//&*">http&colon.//&amp.*</A>
+  &period.el http&colon.//&amp.*
+  .dm off
+:exmp.
+Your example would be written the same as before:
+:xmp.
+  For more information, go to
+  .website www.acme.com
+:exmp.
+:etable.
+.*-----
+:h3 id=faqh15.FAQ 15&colon. Ignoring source record line numbers
+:table refid=faq.
+:row.:c.Q15:
+:c.:hp1.:q.The source records for my document contain line numbers
+in colums 73 to 80 and those line numbers are showing up in the
+output.  Is there a way to have &sysname. ignore line numbers?:eq.:ehp1.
+:row.:c.A15:
+:c.Yes, see the :spotref refid=linenum..
+In your specific case, try:
+:xmp.
+  &PGMCMD. ... ( LINENUM=73-80
+:exmp.
+:etable.
+:erev refid=r45.

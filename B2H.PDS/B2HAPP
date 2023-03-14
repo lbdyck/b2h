@@ -1,0 +1,3129 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HAPP: Appendices
+.*         Imbedded by B2H SCRIPT
+.*         Imbeds B2HMSG - B2H messages
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+.setup b2hsetup
+:appendix.
+.*--------------------
+:h1 id=taglist.Symbols, control words, macros and tags supported by &sysname
+.*-----
+:h2.&amp.Symbols
+:p.There are literally hundreds of &script., GML and &bm. symbols
+and over 300 are defined to &sysname..  All ISO 8859-1 characters
+are defined plus many other &bm. symbols, so files written in
+languages other than English should display correctly if the proper
+&amp.symbols are used (e.g. &amp.Aumlaut for &Aumlaut., &amp.eacute
+for &eacute.). In addition, the symbols used by XEDITG and CHARGES
+line-drawing tools are also defined.
+:p.If you need a special symbol which is not currently supported,
+simply define it in a user symbol table and point &sysname. to it
+using the :xph.USERSYM=:exph. option.
+:table cols='3* 2* 3* 2* 3* 2*'
+       align='l c l c l c'
+       split=yes.
+:tcap.Supported &amp.symbols
+:tdesc.Some symbols appear correctly only when viewed using a WEB
+browser.
+:etdesc.
+:thd.
+:c.Symbol:c.Value
+:c.Symbol:c.Value
+:c.Symbol:c.Value
+:ethd.
+:row.
+:c.&amp.Aa         :c.&Aa
+:c.&amp.aa         :c.&aa
+:c.&amp.Aacute     :c.&Aacute
+:row.
+:c.&amp.aacute     :c.&aacute
+:c.&amp.Ac         :c.&Ac
+:c.&amp.ac         :c.&ac
+:row.
+:c.&amp.Acirc      :c.&Acirc
+:c.&amp.acirc      :c.&acirc
+:c.&amp.acircle    :c.&acircle
+:row.
+:c.&amp.acute      :c.&acute
+:c.&amp.Ad         :c.&Ad
+:c.&amp.Ae         :c.&Ae
+:row.
+:c.&amp.ae         :c.&ae
+:c.&amp.AElig      :c.&AElig
+:c.&amp.aelig      :c.&aelig
+:row.
+:c.&amp.Ag         :c.&Ag
+:c.&amp.ag         :c.&ag
+:c.&amp.Agrave     :c.&Agrave
+:row.
+:c.&amp.agrave     :c.&agrave
+:c.&amp.Al         :c.&Al
+:c.&amp.amp        :c.&amp
+:row.
+:c.&amp.and        :c.&and
+:c.&amp.Ao         :c.&Ao
+:c.&amp.ao         :c.&ao
+:row.
+:c.&amp.apos       :c.&apos
+:c.&amp.Ar         :c.&Ar
+:c.&amp.Aring      :c.&Aring
+:row.
+:c.&amp.aring      :c.&aring
+:c.&amp.asterisk   :c.&asterisk
+:c.&amp.At         :c.&At
+:row.
+:c.&amp.at         :c.&at
+:c.&amp.Atilde     :c.&Atilde
+:c.&amp.atilde     :c.&atilde
+:row.
+:c.&amp.atsign     :c.&atsign
+:c.&amp.Au         :c.&Au
+:c.&amp.Auml       :c.&Auml
+:row.
+:c.&amp.auml       :c.&auml
+:c.&amp.Aumlaut    :c.&Aumlaut
+:c.&amp.aumlaut    :c.&aumlaut
+:row.
+:c.&amp.aus        :c.&aus
+:c.&amp.Beta       :c.&Beta
+:c.&amp.bin        :c.&bin
+:row.
+:c.&amp.blank      :c.&blank
+:c.&amp.brkbar     :c.&brkbar
+:c.&amp.brvbar     :c.&brvbar
+:row.
+:c.&amp.bsl        :c.&bsl
+:c.&amp.bslash     :c.&bslash
+:c.&amp.bul        :c.&bul
+:row.
+:c.&amp.bullet     :c.&bullet
+:c.&amp.bxas       :c.&bxas
+:c.&amp.bxbj       :c.&bxbj
+:row.
+:c.&amp.bxcj       :c.&bxcj
+:c.&amp.bxcr       :c.&bxcr
+:c.&amp.bxde       :c.&bxde
+:row.
+:c.&amp.bxh        :c.&bxh
+:c.&amp.bxle       :c.&bxle
+:c.&amp.bxll       :c.&bxll
+:row.
+:c.&amp.bxlr       :c.&bxlr
+:c.&amp.bxri       :c.&bxri
+:c.&amp.bxtj       :c.&bxtj
+:row.
+:c.&amp.bxul       :c.&bxul
+:c.&amp.bxur       :c.&bxur
+:c.&amp.bxv        :c.&bxv
+:row.
+:c.&amp.caret      :c.&caret
+:c.&amp.Cc         :c.&Cc
+:c.&amp.cc         :c.&cc
+:row.
+:c.&amp.cc         :c.&cc
+:c.&amp.Ccedil     :c.&Ccedil
+:c.&amp.ccedil     :c.&ccedil
+:row.
+:c.&amp.cdq        :c.&cdq
+:c.&amp.cdqf       :c.&cdqf
+:c.&amp.cdqg       :c.&cdqg
+:row.
+:c.&amp.cedil      :c.&cedil
+:c.&amp.cent       :c.&cent
+:c.&amp.char       :c.&char
+:row.
+:c.&amp.colon      :c.&colon
+:c.&amp.comma      :c.&comma
+:c.&amp.concat     :c.&concat
+:row.
+:c.&amp.copr       :c.&copr
+:c.&amp.copy       :c.&copy
+:c.&amp.copyr      :c.&copyr
+:row.
+:c.&amp.csq        :c.&csq
+:c.&amp.csqg       :c.&csqg
+:c.&amp.curren     :c.&curren
+:row.
+:c.&amp.currency   :c.&currency
+:c.&amp.darrow     :c.&darrow
+:c.&amp.dash       :c.&dash
+:row.
+:c.&amp.dbls       :c.&dbls
+:c.&amp.dblxclam   :c.&dblxclam
+:c.&amp.dblxclm    :c.&dblxclm
+:row.
+:c.&amp.deg        :c.&deg
+:c.&amp.degree     :c.&degree
+:c.&amp.div        :c.&div
+:row.
+:c.:rev refid=r44.
+&amp.divide     :c.&divide
+:erev refid=r44.
+:c.&amp.divslash   :c.&divslash
+:c.&amp.dollar     :c.&dollar
+:row.
+:c.&amp.dot        :c.&dot
+:c.&amp.dotdot     :c.&dotdot
+:c.&amp.Ea         :c.&Ea
+:row.
+:c.&amp.ea         :c.&ea
+:c.&amp.Eacute     :c.&Eacute
+:c.&amp.eacute     :c.&eacute
+:row.
+:c.&amp.Eb         :c.&Eb
+:c.&amp.ebin       :c.&ebin
+:c.&amp.Ec         :c.&Ec
+:row.
+:c.&amp.ec         :c.&ec
+:c.&amp.echar      :c.&echar
+:c.&amp.Ecirc      :c.&Ecirc
+:row.
+:c.&amp.ecirc      :c.&ecirc
+:c.&amp.ecircfl    :c.&ecircfl
+:c.&amp.Ee         :c.&Ee
+:row.
+:c.&amp.ee         :c.&ee
+:c.&amp.Eg         :c.&Eg
+:c.&amp.eg         :c.&eg
+:row.
+:c.&amp.egml       :c.&egml
+:c.&amp.Egrave     :c.&Egrave
+:c.&amp.egrave     :c.&egrave
+:row.
+:c.&amp.ehex       :c.&ehex
+:c.&amp.El         :c.&El
+:c.&amp.ellip      :c.&ellip
+:row.
+:c.&amp.ellipsis   :c.&ellipsis
+:c.&amp.emdash     :c.&emdash
+:c.&amp.endash     :c.&endash
+:row.
+:c.&amp.eq         :c.&eq
+:c.&amp.eqsym      :c.&eqsym
+:c.&amp.equals     :c.&equals
+:row.
+:c.&amp.Er         :c.&Er
+:c.&amp.Et         :c.&Et
+:c.&amp.ETH        :c.&ETH
+:row.
+:c.&amp.ETH        :c.&ETH
+:c.&amp.Eth        :c.&Eth
+:c.&amp.eth        :c.&eth
+:row.
+:c.&amp.Euml       :c.&Euml
+:c.&amp.euml       :c.&euml
+:c.&amp.female     :c.&female
+:row.
+:c.&amp.fi         :c.&fi
+:c.&amp.finespace  :c.&finespace
+:c.&amp.fl         :c.&fl
+:row.
+:c.:rev refid=r44.
+&amp.florin     :c.&florin
+:erev refid=r44.
+:c.&amp.frac12     :c.&frac12
+:c.&amp.frac14     :c.&frac14
+:row.
+:c.&amp.frac18     :c.&frac18
+:c.&amp.frac34     :c.&frac34
+:c.&amp.frac38     :c.&frac38
+:row.
+:c.&amp.frac58     :c.&frac58
+:c.&amp.frac78     :c.&frac78
+:c.&amp.ge         :c.&ge
+:row.
+:c.&amp.gesym      :c.&gesym
+:c.&amp.gml        :c.&gml
+:c.&amp.grave      :c.&grave
+:row.
+:c.&amp.gt         :c.&gt
+:c.&amp.gtsym      :c.&gtsym
+:c.&amp.hex        :c.&hex
+:row.
+:c.&amp.hyphen     :c.&hyphen
+:c.&amp.Ia         :c.&Ia
+:c.&amp.ia         :c.&ia
+:row.
+:c.&amp.Iacute     :c.&Iacute
+:c.&amp.iacute     :c.&iacute
+:c.&amp.Ic         :c.&Ic
+:row.
+:c.&amp.ic         :c.&ic
+:c.&amp.Icirc      :c.&Icirc
+:c.&amp.icirc      :c.&icirc
+:row.
+:c.&amp.Ie         :c.&Ie
+:c.&amp.ie         :c.&ie
+:c.&amp.iexcl      :c.&iexcl
+:row.
+:c.&amp.iff        :c.&iff
+:c.&amp.Ig         :c.&Ig
+:c.&amp.ig         :c.&ig
+:row.
+:c.&amp.Igrave     :c.&Igrave
+:c.&amp.igrave     :c.&igrave
+:c.&amp.inve       :c.&inve
+:row.
+:c.&amp.invellip   :c.&invellip
+:c.&amp.iquest     :c.&iquest
+:c.&amp.Iuml       :c.&Iuml
+:row.
+:c.&amp.iuml       :c.&iuml
+:c.&amp.Ju         :c.&Ju
+:c.&amp.lahead     :c.&lahead
+:row.
+:c.&amp.laquo      :c.&laquo
+:c.&amp.larrow     :c.&larrow
+:c.&amp.lbrace     :c.&lbrace
+:row.
+:c.&amp.lbracket   :c.&lbracket
+:c.&amp.lbrc       :c.&lbrc
+:c.&amp.lbrk       :c.&lbrk
+:row.
+:c.&amp.lbullet    :c.&lbullet
+:c.&amp.ldarraw    :c.&ldarraw
+:c.&amp.le         :c.&le
+:row.
+:c.&amp.lesym      :c.&lesym
+:c.&amp.Lh         :c.&Lh
+:c.&amp.Ll         :c.&Ll
+:row.
+:c.&amp.lnot       :c.&lnot
+:c.&amp.lor        :c.&lor
+:c.&amp.lpar       :c.&lpar
+:row.
+:c.&amp.lparen     :c.&lparen
+:c.&amp.Lr         :c.&Lr
+:c.&amp.Lsterling  :c.&Lsterling
+:row.
+:c.&amp.lt         :c.&lt
+:c.&amp.ltsym      :c.&ltsym
+:c.&amp.Lv         :c.&Lv
+:row.
+:c.&amp.macr       :c.&macr
+:c.&amp.male       :c.&male
+:c.&amp.mathast    :c.&mathast
+:row.
+:c.&amp.mdash      :c.&mdash
+:c.&amp.micro      :c.&micro
+:c.&amp.middot     :c.&middot
+:row.
+:c.&amp.minus      :c.&minus
+:c.&amp.minusop    :c.&minusop
+:c.&amp.mult       :c.&mult
+:row.
+:c.&amp.nbsp       :c.&nbsp
+:c.&amp.ndash      :c.&ndash
+:c.&amp.ne         :c.&ne
+:row.
+:c.&amp.nesym      :c.&nesym
+:c.&amp.not        :c.&not
+:c.&amp.notsym     :c.&notsym
+:row.
+:c.&amp.Nt         :c.&Nt
+:c.&amp.nt         :c.&nt
+:c.&amp.Ntilde     :c.&Ntilde
+:row.
+:c.&amp.ntilde     :c.&ntilde
+:c.&amp.numsign    :c.&numsign
+:c.&amp.Oa         :c.&Oa
+:row.
+:c.&amp.oa         :c.&oa
+:c.&amp.Oacute     :c.&Oacute
+:c.&amp.oacute     :c.&oacute
+:row.
+:c.&amp.Oc         :c.&Oc
+:c.&amp.oc         :c.&oc
+:c.&amp.Ocirc      :c.&Ocirc
+:row.
+:c.&amp.ocirc      :c.&ocirc
+:c.&amp.odq        :c.&odq
+:c.&amp.odqf       :c.&odqf
+:row.
+:c.&amp.odqg       :c.&odqg
+:c.&amp.Oe         :c.&Oe
+:c.&amp.oe         :c.&oe
+:row.
+:rev refid=r43.
+:c.&amp.OElig      :c.&OElig
+:erev refid=r43.
+:c.&amp.oelig      :c.&oelig
+:c.&amp.Og         :c.&Og
+:row.
+:c.&amp.og         :c.&og
+:c.&amp.Ograve     :c.&Ograve
+:c.&amp.ograve     :c.&ograve
+:row.
+:c.&amp.ordf       :c.&ordf
+:c.&amp.ordm       :c.&ordm
+:c.&amp.Os         :c.&Os
+:row.
+:c.&amp.os         :c.&os
+:c.&amp.Oslash     :c.&Oslash
+:c.&amp.oslash     :c.&oslash
+:row.
+:c.&amp.osq        :c.&osq
+:c.&amp.osqg       :c.&osqg
+:c.&amp.Ot         :c.&Ot
+:row.
+:c.&amp.ot         :c.&ot
+:c.&amp.Otilde     :c.&Otilde
+:c.&amp.otilde     :c.&otilde
+:row.
+:c.&amp.Ouml       :c.&Ouml
+:c.&amp.ouml       :c.&ouml
+:c.&amp.oumlaut    :c.&oumlaut
+:row.
+:c.&amp.ous        :c.&ous
+:c.&amp.par        :c.&par
+:c.&amp.para       :c.&para
+:row.
+:c.&amp.per        :c.&per
+:c.&amp.percent    :c.&percent
+:c.&amp.period     :c.&period
+:row.
+:c.&amp.plus       :c.&plus
+:c.&amp.plusend    :c.&plusend
+:c.&amp.plusmin    :c.&plusmin
+:row.
+:c.&amp.plusmn     :c.&plusmn
+:c.&amp.plusop     :c.&plusop
+:c.&amp.pm         :c.&pm
+:row.
+:c.&amp.pound      :c.&pound
+:c.&amp.prime      :c.&prime
+:c.&amp.quest      :c.&quest
+:row.
+:c.&amp.rahead     :c.&rahead
+:c.&amp.raquo      :c.&raquo
+:c.&amp.rarrow     :c.&rarrow
+:row.
+:c.&amp.rbl        :c.&rbl
+:c.&amp.rbrace     :c.&rbrace
+:c.&amp.rbracket   :c.&rbracket
+:row.
+:c.&amp.rbrc       :c.&rbrc
+:c.&amp.rbrk       :c.&rbrk
+:c.&amp.rdarrow    :c.&rdarrow
+:row.
+:c.&amp.reg        :c.&reg
+:c.&amp.regtm      :c.&regtm
+:c.&amp.rpar       :c.&rpar
+:row.
+:c.&amp.rparen     :c.&rparen
+:c.&amp.sdq        :c.&sdq
+:c.&amp.sect       :c.&sect
+:row.
+:c.&amp.section    :c.&section
+:c.&amp.semi       :c.&semi
+:c.&amp.shy        :c.&shy
+:row.
+:c.&amp.slash      :c.&slash
+:c.&amp.slr        :c.&slr
+:c.&amp.ss         :c.&ss
+:row.
+:c.&amp.ssbl       :c.&ssbl
+:c.&amp.ssq        :c.&ssq
+:c.&amp.STAR       :c.&STAR
+:row.
+:c.&amp.sub0       :c.&sub0
+:c.&amp.sub1       :c.&sub1
+:c.&amp.sub2       :c.&sub2
+:row.
+:c.&amp.sub3       :c.&sub3
+:c.&amp.sub4       :c.&sub4
+:c.&amp.sub5       :c.&sub5
+:row.
+:c.&amp.sub6       :c.&sub6
+:c.&amp.sub7       :c.&sub7
+:c.&amp.sub8       :c.&sub8
+:row.
+:c.&amp.sub9       :c.&sub9
+:c.&amp.sup0       :c.&sup0
+:c.&amp.sup1       :c.&sup1
+:row.
+:c.&amp.sup2       :c.&sup2
+:c.&amp.sup3       :c.&sup3
+:c.&amp.sup4       :c.&sup4
+:row.
+:c.&amp.sup5       :c.&sup5
+:c.&amp.sup6       :c.&sup6
+:c.&amp.sup7       :c.&sup7
+:row.
+:c.&amp.sup8       :c.&sup8
+:c.&amp.sup9       :c.&sup9
+:c.&amp.szlig      :c.&szlig
+:row.
+:c.&amp.Td         :c.&Td
+:c.&amp.telephone  :c.&telephone
+:c.&amp.THORN      :c.&THORN
+:row.
+:c.&amp.Thorn      :c.&Thorn
+:c.&amp.thorn      :c.&thorn
+:c.&amp.tilde      :c.&tilde
+:row.
+:c.&amp.times      :c.&times
+:c.&amp.Tl         :c.&Tl
+:c.&amp.tm         :c.&tm
+:row.
+:c.&amp.Tr         :c.&Tr
+:c.&amp.Tu         :c.&Tu
+:c.&amp.Ua         :c.&Ua
+:row.
+:c.&amp.ua         :c.&ua
+:c.&amp.Uacute     :c.&Uacute
+:c.&amp.uacute     :c.&uacute
+:row.
+:c.&amp.uarrow     :c.&uarrow
+:c.&amp.Uc         :c.&Uc
+:c.&amp.uc         :c.&uc
+:row.
+:c.&amp.Ucirc      :c.&Ucirc
+:c.&amp.ucirc      :c.&ucirc
+:c.&amp.Ue         :c.&Ue
+:row.
+:c.&amp.ue         :c.&ue
+:c.&amp.ue         :c.&ue
+:c.&amp.Ug         :c.&Ug
+:row.
+:c.&amp.ug         :c.&ug
+:c.&amp.Ugrave     :c.&Ugrave
+:c.&amp.ugrave     :c.&ugrave
+:row.
+:c.&amp.Ul         :c.&Ul
+:c.&amp.uml        :c.&uml
+:c.&amp.Ur         :c.&Ur
+:row.
+:c.&amp.us         :c.&us
+:c.&amp.Uuml       :c.&Uuml
+:c.&amp.uuml       :c.&uuml
+:row.
+:c.&amp.uumlaut    :c.&uumlaut
+:c.&amp.vbar       :c.&vbar
+:c.&amp.vellip     :c.&vellip
+:row.
+:c.&amp.xclam      :c.&xclam
+:c.&amp.xclm       :c.&xclm
+:c.&amp.Ya         :c.&Ya
+:row.
+:c.&amp.ya         :c.&ya
+:c.&amp.Yacute     :c.&Yacute
+:c.&amp.yacute     :c.&yacute
+:row.
+:c.&amp.ye         :c.&ye
+:c.&amp.yen        :c.&yen
+:c.&amp.yuml       :c.&yuml
+:etable.
+.*-----
+:rev refid=r46.
+:h2 id=syssym.System &amp.Symbols
+:p.The following :q.system-type:eq. symbols, set by Script/VS, GML
+and Bookmaster, are also set by &sysname. to allow user-written
+macros and other markup to execute under &sysname. without
+modification as much as possible.
+:tdef  id=syssym
+       cols='*'
+       hp='3'.
+:table cols='* 2* 2*'
+       align='l'
+       valign='t'
+       split=yes.
+:tcap.System &amp.symbols
+:thd.
+:c.Symbol
+:c.Description
+:c.Value
+:ethd.
+:row refid=syssym temp.
+:c.Date and Time
+:row.
+:c.:xph.&amp.SYSYEAR:exph.
+:c.Year of the century
+:c.00-99
+:row.
+:c.:xph.&amp.SYSMONTH:exph.
+:c.Month of the year
+:c.01-12
+:row.
+:c.:xph.&amp.SYSDAYOFM:exph.
+:c.Day of the month
+:c.01-31
+:row.
+:c.:xph.&amp.SYSDAYOFW:exph.
+:c.Day of the week
+:c.1-7 ("1" is Sunday)
+:row.
+:c.:xph.&amp.SYSDAYOFY:exph.
+:c.Day of the year
+:c.001-366
+:row.
+:c.:xph.&amp.SYSHOUR:exph.
+:c.Hour of the day
+:c.00-23
+:row.
+:c.:xph.&amp.SYSMINUTE:exph.
+:c.Minute of the hour
+:c.00-59
+:row.
+:c.:xph.&amp.SYSSECOND:exph.
+:c.Second of the minute
+:c.00-59
+:row.
+:c.:xph.&amp.$YEAR:exph.
+:c.Four-digit year
+:c.:pv.yyyy:epv.
+:row refid=syssym temp.
+:c.Output Device Characteristics
+:row.
+:c.:xph.&amp.$LDEV:exph.
+:c.Logical output device
+:c.:xph.HTML:pv.x:epv.:exph.  (e.g. HTML2, HTML3, HTML4)
+:row.
+:c.:xph.&amp.$OUT:exph.
+:c.Output destination
+:c.:xph.FILE:exph.
+:row.
+:c.:xph.&amp.$PDEV:exph.
+:c.Physical output device
+:c.:xph.HTML:pv.x:epv.:exph.  (e.g. HTML2, HTML3, HTML4)
+:row refid=syssym temp.
+:c.SCRIPT Command Options
+:row.
+:c.:xph.&amp.$ASCI:exph.
+:c.ASCII output being generated
+:c.0 (no) or 1 (yes)
+:row.
+:c.:xph.&amp.$DCF:exph.
+:c.Current SCRIPT/VS (or in this case, &sysname.) release level
+:c.&release.
+:row.
+:c.:xph.&amp.$INDX:exph.
+:c.Index requested?
+:c.0 (no) or 1 (yes)
+:row.
+:c.:xph.&amp.$LIB:exph.
+:c.Macro library available
+:c.0
+:row.
+:c.:xph.&amp.$PARM:exph.
+:c.Command options
+:c.Any options passed to &sysname. on the command line
+:row.
+:c.:xph.&amp.$PASS:exph.
+:c.Current pass number
+:c.1 (always)
+:row.
+:c.:xph.&amp.$PSNO:exph.
+:c.Number of formatting passes requested
+:c.1 (always)
+:row.
+:c.:xph.&amp.$SYS:exph.
+:c.Environment
+:c.Name of current platform
+(see also the description of :xph.&amp.b2hplatc:exph.)
+:row.
+:c.:xph.&amp.$TWO:exph.
+:c.TWOPASS specified?
+:c.0 (always)
+:row refid=syssym temp.
+:c.SCRIPT/VS Formatter Parameters
+:row.
+:c.:xph.&amp.$CW:exph.
+:c.Control word separator
+:c.Set by :xph.&period.DC:exph. (defaults to '&semi.')
+:row.
+:c.:xph.&amp.$EGML:exph.
+:c.GML end-tag delimiter
+:c.Set by :xph.&period.DC:exph. (defaults to '&colon.E')
+:row.
+:c.:xph.&amp.$FNAM:exph.
+:c.Current input file name
+:c.File name of the input file
+:row.
+:c.:xph.&amp.$GML:exph.
+:c.GML tag delimiter
+:c.Set by :xph.&period.DC:exph. (defaults to '&colon.')
+:row.
+:c.:xph.&amp.$PN:exph.
+:c.Page number
+:c.1 (always)
+:row.
+:c.:xph.&amp.$RB:exph.
+:c.Required blank
+:c.&amp.nbsp&semi.
+:row.
+:c.:xph.&amp.$TAB:exph.
+:c.Tab character
+:c.&rbl.
+:row refid=syssym temp.
+:c.Miscellaneous system symbols
+:row.
+:c.:xph.&amp.$IXB:exph.
+:c.&rbl.
+:c.A single blank
+:row.
+:c.:xph.&amp.$IXI:exph.
+:c.&rbl.
+:c.A null string
+:row.
+:c.:xph.&amp.$MCS:exph.
+:c.&rbl.
+:c.A single period ('.')
+:etable.
+:erev refid=r46.
+.*-----
+.cp
+:rev refid=r46.
+:h2.&amp.Symbol value attributes
+:erev refid=r46.
+:p.These are the &amp.symbol value attributes supported by
+&sysname..  For more information on their usage, see the
+:cit.&script. User's Guide:ecit..
+:table cols='8m *'
+       align='c l'
+       valign='t'
+       split=yes.
+:tcap.Supported &amp.symbol value attributes
+:thd.
+:c.Value Attribute
+:c.Description
+:ethd.
+:row.
+:c.:xph.&amp.E':exph.
+:c.Verifies existence of a symbol.  Returns either a :q.1:eq. or
+:q.0:eq. depending on whether or not the character string following
+:xph.&amp.E':exph. is a defined symbol.
+:row.
+:c.:xph.&amp.L':exph.
+:c.Determines the length of a symbol value or the number of
+characters in any character string.
+:row.
+:c.:xph.&amp.T':exph.
+:c.Analyzes the symbol type. Replaces the character string with
+an :q.:xph.N:exph.:eq. if the value is numeric or null, or a
+:q.:xph.C:exph.:eq. if the value contains nonnumeric data.
+:row.
+:c.:xph.&amp.U':exph.
+:c.Converts lowercase characters to uppercase.
+:row.
+:c.:xph.&amp.V':exph.
+:c.Returns the value of the symbol. Within &sysname.,
+&amp.V'&amp.:pv.name:epv. is equivalent to &amp.:pv.name:epv..
+:row.
+:c.:xph.&amp.W':exph.
+:c.Returns the width of a character string. Within &sysname.,
+&amp.W'&amp.:pv.name:epv. is equivalent to &amp.L'&amp.:pv.name:epv..
+:rev refid=r46.
+:row.
+:c.:xph.&amp.X':exph.
+:c.Converts a hexadecimal notation (may be the value of another symbol)
+to a character string :hp1.using the character coding of the platform
+on which &sysname. is currently running:ehp1. (ASCII if running on a PC,
+EBCDIC if running on a mainframe).  The :xph.&amp.$ASCI:exph. symbol
+is set to 1 (one) if running on an ASCII platform,
+otherwise the symbol is set to 0 (zero).
+:erev refid=r46.
+:etable.
+.*-----
+.cp
+:rev refid=r42.
+:h2.&script. control words
+:erev refid=r42.
+:table id=tsc refid=tsup4.
+:tcap.Supported &script. control words
+:tdesc.
+The :q.How?:eq. column contains an :q.S:eq. if the control word is
+supported via a Symbol table definition or an :q.I:eq. if the
+control word is supported via a &sysname. internal routine.
+:etdesc.
+:thd.
+:c.Control Word
+:c.How?
+:c.Comments
+:rev refid=r42.
+:c.Related &sysname. options
+:erev refid=r42.
+:ethd.
+:row.:c.&period.&period.&period.:pv.label:epv.:c.I
+:c.Both with and without a blank prior to the label name
+:row.:c.&period.AN:c.I
+:rev refid=r45.
+:row.:c.&period.BF:c.I
+:c.Begins the specified font.
+:c.:spotref refid=fontag2.
+:erev refid=r45.
+:row.:c.&period.BL:c.S
+:c.Mapped to new-paragraph.  When :xph.SOURCE=SCRIPT:exph., a
+:xph.&period.BL:exph. is automatically generated and executed
+whenever a blank line is processed.
+:row.:c.&period.BR:c.S
+:c.Mapped to new-line
+:row.:c.&period.BX:c.S
+:c.Mapped to a horizontal-rule
+:row.:c.&period.CB:c.S
+:c.Mapped to new-paragraph
+:row.:c.&period.CE:c.I
+:c.Text is centered either by using monospaced leading
+blanks:fnref refid=fnline. or by using the &html
+:xph.&lt.CENTER&gt.:exph. tag. The :spotref refid=centert.
+specifies which technique is used.
+:rev refid=r42.
+:c.:spotref refid=center2. and
+:spotref refid=linewi2.
+:erev refid=r42.
+:row.:c.&period.CP:c.S
+:c.Mapped to new-paragraph
+:row.:c.&period.CS:c.I
+:c.
+:row.:c.&period.CT:c.S
+:c.Text included as-is.
+:rev refid=r45.
+:row.:c.&period.DC:c.I
+:c.Only the :xph.CW:exph. and :xph.GML:exph. operands are supported.
+For :xph.GML:exph., if less than two values are specified or if
+:q.:xph.OFF:exph.:eq. is specified for either of the first two
+values, error message 456 is issued and the control word is ignored.
+:erev refid=r45.
+:row.:c.&period.DD:c.I
+:c.The :xph.LIB:exph. operand (whether explicitly specified or
+defaulted) is supported on all platforms.  On MVS, the
+:xph.DD:exph. and :xph.DSN:exph. operands are also supported.
+If the :xph.TERM:exph. operand is specified, the entire control word
+is ignored.
+:row.:c.&period.DM:c.I
+:c.Only the following two formats are supported:
+:xmp.
+  &period.dm name /stmt1/stmt2/ ... /stmtx&lbrk./&rbrk.
+ 
+  &period.dm name on
+  stmt1
+  stmt2
+   ....
+  stmtx
+  &period.dm off
+:exmp.
+:p.Parameters on the macro (e.g. ".name parm1 parm2") and
+referencing them within the macro
+(e.g. &amp.*, &amp.*0, &amp.*1, &amp.*2 ...) is also supported.
+:row.:c.&period.DV:c.I
+:row.:c.&period.EF:c.I
+:rev refid=r44.
+:c.The :xph.CLOSE:exph. option is supported.
+:erev refid=r44.
+:row.:c.&period.EL:c.I
+:row.:c.&period.FN:c.I
+:c.:xph..FN ON:exph. mapped to :xph.&colon.FN.:exph.,
+:xph..FN OFF:exph. mapped to :xph.&colon.EFN.:exph..
+:xph..FN&rbl.LEADER:exph. places 16 dashes on a separate line
+.* :p.Not supported if :xph.SOURCE=SCRIPTONLY:exph.
+:row.:c.&period.FO:c.I
+:c.:xph..FO OFF:exph. mapped to &pre
+.br;:xph..FO ON:exph. mapped to &epre
+.br;:xph..FO CENTER:exph. is handled according to the
+:spotref refid=centert.
+.br;:xph..FO LEFT:exph. and :xph..FO RIGHT:exph. :q.terminate:eq. a
+previous :xph..FO:exph. control word
+.br;all other operands are ignored.
+:rev refid=r42.
+:c.:spotref refid=center2.
+:erev refid=r42.
+:row.:c.&period.GO:c.I
+:c.Branching only to a label :hp1.later:ehp1. in the
+file is supported.
+:q.:xph.&period.GO:exph.:eq. control words branching to a label
+:hp1.earlier:ehp1. in the file are ignored.
+See additional comments in :hdref refid=caveat..
+:p.The alternate formats
+:q.:xph.&period.GOTO:exph.&rbl.:pv.label:epv.:eq. and
+:q.:xph.&period.GO&rbl.TO:exph.&rbl.:pv.label:epv.:eq.
+are also recognized.
+:row.:c.&period.H0, &period.H1, &period.H2, &period.H3, &period.H4,
+&period.H5 and &period.H6:c.I
+:c.Mapped to their GML equivalent (&colon.H:pv.x:epv..).
+:row.:c.&period.IF:c.I
+:row.:c.&period.IM:c.I
+:c.Passing of positional tokens not supported.
+:rev refid=r42.
+:c.:spotref refid=imbfte2.
+:erev refid=r42.
+:row.:c.&period.LB:c.I
+:row.:c.&period.LI:c.I
+:row.:c.&period.MG:c.I
+:row.:c.&period.NF:c.I
+:row.:c.&period.OR:c.I
+:row.:c.&period.PA:c.S
+:c.Mapped to double new-paragraph
+:rev refid=r45.
+:row.:c.&period.PF:c.I
+:c.Restores the previous font.
+:c.:spotref refid=fontag2.
+:row.:c.&period.PI:c.I
+:c.Only index terms 1 to 4 are used.
+The :xph.REF:exph., :xph.ORDER:exph., :xph.START:exph.,
+:xph.END:exph. and :xph.KEY:exph. attributes are ignored.
+:c.:spotref refid=indexre. and :spotref refid=deftex2.
+(:xph.DEFTEXT.INDEXENTRYL=:exph. and :xph.DEFTEXT.INDEXENTRYR=:exph.)
+:erev refid=r45.
+:row.:c.&period.PP:c.S
+:row.:c.&period.QQ:c.I
+:row.:c.&period.QU:c.I
+:row.:c.&period.RC:c.I
+:rev refid=r46.
+:c.Formats supported:
+.br;&period.RC&rbl.:pv.n:epv.&rbl.:pv.c:epv.
+.br;&period.RC&rbl.:pv.n:epv.&rbl.ON
+.br;&period.RC&rbl.:pv.n:epv.&rbl.OFF
+.br;&period.RC&rbl.:pv.n:epv.&rbl.ON/OFF
+:erev refid=r46.
+:rev refid=r42.
+:c.:spotref refid=revtag2.
+:erev refid=r42.
+:row.:c.&period.RE:c.I
+:c.See the description of :xph.&period.SA:exph.
+for which values are saved/restored.
+:row.:c.&period.RV:c.I
+:row.:c.&period.SA:c.I
+:c.The status of the following control words are saved:
+:xph.&period.CE:exph.,
+:rev refid=r45.
+:xph.&period.DC:exph.,
+:erev refid=r45.
+:xph.&period.FO:exph.,
+:xph.&period.TI:exph.,
+:xph.&period.TR:exph.,
+:xph.&period.UC:exph.,
+:xph.&period.UP:exph. and
+:xph.&period.US:exph.
+:row.:c.&period.SE:c.I
+:c.Formats supported:
+.br;&period.SE&rbl.:pv.symname:epv.&rbl.OFF
+.br;&period.SE&rbl.:pv.symname:epv.&rbl.&lbrk.=&rbrk.&rbl.':pv.string:epv.'
+.br;&period.SE&rbl.:pv.symname:epv.&rbl.&lbrk.=&rbrk.&rbl.&cont.
+INDEX&rbl.:pv.string1&rbl.string2:epv.
+.br;&period.SE&rbl.:pv.symname:epv.&rbl.&lbrk.=&rbrk.&rbl.&cont.
+SUBSTR&rbl.:pv.string&rbl.start&rbl.stop:epv.
+.br;&period.SE&rbl.:pv.symname:epv.&rbl.&lbrk.=&rbrk.&rbl.&cont.
+:pv.arithmetic-expression:epv.
+:row.:c.&period.SI:c.I
+:c.Mapped to :xph.&colon.ARTWORK NAME=:exph.:pv.name:epv..
+:row.:c.&period.SK:c.I
+:row.:c.&period.SP:c.I
+:row.:c.&period.SU:c.I
+:c.The :q.:xph.ON:exph.:eq. and
+:q.:xph.OFF:exph.:eq. operands are supported,
+all others are treated as if :q.:xph.ON:exph.:eq..
+:row.:c.&period.SX:c.I
+:c.Implemented using a monospaced font on a line whose width is
+specified using the :spotref refid=linewid.
+:rev refid=r42.
+:c.:spotref refid=linewi2.
+:erev refid=r42.
+:row.:c.&period.TC:c.S
+:c.Mapped to &colon.TOC.
+:row.:c.&period.TD:c.I
+:row.:c.&period.TH:c.I
+:row.:c.&period.TI:c.I:c.
+:rev refid=r45.
+:c.See the :xph.&colon.XLATEI.:exph. symbol table statement
+in :hdref refid=sxlt.
+:erev refid=r45.
+:row.:c.&period.TR:c.I:c.
+:rev refid=r45.
+:c.See the :xph.&colon.XLATEO.:exph. symbol table statement
+in :hdref refid=sxlt.
+:erev refid=r45.
+:row.:c.&period.TY:c.I
+:row.:c.&period.UC:c.I
+:row.:c.&period.UP:c.I
+:row.:c.&period.US:c.I
+:etable.
+:fn id=fnline.
+The :hp1.number:ehp1. of leading blanks is determined by the line
+width as specified by the :spotref refid=linewid..
+:efn.
+.sp 2
+.cp 9
+:p.:hp2.Control words not applicable or not supported; will be
+ignored:ehp2.
+:p.&period.AA, &period.AP, &period.AR, &period.BC,
+&period.BM, &period.CC, &period.CD, &period.CL, &period.CM,
+&period.DA, &period.DF, &period.DH, &period.DL,
+&period.DR, &period.DS, &period.DU, &period.EC, &period.EM,
+&period.ES, &period.FL, &period.FV, &period.GR, &period.GS,
+&period.HR, &period.HW, &period.HY, &period.IC, &period.IE,
+&period.IL, &period.IN, &period.IR, &period.IS, &period.IT,
+&period.IX, &period.KP, &period.LL, &period.LO, &period.LS,
+&period.LT, &period.LY, &period.MC, &period.ME, &period.MS,
+&period.NL, &period.NV, &period.OC, &period.OF,
+&period.PL, &period.PM, &period.PN, &period.PT,
+&period.PW, &period.PX, &period.RD, &period.RF, &period.RH,
+&period.RI, &period.RN, &period.SB, &period.SC,
+:rev refid=r45.
+&period.SD,
+:erev refid=r45.
+&period.SO,
+&period.SS, &period.SV, &period.TA, &period.TE, &period.TM,
+&period.TP, &period.TS, &period.TU, &period.UD, &period.UN,
+&period.UW, &period.VR, &period.WF, &period.WS and &period.WZ
+.*-----
+.cp
+:h2.&bm. and GML macros
+:table id=tta refid=tsup.
+:tcap.Supported &bm. and GML macros
+:tdesc.
+The :q.How?:eq. column contains an :q.S:eq. if the macro is
+supported via a Symbol table definition or an :q.I:eq. if the macro
+is supported via a &sysname. internal routine.
+:etdesc.
+:thd.
+:c.Macro
+:c.How?
+:c.Comments
+:ethd.
+:row.:c.&period.CONFIG:c.I
+:row.:c.&period.GETW:c.I
+:c.All operands supported except :xph.GMLTYPE=:exph. and
+:xph.SCALE=:exph..
+:row.:c.&period.INWIDTH:c.I
+:row.:c.&period.NAMECTR:c.I
+:c.All functions supported, but the :xph.GMLTYPE=:exph.,
+:xph.SIZE=:exph. and :xph.CTRTYPE=:exph. operands are ignored
+:row.:c.&period.NAMEFILE:c.I
+:c.In addition to the required :xph.NAME=:exph.,
+the :xph.CMS=:exph.,
+:xph.TSOFULL=:exph. and :xph.TSOPART=:exph.
+operands are supported
+:row.:c.&period.NAMEIT:c.I
+:c.All operands supported except :xph.SIZE=:exph.
+:row.:c.&period.SETDVCF:c.I
+:row.:c.&period.SETUP:c.I
+:row.:c.&period.TABRACK:c.I
+:c.The width of the line is determined by the value of the
+:spotref refid=linewid.
+:row.:c.&period.WHEN:c.I
+:row.:c.&period.usermacro:c.I
+:c.Macro defined previously using the :xph.&period.dm:exph. control
+word.  Parameters on the macro
+(e.g. :xph..name&rbl.parm1&rbl.parm2:exph.) and referencing them
+within the macro
+(e.g. &amp.*, &amp.*0, &amp.*1, &amp.*2 ...) is also supported.
+:etable.
+.sp 2
+.cp 5
+:p.:hp2.Macros not supported or not applicable; will be
+ignored:ehp2.
+:p.&period.BLOCK, &period.BOOKMARK, &period.CCPTOC, &period.CCTOC,
+&period.GETREF, &period.GETWMAX, &period.GETWSUM, &period.INCLUDE,
+&period.LAYOUT, &period.MOD, &period.MODSET, &period.MODTRAP,
+&period.NAMEEPS, &period.NAMEF, &period.NAMESTYL, &period.PGCHECK,
+&period.TABREAK and &period.USING
+.*-----
+.cp 45
+:rev refid=r42.
+:h2.&bm. and GML tags
+:erev refid=r42.
+:table refid=tsup4.
+:tcap.Supported &bm. and GML tags
+:tdesc.
+The :q.How?:eq. column contains an :q.S:eq. if the tag is supported
+via a Symbol table definition or an :q.I:eq. if the tag is supported
+via a &sysname. internal routine.
+:etdesc.
+:thd.
+:c.Tag
+:c.How?
+:c.Comments (fully supported unless specified otherwise)
+:rev refid=r42.
+:c.Related &sysname. options
+:erev refid=r42.
+:ethd.
+:row.:c.&colon.ABBREV.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.ABBREV=:exph.)
+:erev refid=r42.
+:row.:c.&colon.ABSTRACT.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.ABSTRACT=:exph.)
+:erev refid=r42.
+:row.:c.&colon.ADDRESS.:c.I:c.
+:rev refid=r42.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.ALINE.:c.S
+:row.:c.&colon.ANNOT.:c.I:c.
+:rev refid=r42.
+:c.:spotref refid=annot2.,
+:spotref refid=settag2.
+and :spotref refid=sysvra2.
+:erev refid=r42.
+:row.:c.&colon.ANSREF:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.QANSREF=:exph.)
+:erev refid=r42.
+:row.:c.&colon.ANSWER:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.REFID=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=qanda.
+:row.:c.&colon.APL.:c.S
+:row.:c.&colon.APPENDIX.:c.I:c.
+:rev refid=r42.
+:c.:spotref refid=aphd12., :spotref refid=aphd1x2.,
+:spotref refid=deftex2. (:xph.DEFTEXT.APPENDIX=:exph.) and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.ARTALT.:c.I
+:c.The comments for :xph.&colon.ARTWORK:exph.
+apply equally to this tag also.
+:row.:c.&colon.ARTDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.ARTWORK.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ALIGN=:exph.,
+:xph.LABEL=:exph.,
+:xph.NAME=:exph.,
+:xph.REFID=:exph.,
+:xph.RULE:exph. and
+:xph.RUNIN:exph.
+:erev refid=r42.
+:p.If :xph.RULE:exph. specified or :xph.NAME=:exph. omitted,
+then the value for the :xph.HRTAG.1=:exph. option
+(normally :xph.&lt.HR&gt.:exph.) is inserted.
+If :xph.CENTERTAG=YES:exph. and :xph.HTML=3:exph.
+:rev refid=R42.
+or :xph.HTML=4:exph.
+:erev refid=R42.
+is specified, then the :xph.ALIGN=CENTER:exph. and
+:xph.ALIGN=RIGHT:exph. attributes are also supported by enclosing
+the image reference with the :xph.&lt.CENTER&gt. and
+&lt./CENTER&gt.:exph. &html. tags.
+:rev refid=r42.
+:c.:spotref refid=artlin2.,
+:spotref refid=artsho2.,
+:spotref refid=arttyp2. and
+:spotref refid=hrtag2.
+:erev refid=r42.
+:row.:c.&colon.ASMLIST.:c.S
+:row.:c.&colon.ATTACH.:c.S
+:row.:c.&colon.AUTHOR.
+:rev refid=r42.
+:c.I
+:c.Attributes supported: :xph.TEXT=:exph.
+:erev refid=r42.
+:row.:c.&colon.BACKM.:c.I
+:row.:c.&colon.BIBLIOG.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.BIBLIOG=:exph.)
+:erev refid=r42.
+:row.:c.&colon.BIN.:c.S
+:row.:c.&colon.BINDNUM.
+:rev refid=r42.
+:c.I
+:c.Displayed as part of the title page, since &html. has no
+:q.back cover:eq. concept
+:erev refid=r42.
+:row.:c.&colon.BLANK:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ANS=:exph. and :xph.WIDTH=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=qanda.
+:row.:c.&colon.BODY.:c.I
+:row.:c.&colon.C.:c.I
+:row.:c.&colon.CAUTION.:c.S
+:rev refid=r42.
+:row.:c.&colon.CGDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:erev refid=r42.
+:row.:c.&colon.CGRAPHIC.
+:rev refid=r42.
+:c.I
+:c.Attributes supported:
+:xph.SCALE=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.CHAR.:c.S
+:row.:c.&colon.CHOICE:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=qanda.
+:row.:c.&colon.CIT.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.DOCID=:exph.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.CODE.
+:rev refid=R42.:c.I:erev refid=R42.
+:row.:c.&colon.CODEL.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COMPACT:exph.,
+:xph.DEST=:exph.,
+:xph.MODULE=:exph.,
+:xph.NUMBYTES=:exph.,
+:xph.ORESP=:exph.,
+:xph.PRESP=:exph.,
+:xph.PROBD=:exph.,
+:xph.REFID=:exph.
+:xph.SCALE=:exph.,
+:xph.SEVERITY=:exph.,
+:xph.SPRESP=:exph.,
+:xph.STYLE=:exph.,
+:xph.SYSACT=:exph.,
+:xph.URESP=:exph. and
+:xph.XPL=:exph.
+:erev refid=r42.
+:p.:xph.STYLE=RULE:exph. causes the value specified for the
+:xph.HRTAG.4=:exph. option (normally a :xph.&lt.HR&gt.:exph.) to be
+inserted around each :xph.&colon.CODE.:exph. block.
+:rev refid=r42.
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.,
+:spotref refid=deftex2. (:xph.DEFTEXT.MC:pv.xxx:epv.:exph.),
+:spotref refid=hrtag2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.COPREXT.:c.I
+:row.:c.&colon.COPRNOTE.:c.I
+:row.:c.&colon.DANGER.:c.S
+:row.:c.&colon.DATE.:c.I
+:row.:c.&colon.DD.:c.I
+:row.:c.&colon.DDHD.:c.I
+:row.:c.&colon.DELIM.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.OPT:exph. and :xph.REQ:exph.
+:erev refid=r42.
+:row.:c.&colon.DENTRY.:c.I
+:row.:c.&colon.DEST.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCDEST=:exph.)
+:erev refid=r42.
+:row.:c.&colon.DIALDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.DIALOG.:c.I
+:rev refid=R42.
+:c.Attributes supported:
+:xph.REFID=:exph.,
+:xph.SCALE=:exph.,
+:xph.SYS=:exph. and
+:xph.USER=:exph.
+.br;For &html. 2 output, this is mapped to &html.'s :xph.&lt.DL
+COMPACT&gt.:exph. tag; otherwise an &html. table is created.
+:c.:spotref refid=dialog2. :fnref refid=dpopt.,
+:spotref refid=dialta2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.DIRDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.DIRECT.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ALIGN=:exph.,
+:xph.CHUNK:exph.,
+:xph.COLS=:exph.,
+:xph.COMPACT:exph.,
+:xph.EXPAND:exph.,
+:xph.REFID=:exph. and
+:xph.SCALE=:exph.
+.br;Implemented using a monospaced font on a line 78 characters wide.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.DIRHDR.:c.I
+:row.:c.&colon.DIRSUB.:c.I
+:row.:c.&colon.DL.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COMPACT:exph., :xph.REFID=:exph. and :xph.TERMHI=:exph.
+:c.:spotref refid=dlfmt2. and
+:spotref refid=dltag2.
+:erev refid=r42.
+:row.:c.&colon.DLDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.DOCNUM.
+:rev refid=r42.
+:c.I
+:c.Attributes supported:
+:xph.LEVEL=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.DOCNUM=:exph.)
+:erev refid=r42.
+:row.:c.&colon.DOCPROF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.APPHD1=:exph.,
+:xph.APPHD1X=:exph.,
+:xph.BODYHD0=:exph.,
+:xph.BODYHD0X=:exph.,
+:xph.BODYHD1=:exph.,
+:xph.BODYHD1X=:exph.,
+:xph.DIALOG=:exph.,
+:xph.FBC=:exph.,
+:xph.FTSEP=:exph.,
+:xph.HEADNUM=:exph.,
+:xph.OLSEQ=:exph.,
+:xph.PTOC=:exph.,
+:xph.QRESET=:exph.,
+:xph.SCREEN=:exph. and
+:xph.TOC=:exph.
+:c.All supported attributes are also available as
+individual &sysname. options.
+:erev refid=r42.
+:row.:c.&colon.DT.:c.I
+:row.:c.&colon.DTHD.:c.I
+:row.:c.&colon.FIG.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.CONCAT=:exph.,
+:xph.FRAME=:exph.,
+:xph.ID=:exph.,
+:xph.REFID=:exph.,
+:xph.SCALE=:exph.,
+:xph.SHADE=:exph. and
+:xph.WIDTH=PAGE:exph.
+:erev refid=r42.
+:p.When generating HTML 2:  if :xph.FRAME=NONE:exph., the figure is
+preceded and followed by a blank line, otherwise the figure is
+preceded and followed by the value specified for the
+:xph.HRTAG.2=:exph. option (normally :xph.&lt.HR&gt.:exph.).
+:p.When generating HTML 3 or higher:  the figure is enclosed within
+a single-row, single-cell table (with BORDER turned on if
+:xph.FRAME=NONE:exph. is :hp1.not:ehp1. specified)
+:rev refid=r42.
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.,
+:spotref refid=deftex2. (:xph.DEFTEXT.FIGURE=:exph.),
+:spotref refid=figcpl2.,
+:spotref refid=hrtag2.,
+:spotref refid=settag2.
+and :spotref refid=shade2.
+:erev refid=r42.
+:row.:c.&colon.FIGCAP.:c.I
+:row.:c.&colon.FIGDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.FIGDESC.:c.S
+:row.:c.&colon.FIGLIST.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.FIGLIST=:exph.),
+:spotref refid=fbc2. :fnref refid=dpopt.,
+:spotref refid=ftlink2.,
+:spotref refid=ftsep2. :fnref refid=dpopt.,
+:spotref refid=settag2. and
+:spotref refid=tfigl2.
+:erev refid=r42.
+:row.:c.&colon.FIGREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.FILENUM.
+:c.:rev refid=r42.I
+:c.Displayed as part of the title page, since &html. has no
+:q.back cover:eq. concept
+:erev refid=r42.
+:row.:c.&colon.FN.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.CALLOUT=:exph. and :xph.ID=:exph.
+:erev refid=r42.
+:p.All footnotes are displayed at the end of the &html. file.
+(If the output &html. file is being :q.split:eq. into multiple
+output files, footnotes accumulated within each file are shown
+at the end of that file.)
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.FOOTNOTES=:exph.),
+:spotref refid=fnlink2.,
+:spotref refid=fntag2.,
+:spotref refid=hrtag2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.FNREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.FRAGMENT.:c.I
+:row.:c.&colon.FRAGREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.OPT:exph. and :xph.REQ:exph.
+:erev refid=r42.
+:row.:c.&colon.FRONTM.:c.I
+:row.:c.&colon.GD.:c.I
+:row.:c.&colon.GDG.:c.I
+:row.:c.&colon.GDOC.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COPYR=:exph. and :xph.SEC=:exph.
+:erev refid=r42.
+:row.:c.&colon.GL.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.COMPACT:exph.
+:c.:spotref refid=glfmt2. and
+:spotref refid=gltag2.
+:erev refid=r42.
+:row.:c.&colon.GLOSSARY.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.GLOSSARY=:exph.)
+:erev refid=r42.
+:row.:c.&colon.GROUP.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.CHOICE:exph.,
+:xph.COMPOSITE:exph.,
+:xph.DEF:exph.,
+:xph.OPT:exph.,
+:xph.REQ:exph. and
+:xph.SEQ:exph.
+:erev refid=r42.
+:row.:c.&colon.GRPSEP.:c.S
+:row.:c.&colon.GT.:c.I
+:row.:c.&colon.H0., &colon.H1.,
+&colon.H2., &colon.H3., &colon.H4. ... &colon.H18.,
+&colon.H19. and &colon.H20.
+:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph.,
+:xph.NUM=:exph. and
+:xph.REF=:exph.
+:erev refid=r42.
+.br;If &bmgr.'s :xph.RES=:exph. attribute is encountered, an &html.
+:q.anchor:eq. is also generated using the exact same name as that
+specified for the :xph.RESID:exph. attribute.
+:rev refid=r42.
+:c.:spotref refid=bhd02. :fnref refid=dpopt.,
+:spotref refid=bhd0x2. :fnref refid=dpopt.,
+:spotref refid=bhd12. :fnref refid=dpopt.,
+:spotref refid=bhd1x2. :fnref refid=dpopt.,
+:spotref refid=fbc2. :fnref refid=dpopt.,
+:spotref refid=headnu2. :fnref refid=dpopt.,
+.* :spotref refid=hrtag2.,
+:spotref refid=htag2.,
+:spotref refid=ptoc2. :fnref refid=dpopt.,
+:spotref refid=settag2. and
+:spotref refid=toc2. :fnref refid=dpopt.
+:erev refid=r42.
+:row.:c.&colon.HDREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.HEX.:c.S
+:row.:c.&colon.HP0.:c.S
+:c.No &html. equivalent; will be ignored
+:row.:c.&colon.HP1.:c.S:c.Italics
+:row.:c.&colon.HP2.:c.S:c.Bold
+:row.:c.&colon.HP3.:c.S:c.Bold Italic
+:row.:c.&colon.HP4.:c.S:c.Monospaced font
+:row.:c.&colon.HP5.:c.S:c.Underlined
+:row.:c.&colon.HP6.:c.S:c.Underlined Italic
+:row.:c.&colon.HP7.:c.S:c.Underlined Bold
+:row.:c.&colon.HP8.:c.S:c.Underlined Bold Italic
+:row.:c.&colon.HP9.:c.S:c.Underlined monospaced font
+:row.:c.&colon.IH1.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.CIX1=:exph., :xph.CIX2=:exph. ... :xph.CIX9=:exph.,
+:xph.ID=:exph.,
+:xph.SEE=:exph. and
+:xph.SEEID=:exph.
+:erev refid=r42.
+:row.:c.&colon.IH2.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph.,
+:xph.REFID=:exph.,
+:xph.SEE=:exph. and
+:xph.SEEID=:exph.
+:erev refid=r42.
+:row.:c.&colon.IH3.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph. and
+:xph.REFID=:exph.
+:erev refid=r42.
+:rev refid=r45.
+:c.:spotref refid=indexre. and :spotref refid=deftex2.
+(:xph.DEFTEXT.INDEXENTRYL=:exph. and :xph.DEFTEXT.INDEXENTRYR=:exph.)
+:erev refid=r45.
+:row.:c.&colon.I1.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.CIX1=:exph., :xph.CIX2=:exph. ... :xph.CIX9=:exph.,
+:xph.ID=:exph. and
+:xph.PG=:exph. (:xph.PG=END:exph. causes the tag to be ignored).
+:erev refid=r42.
+:row.:c.&colon.I2.-&colon.I3.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph.,
+:xph.PG=:exph. (:xph.PG=END:exph. causes the tag to be ignored) and
+:xph.REFID=:exph..
+:erev refid=r42.
+:rev refid=r45.
+:c.:spotref refid=indexre. and :spotref refid=deftex2.
+(:xph.DEFTEXT.INDEXENTRYL=:exph. and :xph.DEFTEXT.INDEXENTRYR=:exph.)
+:erev refid=r45.
+:row.:c.&colon.IBMLPS.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COPYR=:exph. and :xph.SEC=:exph.
+:erev refid=r42.
+:row.:c.&colon.INDEX.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.INDEX:pv.xxx:epv.=:exph.),
+:spotref refid=index2.,
+:spotref refid=indxta2.,
+:spotref refid=indxto2. and
+:spotref refid=indxtt2.
+:erev refid=r42.
+:row.:c.&colon.IREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.PG=:exph. (:xph.PG=END:exph. causes the tag to be ignored) and
+:xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.KWD.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.DEF:exph.,
+:xph.OPT:exph. and
+:xph.REQ:exph.
+:erev refid=r42.
+:row.:c.&colon.L.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.LID=:exph.
+:erev refid=r42.
+.br;See :hdref refid=interd. for more information.
+:row.:c.&colon.LBLBOX.:c.I
+:c.If generating &html. 2 output,
+the width of the box header and trailer line is defined by the
+value of the :spotref refid=linewid..
+For &html. 3 or higher, a single-cell, two-row table is generated.
+:rev refid=r42.
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.,
+:spotref refid=linewi2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.LDESC.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.DOCID=:exph.,
+:xph.OBJECT=:exph. and
+:xph.OBJTYPE=:exph.
+:erev refid=r42.
+:p.For the :xph.OBJTYPE=:exph. attribute, the :xph.HEAD:exph.,
+:xph.BOOK:exph., :xph.FIG:exph., :xph.TABLE:exph. and
+:xph.SPOT:exph. values are supported; all others are ignored.
+:p.The :xph.DOCID=:exph. attribute points to the &sysname.
+:xph.DOCDESC=:exph. :hp1.option:ehp1., not the
+:xph.&colon.DOCDESC:exph. :hp1.tag:ehp1..
+See :hdref refid=interd. for more information.
+:rev refid=r42.
+:c.:spotref refid=docdes2.
+:erev refid=r42.
+:row.:c.&colon.LEDI.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph.,
+:xph.TEXT=:exph. and all the category-related attributes.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.LERS:pv.xxxx:epv.:exph.)
+:erev refid=r42.
+:row.:c.&colon.LEGEND.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.LEGEND=:exph.)
+:erev refid=r42.
+:row.:c.&colon.LEN.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=hrtag2.
+:erev refid=r42.
+:row.:c.&colon.LERS.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.LEDIHD=:exph.,
+:xph.LEHD=:exph.,
+:xph.REFID=:exph.,
+:xph.SEP=:exph.
+and all the category-related attributes.
+:erev refid=r42.
+:p.If :xph.SEP=RULE:exph. attribute specified, then the value for
+the :xph.HRTAG.10=:exph. option (normally :xph.&lt.HR&gt.:exph.) is
+inserted prior to each &colon.LEN tag.
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.LERS:pv.xxxx:epv.=:exph.),
+:spotref refid=hrtag2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.LERSDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.LI.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph.
+:erev refid=r42.
+:row.:c.&colon.LIBRARY.:c.I
+:c.See also :hdref refid=doctit..
+:c.:spotref refid=title2.
+:row.:c.&colon.LINES.:c.I:c.
+:rev refid=r42.
+:c.:spotref refid=lines2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.LIREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:c.:spotref refid=liref2.
+:erev refid=r42.
+:row.:c.&colon.LITDATA:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.NAME=:exph.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.LP.:c.S
+:row.:c.&colon.LQ.:c.S
+:row.:c.&colon.MATCH.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ANSID=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=qanda.
+:row.:c.&colon.MCDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.MD.:c.S
+:row.:c.&colon.MODULE.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCMODULE:exph.)
+:erev refid=r42.
+:row.:c.&colon.MSG.
+:rev refid=R42.:c.I:erev refid=R42.
+:row.:c.&colon.MSGL.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COMPACT:exph.,
+:xph.DEST=:exph.,
+:xph.MODULE=:exph.,
+:xph.NUMBYTES=:exph.,
+:xph.ORESP=:exph.,
+:xph.PRESP=:exph.,
+:xph.PROBD=:exph.,
+:xph.REFID=:exph.
+:xph.SCALE=:exph.
+:xph.SEVERITY=:exph.,
+:xph.SPRESP=:exph.,
+:xph.STYLE=:exph.,
+:xph.SYSACT=:exph.,
+:xph.URESP=:exph. and
+:xph.XPL=:exph.
+:erev refid=r42.
+:p.:xph.STYLE=RULE:exph. causes the value specified for the
+:xph.HRTAG.4=:exph. option (normally a :xph.&lt.HR&gt.:exph.) to be
+inserted around each :xph.&colon.MSG.:exph. block.
+:rev refid=r42.
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.,
+:spotref refid=deftex2. (:xph.DEFTEXT.MC:pv.xxx:epv.:exph.),
+:spotref refid=hrtag2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.MSGNO.
+:rev refid=R42.:c.I:erev refid=R42.
+:row.:c.&colon.MV.:c.S
+:row.:c.&colon.NOTE.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.TEXT=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.NOTE=:exph.)
+:erev refid=r42.
+:row.:c.&colon.NOTEL.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COMPACT:exph. and :xph.TEXT=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.NOTEL=:exph.),
+:spotref refid=notelt2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.NOTICES.:c.S
+:row.:c.&colon.NT.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.TEXT=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.NT=:exph.) and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.NUMBYTES.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCNUMBYTES:exph.)
+:erev refid=r42.
+:row.:c.&colon.OL.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.COMPACT:exph.
+:c.:spotref refid=olseq2. :fnref refid=dpopt.,
+:spotref refid=oltag2.
+:erev refid=r42.
+:row.:c.&colon.OPER.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.DEF:exph.,
+:xph.OPT:exph. and
+:xph.REQ:exph.
+:erev refid=R42.
+:row.:c.&colon.ORESP.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCORESP:exph.)
+:erev refid=r42.
+:row.:c.&colon.P.:c.S
+:row.:c.&colon.PARML.:c.S
+:rev refid=r42.
+:c.Attributes supported: :xph.COMPACT.:exph.
+:erev refid=r42.
+.br;Mapped to &html.'s :xph.&lt.DL&gt.:exph. tag.
+:row.:c.&colon.PARTNUM.
+:rev refid=r42.
+:c.I
+:c.Displayed as part of the title page, since &html. has no
+:q.back cover:eq. concept
+:erev refid=r42.
+:row.:c.&colon.PD.:c.S
+:c.Mapped to &html.'s :xph.&lt.DD&gt.:exph. tag
+:row.:c.&colon.PGMNUM
+:c.:rev refid=r42.I:erev refid=r42.
+:row.:c.&colon.PK.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.DEF:exph.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.PREFACE.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.PREFACE=:exph.)
+:erev refid=r42.
+:row.:c.&colon.PRESP.
+:rev refid=R42.:c.I:erev refid=R42.:c.
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCPRESP:exph.)
+:erev refid=r42.
+:row.:c.&colon.PROBD.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCPROBD:exph.)
+:erev refid=r42.
+:row.:c.&colon.PRTLOC.
+:c.:rev refid=r42.I
+:c.Displayed as part of the title page, since &html. has no
+:q.back cover:eq. concept
+:erev refid=r42.
+:row.:c.&colon.PSC.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.OMIT=:exph.,
+:xph.PROC=:exph. and
+:xph.XPROC=:exph.
+.br;See additional comments in :hdref refid=caveat..
+:c.:spotref refid=html2. and
+:spotref refid=psc2.
+:erev refid=r42.
+:row.:c.&colon.PT.:c.S
+:c.Mapped to &html.'s :xph.&lt.DT&gt.:exph. tag
+:row.:c.&colon.PTOC.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.LEVELS=:exph.
+:erev refid=r42.
+.br;The tag is ignored if the :xph.MANUAL:exph. attribute
+is specified.
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.PTOC:pv.xx:epv.=:exph.),
+:spotref refid=ptoc2. :fnref refid=dpopt.,
+:spotref refid=settag2.,
+:spotref refid=tocc2.,
+:spotref refid=tocind2.,
+:spotref refid=tocsup2. and
+:spotref refid=toctag2.
+:erev refid=r42.
+:row.:c.&colon.PV.:c.S
+:row.:c.&colon.Q.:c.S
+:row.:c.&colon.QITEM.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ANS=:exph.
+:erev refid=r42.
+:c.See also :hdref refid=qanda.
+:row.:c.&colon.QREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.QUALIF.:c.I
+:c.The width of the qualification header and trailer line is defined
+by the value of the :spotref refid=linewid..
+:rev refid=r42.
+:c.:spotref refid=linewi2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.QUESTION:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.DINGBAT=:exph.,
+:xph.FORM=:exph. and
+:xph.ID=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=qanda..
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.QQREF=:exph.),
+:spotref refid=qreset2. :fnref refid=dpopt.,
+:spotref refid=ques2. and
+:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.RELEASE.:c.I
+:row.:c.&colon.REPSEP.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.OPT:exph. and :xph.REQ:exph.
+:erev refid=r42.
+:row.:c.&colon.REV.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph.
+:c.:spotref refid=revtag2.
+:erev refid=r42.
+:row.:c.&colon.REVISION.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.CHAR=:exph., :xph.ID=:exph. and :xph.RUN=:exph.
+:c.:spotref refid=revtag2.
+:erev refid=r42.
+:row.:c.&colon.RK.:c.S
+:row.:c.&colon.ROW.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph. and :xph.TEMP:exph.
+:erev refid=r42.
+:row.:c.&colon.SAFETY.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.SAFETY=:exph.)
+:erev refid=r42.
+:row.:c.&colon.SCHDATE.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ACTHD=:exph.,
+:xph.CMTHD=:exph.,
+:xph.CMTSIZE=:exph.,
+:xph.LISTREF=:exph. and
+:xph.SCALE=:exph.
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.
+and :spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.SCHDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.SCHEDULE.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ACTHD=:exph.,
+:xph.CMTHD=:exph.,
+:xph.CMTSIZE=:exph.,
+:xph.LISTREF=:exph. and
+:xph.REFID=:exph.
+:erev refid=r42.
+.br;Schedule :hp1.tables:ehp1. are supported, but not schedule
+:hp1.charts:ehp1.
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.SCHEDACTHD=:exph.)
+:erev refid=r42.
+:row.:c.&colon.SCHI.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.CMT=:exph.
+:erev refid=r42.
+:row.:c.&colon.SCRDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.SCREEN.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph.,
+:xph.SCALE=:exph. and
+:xph.WIDTH=:exph.
+:erev refid=r42.
+.br;The width of the screen image is determined by the
+:xph.WIDTH=:exph. attribute, or, if omitted, the value of the
+:spotref refid=linewid..
+:rev refid=r42.
+:c.:spotref refid=linewi2.,
+:spotref refid=settag2.
+and :spotref refid=shade2. :fnref refid=dpopt.
+:erev refid=r42.
+:row.:c.&colon.SEP.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.OPT:exph. and :xph.REQ:exph.
+:erev refid=r42.
+:row.:c.&colon.SEVERITY.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCSEVERITY:exph.)
+:erev refid=r42.
+:row.:c.&colon.SL.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.COMPACT:exph.
+:c.:spotref refid=sltag2.
+:erev refid=r42.
+:row.:c.&colon.SOA.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.SOA=:exph.)
+:erev refid=r42.
+:row.:c.&colon.SPOT.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph. and :xph.XREFTEXT=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.SPOT:pv.x:epv.=:exph.)
+:erev refid=r42.
+:row.:c.&colon.SPOTREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.SPRESP.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCSPRESP:exph.)
+:erev refid=r42.
+:row.:c.&colon.SUB.:c.S
+:row.:c.&colon.SUP.:c.S
+:row.:c.&colon.SYNDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.SYNNT.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ID=:exph. and :xph.CALLOUT=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.SYNNT=:exph.)
+:erev refid=r42.
+:row.:c.&colon.SYNNTREF.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.SYNOPSIS.:c.S
+:row.:c.&colon.SYNTAX.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph.,
+:xph.SCALE=:exph.,
+:xph.STYLE=:exph. and
+:xph.VIEW=:exph.
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.,
+:spotref refid=deftex2. (:xph.DEFTEXT._:pv.xxx:epv.=:exph.),
+:spotref refid=hrtag2.,
+:spotref refid=settag2.
+and :spotref refid=synfon2.
+:erev refid=r42.
+:row.:c.&colon.SYS.
+:rev refid=r42.:c.I:erev refid=r42.
+:row.:c.&colon.SYSACT.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCSYSACT:exph.)
+:erev refid=r42.
+:row.:c.&colon.TABDATA.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ALIGN=:exph. (including fill-character),
+:xph.CHAR=:exph.,
+:xph.COLS=:exph.,
+:xph.REFID=:exph.,
+:xph.SCALE=:exph. and
+:xph.W1=:exph.,
+:xph.W2=:exph., ...
+:xph.W9=:exph.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.TABDDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.TABLE.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.ALIGN=:exph.,
+:xph.ARRANGE=:exph.,
+:xph.COLS=:exph.,
+:xph.CONCAT=:exph.,
+:xph.CWIDTHS=:exph.,
+:xph.FRAME=:exph.,
+:xph.HP=:exph.,
+:xph.ID=:exph.,
+:xph.REFID=:exph.,
+:xph.SCALE=:exph.,
+:xph.SHADE=:exph.,
+:xph.VALIGN=:exph. (if generating &html. 3 or higher) and
+:xph.WIDTH=PAGE:exph.
+:p.Implementation is dependent on the &html. release being
+generated.  If :xph.HTML=2:exph., the width of the table is
+defined by the value of the :spotref refid=linewid..
+For more information, see :hdref refid=spect..
+:c.:rev refid=r46.:spotref refid=bortag2.:erev refid=r46.,
+:spotref refid=deftex2. (:xph.DEFTEXT.TABLE:exph.),
+:spotref refid=linewi2.,
+:spotref refid=settag2.,
+:spotref refid=shade2.,
+and :spotref refid=table22.
+:erev refid=r42.
+:row.:c.&colon.TCAP.:c.I
+:row.:c.&colon.TDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:row.:c.&colon.TDESC.:c.I
+:row.:c.&colon.TFT.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph. and :xph.TEMP:exph.
+:erev refid=r42.
+:row.:c.&colon.THD.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph. and :xph.TEMP:exph.
+:erev refid=r42.
+:row.:c.&colon.TIPAGE.
+:rev refid=r42.
+:c.I:c.&rbl.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:row.:c.&colon.TITLE.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.STITLE=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=doctit..
+:c.:spotref refid=title2.
+:row.:c.&colon.TITLEP.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.STITLE=:exph.
+:erev refid=r42.
+.br;See also :hdref refid=doctit..
+:c.:spotref refid=title2.
+:row.:c.&colon.TLINE.:c.S
+:row.:c.&colon.TLIST.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.ID=:exph.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.TLIST:exph.),
+:spotref refid=fbc2. :fnref refid=dpopt.,
+:spotref refid=ftlink2.,
+:spotref refid=ftsep2. :fnref refid=dpopt.,
+:spotref refid=settag2.,
+:spotref refid=tfigl2. and
+:spotref refid=tlist2.
+:erev refid=r42.
+:row.:c.&colon.TNOTE.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.TEXT=:exph.
+:erev refid=r42.
+:row.:c.&colon.TOC.:c.I:c.
+:rev refid=r42.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.TOC:exph.),
+:spotref refid=hrtag2.,
+:spotref refid=settag2.,
+:spotref refid=tocc2.,
+:spotref refid=tocind2.,
+:spotref refid=tocret2.,
+:spotref refid=tocsup2. and
+:spotref refid=toctag2.
+:erev refid=r42.
+:row.:c.&colon.TOPIC.:c.I
+:c.See also :hdref refid=doctit..
+:c.:spotref refid=title2.
+:row.:c.&colon.TP.:c.S
+:row.:c.&colon.TREF.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.FORM=:exph. and :xph.REFID=:exph.
+:erev refid=r42.
+:row.:c.&colon.UL.:c.I
+:rev refid=r42.
+:c.Attributes supported: :xph.COMPACT:exph.
+:c.:spotref refid=ultag2.
+:erev refid=r42.
+:row.:c.&colon.URESP.
+:rev refid=R42.
+:c.I:c.&rbl.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCURESP:exph.)
+:erev refid=r42.
+:row.:c.&colon.USER.
+:rev refid=r42.:c.I:erev refid=r42.
+:row.:c.&colon.USERDOC.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.COPYR=:exph., :xph.IBMCOPYR:exph. and :xph.SEC=:exph.
+:erev refid=r42.
+:row.:c.&colon.VAR.:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.DEF:exph.,
+:xph.OPT:exph. and
+:xph.REQ:exph.
+:erev refid=r42.
+:row.:c.&colon.VENDOR.
+:c.:rev refid=r42.I
+:c.Displayed as part of the title page, since &html. has no
+:q.back cover:eq. concept
+:erev refid=r42.
+:row.:c.&colon.VERSION.:c.I
+:row.:c.&colon.VNHD.:c.S
+:row.:c.&colon.VNOTICE.:c.I
+:row.:c.&colon.VOLNUM.
+:rev refid=r42.
+:c.I:c.&rbl.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.VOLNUM=:exph.)
+:erev refid=r42.
+:row.:c.&colon.WARNING.:c.S
+:row.:c.&colon.WARRANTY:c.I
+:rev refid=r42.
+:c.Attributes supported:
+:xph.SUBJECT=:exph.,
+:erev refid=r42.
+:row.:c.&colon.XMP.:c.S
+:rev refid=r42.
+:c.Attributes supported:
+:xph.REFID=:exph. and :xph.SCALE=:exph.
+:c.:spotref refid=settag2.
+:erev refid=r42.
+:rev refid=r42.
+:row.:c.&colon.XMPDEF.:c.I
+:c.Both with and without :xph.ID=:exph. attribute
+:erev refid=r42.
+:row.:c.&colon.XPH.:c.S
+:row.:c.&colon.XPL.
+:rev refid=R42.
+:c.I:c.&rbl.
+:c.:spotref refid=deftex2. (:xph.DEFTEXT.MCXPL:exph.)
+:erev refid=r42.
+:etable.
+.sp 2
+:p.:hp2.Not applicable or not supported; will be ignored:ehp2.
+:p.&colon.AUTOLIK., &colon.CAUSE., &colon.CC. &colon.CI.,
+&colon.CIREF., &colon.CLETTER., &colon.CMT., &colon.COMPANY.,
+&colon.COMPL., &colon.COVER., &colon.CT., &colon.DC., &colon.DF.,
+&colon.DFDEF., &colon.F., &colon.FIGSEG., &colon.FLE., &colon.FROM.,
+&colon.GRID., &colon.GRIDAREA., &colon.GRIDDEF., &colon.GRIDSEG.,
+&colon.IBMX., &colon.INIT., &colon.IZIP., &colon.LOC., &colon.MAP.,
+&colon.MAPDEF., &colon.MAPQFIX., &colon.MARKDESC., &colon.MARKLIST.,
+&colon.MARKNT., &colon.MKACTION., &colon.MKCLASS., &colon.MKINDEX.,
+&colon.NAME., &colon.NETID., &colon.NITEM., &colon.OVERART.,
+&colon.OVERLAY., &colon.PARTSASM., &colon.PC., &colon.PHONE.,
+&colon.PNINDEX., &colon.PROLOG., &colon.QT., &colon.REF.,
+&colon.RETKEY., &colon.REVCW., &colon.REVPF., &colon.REVPP.,
+&colon.REVPT., &colon.REVSLUG., &colon.SCHNOTE., &colon.SEP.,
+&colon.SIG., &colon.SNOTICE., &colon.ST., &colon.STEP.,
+&colon.STEPREF., &colon.SUBJECT., &colon.TCE0., &colon.TCE1.,
+&colon.TCE2., &colon.TCE3., &colon.TCE4., &colon.TCE5.,
+&colon.TCE6., &colon.TCE7., &colon.TCE8., &colon.TCE9.,
+&colon.TCE10., &colon.TCE11., &colon.TCE12., &colon.TCE13.,
+&colon.TCE14., &colon.TCE15., &colon.TCE16., &colon.TCE17.,
+&colon.TCE18., &colon.TCE19., &colon.TCE20., &colon.TLE.,
+&colon.TO., &colon.TPCODE.
+.*-----
+:fn id=dpopt.
+.dpopt
+:efn.
+.************************************************************************
+:rev refid=r42.
+:h1 id=b2hvars.&amp.Symbols pre-defined by &sysname
+:erev refid=r42.
+:p.In addition to the normal &amp.symbols provided by Script/VS, GML
+and &bm., &sysname. also provides a number of special-use
+&amp.symbols. These are most often used within header and footer
+files and in conjunction with certain options, such as
+:rev refid=r42.
+:xph.SPLITLINK.:pv.x:epv.=:exph.
+:erev refid=r42.
+and :xph.COMMENT=:exph..
+:table cols='* 5*' align=l.
+:thd.
+:c.&amp.symbol
+:c.Contains
+:ethd.
+:row. :c.&amp.b2hcoprext
+:c.Text specified for the :xph.&colon.COPREXT:exph. tag (if any)
+:row. :c.&amp.b2hcopyr
+:c.Text specified for the :xph.COPYR=:exph. attribute (if any) on
+the :xph.&colon.GDOC:exph. or :xph.&colon.USERDOC:exph. tag
+:row. :c.&amp.b2hhead:pv.num:epv.
+:c.Contains the header text of the most-recent
+:xph.&colon.H:pv.num:epv..:exph. tag. The text specified for the
+most-recent :xph.&colon.H0.:exph. is stored in
+:xph.&amp.b2hhead0:exph., :xph.&colon.H1.:exph. is in
+:xph.&amp.b2hhead1:exph., etc.
+:p.When an :xph.&colon.H:pv.x:epv..:exph. tag is encountered, all
+:q.lower:eq. symbols are cleared. For example, if an
+:xph.&colon.H2.:exph. tag is encountered, the
+:xph.&amp.b2hhead3:exph. symbol is cleared, :xph.&amp.b2hhead4:exph.
+is cleared, :xph.&amp.b2hhead5:exph. is cleared, etc.
+:row. :c.&amp.b2hhtml
+:c.The &html. release level being generated as specified by the
+:spotref refid=html2. option. Contains the number 2, 3
+:rev refid=r42.
+or 4.
+:row. :c.&amp.b2hhtmlid
+:c.The appropriate value of the :spotref refid=htmldo2.
+option for the &html. release being generated.
+:erev refid=R42.
+:row. :c.&amp.b2hiall
+:c.The fully-qualified name of the input file
+:xmp.
+  AIX:   /path/subdir/hh1.h2.hhh3
+  CMS:   fn ft fm
+  LINUX: /path/subdir/hh1.h2.hhh3
+  MVS:   :pv.userid:epv..h1.h2.h3   &cont.
+:pv.userid:epv..h1.h2.h3(member)
+  OS/2:  c:\dir\subdir\fname.ext
+  WIN95: c:\dir\subdir\fname.ext
+  WINNT: c:\dir\subdir\fname.ext
+:rev refid=r47.
+  UNIX:  /path/subdir/hh1.h2.hhh3
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hibmcopyr
+:c.Text specified for the :xph.IBMCOPYR=:exph. attribute (if any) on
+the :xph.&colon.USERDOC:exph. tag
+:row. :c.&amp.b2hipath
+:c.The path of the input file (if appropriate)
+:xmp.
+  AIX:   /path/subdir/
+  CMS:   (Null string)
+  LINUX: /path/subdir/
+  MVS:   (Null string)
+  OS/2:  c:\dir\subdir\
+  WIN95: c:\dir\subdir\
+  WINNT: c:\dir\subdir\
+:rev refid=r47.
+  UNIX:  /path/subdir/
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hifile
+:c.The non-path portion of the input file
+:xmp.
+  AIX:   hh1.h2.hhh3
+  CMS:   fn ft
+  LINUX: hh1.h2.hhh3
+  MVS:   :pv.userid:epv..h1.h2.h3   &cont.
+:pv.userid:epv..h1.h2.h3(member)
+  OS/2:  fname.ext
+  WIN95: fname.ext
+  WINNT: fname.ext
+:rev refid=r47.
+  UNIX:  hh1.h2.hhh3
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hidate
+:c.The input file's date stamp in :pv.yyyy-mm-dd:epv. format
+:row. :c.&amp.b2hitime
+:c.The input file's time stamp in :pv.hh&colon.mm&colon.ss:epv. format
+:row. :c.&amp.b2holall
+:c.The fully-qualified name of the :hp1.logical:ehp1. output file
+:xmp.
+  AIX:   /path/subdir/hh1.h2.hhh3
+  CMS:   fn ft fm
+  LINUX: /path/subdir/hh1.h2.hhh3
+  MVS:   :pv.userid:epv..h1.h2.h3
+  OS/2:  c:\dir\subdir\fname.ext
+  WIN95: c:\dir\subdir\fname.ext
+  WINNT: c:\dir\subdir\fname.ext
+:rev refid=r47.
+  UNIX:  /path/subdir/hh1.h2.hhh3
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2holpath
+:c.The path of the :hp1.logical:ehp1. output file (if appropriate)
+:xmp.
+  AIX:   /path/subdir/
+  CMS:   (Null string)
+  LINUX: /path/subdir/
+  MVS:   (Null string)
+  OS/2:  c:\dir\subdir\
+  WIN95: c:\dir\subdir\
+  WINNT: c:\dir\subdir\
+:rev refid=r47.
+  UNIX:  /path/subdir/
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2holfile
+:c.The non-path portion of the :hp1.logical:ehp1. output file
+:xmp.
+  AIX:   hh1.h2.hhh3
+  CMS:   fn ft
+  LINUX: hh1.h2.hhh3
+  MVS:   :pv.userid:epv..h1.h2.h3
+  OS/2:  fname.ext
+  WIN95: fname.ext
+  WINNT: fname.ext
+:rev refid=r47.
+  UNIX:  hh1.h2.hhh3
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hopall
+:c.The fully-qualified name of the :hp1.physical:ehp1. output file
+:xmp.
+  AIX:   /path/subdir/hh1.h2.hhh3
+  CMS:   fn ft fm
+  LINUX: /path/subdir/hh1.h2.hhh3
+  MVS:   :pv.userid:epv..h1.h2.h3
+  OS/2:  c:\dir\subdir\fname.ext
+  WIN95: c:\dir\subdir\fname.ext
+  WINNT: c:\dir\subdir\fname.ext
+:rev refid=r47.
+  UNIX:  /path/subdir/hh1.h2.hhh3
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hoppath
+:c.The path of the :hp1.physical:ehp1. output file (if appropriate)
+:xmp.
+  AIX:   /path/subdir/
+  CMS:   (Null string)
+  LINUX: /path/subdir/
+  MVS:   (Null string)
+  OS/2:  c:\dir\subdir\
+  WIN95: c:\dir\subdir\
+  WINNT: c:\dir\subdir\
+:rev refid=r47.
+  UNIX:  /path/subdir/
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hopfile
+:c.The non-path portion of the :hp1.physical:ehp1. output file
+:xmp.
+  AIX:   hh1.h2.hhh3
+  CMS:   fn ft
+  LINUX: hh1.h2.hhh3
+  MVS:   :pv.userid:epv..h1.h2.h3
+  OS/2:  fname.ext
+  WIN95: fname.ext
+  WINNT: fname.ext
+:rev refid=r47.
+  UNIX:  hh1.h2.hhh3
+:erev refid=r47.
+:exmp.
+:row. :c.&amp.b2hparttop
+:c.The applicable next/prev links for the :hp1.top:ehp1. of an
+&html. output file.  Normally referenced inside a user header file.
+If the output file is :hp1.not:ehp1. being split, this is a null
+string.  Otherwise, this contains either the value of
+:rev refid=r42.
+:xph.SPLITLINK.1,
+SPLITLINK.3, SPLITLINK.5, SPLITLINK.11, SPLITLINK.13:exph. or
+:xph.SPLITLINK.15:exph.,
+:erev refid=r42.
+depending on the circumstances.
+:row. :c.&amp.b2hpartbot
+:c.The applicable next/prev links for the :hp1.bottom:ehp1. of an
+&html output file.  Normally referenced inside a user footer file.
+If the output file is :hp1.not:ehp1. being split, this is a null
+string.  Otherwise, this contains either the value of
+:rev refid=r42.
+:xph.SPLITLINK.2,
+SPLITLINK.4, SPLITLINK.6, SPLITLINK.12, SPLITLINK.14:exph. or
+:xph.SPLITLINK.16:exph.,
+:erev refid=r42.
+depending on the circumstances.
+:row. :c.&amp.b2hplat
+:c.A string containing both the platform on which &sysname. was run
+and the destination platform with a dash separating the two.  If the
+current platform and the destination platform are the same, then the
+string contains only a single value.
+:row. :c.&amp.b2hplatc
+:c.The name of the :hp1.current:ehp1. platform on which &sysname. is
+running, e.g. AIX, CMS, HPFS, Linux, MVS, OS2, WIN95, WINNT,
+:rev refid=r47.
+UNIX
+:erev refid=r47.
+:row. :c.&amp.b2hplatd
+:c.The name of the :hp1.destination:ehp1. platform, as specified by
+the :xph.DESTSYS=:exph. option
+:row. :c.&amp.b2hrevchar
+:c.Contains the revision character identifying the
+:xph.&period.rc:exph. control word or :xph.&colon.revision:exph. tag
+currently in effect (if any) -- intended for use in conjunction with
+the :spotref refid=revtag.
+:row. :c.&amp.b2hsig
+:c.The name, release number and internal level of the &sysname.
+program itself
+:row. :c.&amp.b2huser
+:c.The user ID executing the &sysname. program.
+:xmp.
+  AIX:   (Null string)
+  CMS:   BY :pv.userid:epv. AT :pv.node:epv.
+  LINUX: (Null string)
+  MVS:   BY :pv.userid:epv. AT :pv.node:epv.
+  OS/2:  (Null string)
+  WIN95: (Null string)
+  WINNT: (Null string)
+:rev refid=r47.
+  UNIX:  (Null string)
+:erev refid=r47.
+:exmp.
+:tnote.
+The following &amp.symbols are specifically intended to be
+referenced within a
+:rev refid=r42.
+:xph.SPLITLINK.:pv.x:epv.=:exph.
+:erev refid=r42.
+option, but can be used anywhere.
+:etnote.
+:row. :c.&amp.b2hbot
+:c.&html. label for the bottom of the current &html. file
+:row. :c.&amp.b2hidx
+:c.&html. file/label for the start of the index (if generated)
+:row. :c.&amp.b2hnext
+:c.&html. file/label for the next &html. file
+:row. :c.&amp.b2hprev
+:c.&html. file/label for the previous &html. file
+:row. :c.&amp.b2hptoc
+:c.&html. file/label for the start of the most-recent
+Partial Table-of-Contents (PTOC).  Equivalent to &amp.b2htoc if no
+PTOC yet encountered.
+:row. :c.&amp.b2hthis
+:c.Name of the current &html. file
+:row. :c.&amp.b2htoc
+:c.&html. file/label for the start of the Table-of-Contents
+:row. :c.&amp.b2htop
+:c.&html. label for the top of the current &html. file
+:etable.
+.************************************************************************
+.im b2hmsg ;.cm B2H Messages
+.************************************************************************
+:bibliog id=biblig.
+:ul.
+:li.:cit.IBM BatchPipes/MVS BatchPipeWorks Reference:ecit.,
+order number GC28-1217
+:li.:cit.TSO/E REXX/MVS Reference:ecit., order number SC28-1883
+:li.:cit.IBM BookMaster User's Guide:ecit., order number SC34-5009
+:li.:cit.IBM Document Composition Facility Generalized Markup
+Language Starter Set Reference:ecit., order number SH20-9187
+:li.:cit.IBM Document Composition Facility Script/VS Language
+Reference Guide:ecit., order number SH35-0070
+:eul.
+.************************************************************************
+.*---------- Summary of what's changed ----------
+:h1 id=soar.&sysname. release history
+:p.For detailed release information, including fixes, see the
+:xph.B2H&rbl.NEWS:exph. file included with the &sysname. package.
+.*----------
+:rev refid=r47.
+:h2 id=soar47.Updates for &sysname. Release 4.7
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul compact.
+:li.None
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul compact.
+:li.&sysname. will now run under Regina Rexx (Release 3.0 or higher).
+Regina is a free Rexx implementation which can be used as an
+alternative to IBM's Object Rexx and is available at
+.website regina-rexx.sourceforge.net/
+:li.&sysname. will now support and run in Unix when run under Regina Rexx
+:li.Multiple lines generated by
+:q.:xph..sk:exph.:eq. or :q.:xph..sp:exph.:eq. are being ignored by
+modern web browsers due to their suppressing multiple blank lines.
+Output created by &sysname. altered to prevent this suppression.
+:li.When run on Windows or OS/2, a filename enclosed in double-quote
+characters is now accepted on the command line.  This to ensure
+consistency with other filename handling routines in Windows and OS/2.
+:li.Additional &html. tags can now be customized.
+The :xph.HTMLATT=:exph. option was enhanced to support customization
+of the :xph.&lt.A&gt.:exph., :xph.&lt.DD&gt.:exph., :xph.&lt.DT&gt.:exph.,
+:xph.&lt.FORM&gt.:exph., :xph.&lt.IMG&gt.:exph.
+and :xph.&lt.INPUT&gt.:exph. &html. tags.
+(see the :spotref refid=htmlatt.)
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:xmp.
+  HTMLATT.:pv.tagname:epv.=':pv.text:epv.'              (more :pv.tagname:epv. values)
+:exmp.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.Section added regarding the REXX versions under which B2H will run
+:li.Many updates to reflect the UNIX platform
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.Various default definitions added for UNIX support
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.Definition for :q.:xph..sk:exph.:eq. and :q.:xph..sp:exph.:eq.
+:eul.
+:erev refid=r47.
+.*----------
+:rev refid=r46.
+:h2 id=soar46.Updates for &sysname. Release 4.6
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.Support :xph.&amp.X':pv.hhhh:epv.:exph.
+symbol value attribute (convert hex characters)
+:li.Additional DCF symbols defined to more
+closely emulate the mainframe environment (see :hdref refid=syssym.)
+:li.:q.:xph.ON/OFF:exph.:eq. option of the :q.:xph..rc:exph.:eq.
+control word now supported
+.br;(e.g. :q.:xph..rc 1 on/off:exph.:eq.)
+:li.:xph.FRAME=RULES:exph. now recognized and supported on
+the :xph.&colon.FIG:exph. tag
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.Tag delimiter character(s) may be changed using the
+:xph..DC:exph. control word. Tag delimiters can even be
+turned off (:xph..DC GML OFF:exph.)
+:li.If :xph.&colon.TDESC:exph. is encountered in a table, but not ended
+using :xph.&colon.ETDESC:exph., the :xph.&colon.ETABLE:exph. tag will
+end the :xph.&colon.TDESC:exph..  (the :xph.&colon.ETDESC:exph. tag
+is not required in all :q.flavors:eq. of GML/Bookmaster.)
+:li.If :xph.&colon.ADDRESS:exph. is encountered, but not ended using
+:xph.&colon.EADDRESS:exph., either the :xph.&colon.ETITLE:exph.
+or :xph.&colon.ETITLEP:exph. tag will end the :xph.&colon.ADDRESS:exph..
+If neither :xph.&colon.ETITLE:exph. or :xph.&colon.ETITLEP:exph.
+is encountered, a "missing &colon.EADDRESS" message is issued.
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:xmp.
+  BORDERTAG=':pv.tag:epv.'                          (new option)
+  BORDERTAG.:pv.x:epv.=':pv.tag:epv.'                        (new option)
+  HRTAG.:pv.x:epv.=':pv.tag:epv.'                            (HRTAG.4 now used)
+:exmp.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.New appendix section documenting supporting system-type
+&amp.symbols (e.g. :xph.&amp.SYSYEAR:exph., :xph.&amp.$INDX:exph.,
+:xph.&amp.$PDEV:exph.). See :hdref refid=syssym..
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.None
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.None
+:eul.
+:erev refid=r46.
+.*----------
+:rev refid=r45.
+:h2 id=soar45.Updates for &sysname. Release 4.5
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.:xph.&period.DC:exph. control word with :xph.CW:exph. and
+:xph.GML:exph. options now supported
+:li.:xph.&period.BF:exph., :xph.&period.PF:exph. and
+:xph.&period.PI:exph. control words are now supported
+:li.Multiple :xph.&colon.AUTHOR:exph. tags now supported
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.The parser has been updated which allows the following enhancements:
+:ul compact.
+:li.:q.Splitting:eq. of the output &html. is now supported for
+:xph.SOURCE=SCRIPTONLY:exph.
+:li.:xph.When SOURCE=SCRIPTONLY:exph., all control words
+:hp1.mapped:ehp1. to &bm./GML tags are now supported.
+Prior to R4.5, control words that were normally handled by simply
+:hp1.mapping:ehp1. them to their &bm./GML equivalent
+(e.g. :xph..FN:exph. to :xph.&colon.FN.:exph.,
+:xph..H:pv.x:epv.:exph. to :xph.&colon.H:pv.x:epv..:exph.)
+were not supported when :xph.SOURCE=SCRIPTONLY:exph..
+:li.Tag delimiter character(s) may be changed using the
+:xph.&period.DC:exph. control word
+:eul.
+:li.Symbol table records can now be imbedded within the source document
+using the new :q.:xph..*B2H SYMBOL:exph.:eq. statement
+:li.Improved support for character set translations:
+:ul compact.
+:li.New :xph.&colon.XLATEO.:exph. symbol table statement allows
+translations specific to :hp1.output:ehp1. &html. records
+:li.:xph.&colon.XLATEI.:exph. symbol table statement
+(was :xph.&colon.XLATE.:exph.) allows translations specific
+to :hp1.input:ehp1. source records
+:li.Improved handling of :xph..TI:exph. and :xph..TR:exph.
+:eul.
+:li.New :xph.LINENUM=:exph. option allows &sysname. to recognize
+and ignore line numbers in source records
+:li.A label cell is no longer generated for
+:xph.&colon.SYNTAX&rbl.STYLE=LBLBOX:exph. if no label data has been
+provided
+:li.Empty syntax diagrams are now suppressed
+:li.If a :xph.&period.RE:exph. (restore environment) control word
+changes the pre-formatting status of the output, the appropriate
+&html. tags are now generated to automatically compensate
+:li.The :xph.DLFMT=:exph. and :xph.GLFMT=:exph. options now default
+to :xph.TABLE:exph. if generating &html. 3 (or higher);
+if generating &html. 2, both default to :xph.DL:exph.
+:li.Additional diagnostics provided for I/O and allocation errors
+under MVS
+:li.To show a vertical bar, such as those used for syntax diagrams
+and the :xph.&colon.SCREEN:exph. tag, &sysname. now generates
+:q.:xph.&amp.#124;:exph.:eq. instead of a physical vertical bar.
+(This circumvents a problem experienced by some users where their
+upload/download process was translating a vertical bar into something else.)
+:li.In a profile file, comments may now be placed after any option(s)
+by preceding the comment with two dashes (:xph.--:exph.).
+This capability was already available for the symbol table file.
+:li.Indentation of multi-line messages within the &sysname.
+log was changed to improve readability
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:xmp.
+  DEFTEXT.:pv.name:epv.=':pv.text:epv.'                           (new names)
+  FONTTAG=':pv.fonttext:epv.,:pv.efonttext:epv.,&cont.
+&lbrk.PROP|NOPROP&rbrk.'&cont.
+    (new option)
+  H3ADDONS=&lbrc. NO | YES &rbrc.                         (removed - obsolete)
+  H3TABLE=&lbrc. COMPLEX | SIMPLE &rbrc.                  (removed - obsolete)
+  INDEXREFLINK=&lbrc. :pk def.NO:epk. | YES &rbrc.                     (new option)
+  LINENUM=&lbrc. :pk def.NO:epk. | BEGIN | END | &cont.
+:pv.scol:epv.-:pv.ecol:epv. &rbrc.      (new option)
+  PROCACT='...'                                 (additional operand)
+:exmp.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.Section added on how to use only Script/VS control words to
+include/exclude text when converting to &html.
+:li.:hdref refid=faqh13., :hdref refid=faqh14. and :hdref refid=faqh15.
+added to Frequently-Asked-Questions section
+:li.Document new message numbers 109, 152, 317 and 318
+:li.Miscellaneous updates to reflect R4.5 changes
+:rev refid=r46.
+:li.New appendix section documenting supporting system-type
+&amp.symbols (see :hdref refid=syssym.)
+:erev refid=r46.
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.Show defaults for new options
+:li.Change vertical bars to "&amp.#124;"
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.:xph.&colon.XLATE.:exph. statement renamed to :xph.&colon.XLATEI.:exph.
+(:xph.&colon.XLATE.:exph. still supported, but :xph.&colon.XLATEI.:exph.
+preferred)
+:li.:xph.&period.SD:exph. Script/VS control word defined as being
+ignored
+:li.Change definition of :xph.&period.BF:exph., :xph.&period.DC:exph.,
+:xph.&period.PF:exph. and :xph.&period.PI:exph. from ignored to
+handled internally
+:eul.
+:erev refid=r45.
+.*----------
+:rev refid=r44.
+:h2 id=soar44.Updates for &sysname. Release 4.4
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.:xph.&period.LP:exph. now properly left-aligned when within a
+:xph.&colon.DL:exph. or :xph.&colon.GL:exph. and a table is being
+generated (e.g. :xph.DLFMT=TABLE:exph. or :xph.GLFMT=TABLE:exph.)
+:li.:xph.&period.EF:exph. now fully supported with or without
+the :xph.CLOSE:exph. operand.
+:li.Script/VS :xph.&amp.$CONT.:exph. and :xph.&amp.$TAB.:exph.
+symbols now supported
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.When &sysname. is run on MVS, if the physical output file is
+DSORG=PS and is also pre-allocated, &sysname. will no longer delete
+and reallocate it, improving efficiency
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:ul.
+:li.When &sysname. is run on MVS (OS/390), the :xph.HEADER=:exph.
+and :xph.FOOTER=:exph.  options now support specifying the input
+file using the ":xph.DD&colon.:pv.ddname:epv.:exph." syntax
+:eul.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.Minor updates to reflect R4.4 changes
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.None
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.:xph.&colon.COVER:exph. definition updated to correct
+:q.missing period:eq. error messages
+:li.:xph.&amp.divide:exph. symbol added in addition to
+:xph.&amp.divid:exph.
+:li.:xph.&amp.florin:exph. symbol added and mapped to
+:xph.&amp.#402;:exph.
+:eul.
+:erev refid=r44.
+.*----------
+:rev refid=r43.
+:h2 id=soar43.Updates for &sysname. Release 4.3
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.If an :xph.&colon.ADDRESS:exph. tag is encountered within
+:xph.&colon.PROLOG/&colon.EPROLOG:exph., hold the text until
+the formal title page is generated; otherwise display the address
+text as encountered.
+:li.:xph.&colon.COVER:exph. now treated as a synonym of
+:xph.&colon.TIPAGE:exph.; both tags now generate a formal title page
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.:xph.LOG=:exph. option now accepts an asterisk (*),
+which is dynamically replaced by the input filename.
+For more information, see the :spotref refid=logopt..
+:li.When running as a Pipeline filter, &sysname. now supports
+writing log records to a pipeline output stream
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:ul.
+:li.New :xph.LOG=:exph. capabilities as mentioned above
+:eul.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.Describe new B2H128 message
+:li.Minor updates to reflect R4.3 changes
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.None
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.Change definition of :xph.&amp.OELIG:exph. to
+:xph.&amp.OElig:exph.
+:li.Defined :xph.&colon.ETOC:exph. and :xph.&colon.EDOCPROF:exph.
+as ignored tags
+:li.Recognize :xph.&amp.$RB.:exph. as meaning a blank
+:li.Define :xph.&colon.COVER:exph.,
+:xph.&colon.PROLOG/&colon.EPROLOG:exph. as internal tags
+:eul.
+:erev refid=r43.
+.*----------
+:rev refid=r42.
+:h2 id=soar42.Updates for &sysname. Release 4.2
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.:xph.&colon.CGDEF:exph. and :xph.&colon.XMPDEF:exph. tags
+now supported
+:li.:xph.APPHD1=:exph., :xph.APPHD1X=:exph. and :xph.DIALOG=:exph.
+attributes now supported on the :xph.&colon.DOCPROF:exph. tag
+:li.:xph.SCALE=:exph. attribute now supported on the following tags:
+:xph.&colon.CGRAPHIC:exph., :xph.&colon.CODEL:exph.,
+:xph.&colon.DIALOG:exph., :xph.&colon.DIRECT:exph.,
+:xph.&colon.FIG:exph., :xph.&colon.MSGL:exph.,
+:xph.&colon.SCHDATE:exph., :xph.&colon.SCREEN:exph.,
+:xph.&colon.SYNTAX:exph., :xph.&colon.TABDATA:exph.,
+:xph.&colon.TABLE:exph. and :xph.&colon.XMP:exph.
+:li.:xph.TEXT=:exph. attribute now supported on the
+:xph.&colon.AUTHOR:exph. tag
+:li.:xph.LEVEL=:exph. attribute now supported on the
+:xph.&colon.DOCNUM:exph. tag
+:li.Within a table, when too many :xph.&colon.C:exph. tags are
+encountered for a logical row, a :xph.&colon.ROW:exph. tag is
+automatically inserted to force a new row
+:li.The IBM-internal :xph.CAPBC=:exph., :xph.EQBC=:exph. and
+:xph.FNBC=:exph. attributes on the :xph.&colon.DOCPROF:exph. tag
+no longer cause a warning message to be issued
+:li.The IBM-internal :xph.&colon.DFREF:exph. tag no longer causes
+a warning message to be issued
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.&html. 4 output can now be specified (see :hdref refid=faqh4.)
+:li.Layout of formal title page now corresponds more closely
+to the &bm. standard
+:li.Appearance of :xph.&colon.H5:exph. though :xph.&colon.H20:exph.
+now corresponds more closely to the &bm.'s default layout
+(see new :xph.HTAG=:exph. option)
+:li.Propagation of font color changes used with
+:xph.&period.RC/&colon.REV/&colon.EREV:exph.
+can be enabled/disabled on a per-revision code basis
+:li.Footnote appearance can now be customized using the new
+:xph.FNTAG=:exph. option.
+(Thanks to Mark Gaubatz for his code update that led to this
+enhancement!) Default footnote id now displayed as a superscript
+instead of normal text enclosed in parentheses.
+:li.Improved &html. output for &bm. tables which
+use :xph.ARRANGE=:exph.
+:li.Improved &html. output for &bm.'s Messages and Codes tags
+:li.Improved &html. output for &bm.'s Dialog tags
+:li.Improved appearance and customization capability
+for syntax diagrams (see item :hdref refid=faqsn.)
+:li.The ability to selectively process profile records, symbol table
+records and :q.:xph.&period.*&sysname.:exph.:eq. statements has been
+enhanced by allowing the &html. release level being generated to
+also be a selection criteria
+:li.The new :q.:xph.SETUPTAG.:pv.tagname:epv.=:exph.:eq. option
+allows you to define &html. statements to precede/follow the output
+generated for a particular GML/&bm. tag.  For example, you could
+specify that a certain font be loaded specifically for
+:xph.&colon.CGRAPHIC.:exph. diagrams or cause the entire title page
+to be centered or right-justified.
+:li.New :q.:xph.HTMLDOCID.:pv.rel:epv.=:exph.:eq. option allows you
+to explicitly specify the Document Type Definition value for the
+first record of the &html. output -- the :q.:pv.xxx:epv.:eq. in the
+following:
+:xmp.  &lt.!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML &cont.
+:pv.xxx:epv.//EN"&gt.:exmp.
+:p.The new :xph.&amp.b2hhtmlid:exph. symbol is defined to contain
+the appropriate value of this option for the &html. release being
+generated.
+:li.Additional process names :q.:xph.HTML2+:exph.:eq.,
+:q.:xph.HTML3+:exph.:eq. and :q.:xph.HTML4+:exph.:eq. for use with
+:xph.&colon.PSC:exph. allow more generalized selection of text
+:li.New :q.:xph.&period.*B2H MSG:exph.:eq. statement added to allow
+messages to be issued (and the return code set) from within the
+document.  Can also be returned from a user program to show messages
+and set return codes.
+:li.New :q.:xph.HEADREC=:exph.:eq. option provides the ability to
+insert records into the header section of the output &html. file.
+Most commonly used to include JavaScript code.
+:li.All options, statements and text regarding :q.splitting:eq. of
+the output &html. file have been renamed for consistency.  The use
+of :q.BREAK:eq. and :q.PART:eq. have been changed to :q.SPLIT:eq.:
+:ul compact.
+:li.:q.:xph.AUTOPART=:exph.:eq. is now :q.:xph.AUTOSPLIT=:exph.:eq.,
+:li.:q.:xph.PARTDIGITS=:exph.:eq. is now :q.:xph.SPLITDIGITS=:exph.:eq.,
+:li.:q.:xph.PARTDIR=:exph.:eq. is now :q.:xph.SPLITDIR=:exph.:eq.,
+:li.:q.:xph.PARTLINK=:exph.:eq. is now :q.:xph.SPLITLINK=:exph.:eq. and
+:li.:q.:xph.PARTNAMES=:exph.:eq. is now :q.:xph.SPLITNAMES=:exph.:eq.
+:li.The :q.:xph..*B2H&rbl.BREAK:exph.:eq. statement is now
+:q.:xph..*B2H&rbl.SPLIT:exph.:eq.
+:eul.
+For downward compatibility, all the old names are still recognized
+as aliases of their new official names.
+:li.Both the :q.:xph.SPLITDIR.x=:exph.:eq. and
+:q.:xph.SPLITNAME.x=:exph.:eq. options now allow the
+:q.:pv.x:epv.:eq. value to be specified as :q.:xph.NEXT:exph.:eq.,
+which allows you to name the :hp1.next:ehp1. split file, wherever
+and whenever it occurs.
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:xmp.
+  APPHD1=':pv.text:epv.'              &cont.
+                       (new option)
+  APPHD1X=':pv.text:epv.'             &cont.
+                       (new option)
+  AUTOSPLIT= ...             &cont.
+                       (was "AUTOPART=")
+  DEFTEXT.:pv.name:epv.=':pv.text:epv.'&cont.
+                               (additional names)
+  DEFTEXT.:pv.name:epv.=':pv.text:epv.',&cont.
+&lbrk.:pv.width:epv.&rbrk.&cont.
+                       (new operand)
+  DIALOG='&lbrk.LABEL&rbrk. &lbrk.FONT&rbrk. &lbrk.COLOR&rbrk.'&cont.
+                   (new option)
+  DIALOGTAG.:pv.x:epv.=':pv.ts,te,fs,fe,cs,cs:epv.'&cont.
+                   (new option)
+  FNTAG=':pv.cs,ce,ls,le,lcs,lce,lts,lte,ts,te:epv.'&cont.
+         (new option)
+  HEADREC.:pv.num:epv.=':pv.text:epv.'         &cont.
+                       (new option)
+  HRTAG=':pv.text:epv.'               &cont.
+                       (no :q.:pv.x:epv.:eq. required)
+  HRTAG.:pv.x:epv.=':pv.text:epv.'             &cont.
+                       (new :q.:pv.x:epv.:eq. values)
+  HTAG=':pv.hs,he,ss,sr:epv.'         &cont.
+                       (new option)
+  HTAG.:pv.num:epv.=':pv.hs,he,ss,sr:epv.'     &cont.
+                       (new option)
+  HTML=&lbrc. 2 | 3 | 4 &rbrc.&cont.
+                                (new operand)
+  HTMLDOCID.:pv.htmlrel:epv.=':pv.text:epv.'&cont.
+                          (new option)
+  REVTAG=':pv.revtext:epv.,:pv.erevtext:epv.,&cont.
+&lbrk.PROP|NOPROP&rbrk.'&cont.
+           (new operand)
+  SETUPTAG.:pv.tagname:epv.=':pv.beforetext:epv.',':pv.aftertext:epv.'&cont.
+         (new option)
+  SPLITDIGITS= ...           &cont.
+                       (was "PARTDIGITS=")
+  SPLITDIR= ...              &cont.
+                       (was "PARTDIR=")
+  SPLITDIR.NEXT= ...         &cont.
+                       (new operand)
+  SPLITLINK= ...             &cont.
+                       (was "PARTLINK=")
+  SPLITLINK.x= ...           &cont.
+                       (was "PARTLINK.x=")
+  SPLITNAME.x= ...           &cont.
+                       (was "PARTNAME.x=")
+  SPLITNAME.NEXT= ...        &cont.
+                       (new operand)
+  TOCTAG=':pv.ls,le,ie,ie,ts,te:epv.' &cont.
+                       (new operands)
+:exmp.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.Added a section describing the overall structure of each output
+&html. file and what is used to build it (see :hdref refid=layout.)
+:li.Document the support for :xph.&colon.LEGEND:exph.,
+:xph.&colon.SAFETY:exph., :xph.SYNDEF:exph.,
+:xph.&colon.SYNNT:exph. and
+:xph.&colon.SYNNTREF:exph. tags which previously were either
+inadvertently missing or incorrectly listed as unsupported.
+:li.Restructure Appendix A.3 and A.5 to show any related &sysname.
+options for each control word and tag
+:li.Update the caveat section to show that &bm. :q.style:eq. files
+are not processed
+:li.Document the changes for R4.2
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.Update default :xph.DEFTEXT:exph. values for syntax diagrams
+:li.Set defaults for :xph.DIALOGTAG.:pv.x:epv.:exph.,
+:xph.FNTAG=:exph., :xph.HTAG.:pv.num:epv.=:exph.,
+:xph.HTMLDOCID.:pv.x:epv.=:exph. and :xph.TOCTAG=:exph. options
+:li.Change the :q.PART:eq.-type option names to
+:q.SPLIT:eq.-type names
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.Change definition of :q.:xph.&amp.invellip:exph.:eq. to precede
+it with two blanks
+:li.Show the following tags are now handled internally:  Dialog
+tags, Messages and Codes tags, various title page tags and
+:xph.&colon.CGRAPHIC/&colon.ECGRAPHIC:exph. tags
+:li.Other miscellaneous changes
+:eul.
+:erev refid=r42.
+.*----------
+:h2 id=soar41.Updates for &sysname. Release 4.1
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.:xph.OLSEQ=:exph. attribute now supported on the
+:xph.&colon.DOCPROF:exph. tag
+:li.:q.:xph.&period.NF:exph.:eq. and :q.:xph.&period.PP:exph.:eq.
+control words now supported
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.Year2000 support added
+:li.B2H now executes on the LINUX platform
+(you must have IBM's Object REXX for LINUX installed)
+:li.Font color changes used with
+:xph.&period.RC/&colon.REV/&colon.EREV:exph.
+are now propagated into &html. 3 tables
+:li.For ordered lists, &sysname. now generates the appropriate
+:xph.&lt.OL TYPE=:pv.x:epv.&gt.:exph. tag to allow different
+numbering schemes based on the :q.nesting:eq. of the list.  This
+means the main list will be numbered, the first sub-list will have
+alphabetic indices, and so on.  The :xph.OLSEQ=:exph. option (also
+recognized on &bm.'s :xph.&colon.DOCPROF:exph. tag) can be used to
+override this behavior.  The list item reference generated for
+:xph.&colon.LIREF:exph. now reflects the actual indice.
+:li.The :xph.SYNFONT=:exph. option now also affects how the
+:xph.&colon.SYNNTREF:exph. tag is shown
+:li.Support added for abbreviations of various tag attributes
+(e.g. :q.:xph.COL:exph.:eq. for :q.:xph.COLS:exph.:eq.,
+:q.:xph.RETCODE:exph.:eq. for :q.:xph.RETCODES:exph.:eq.)
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:xmp.
+  DESTSYS=&lbrc.AIX|HPFS|LINUX|MVS|OS2|VM|WIN95|WINNT&rbrc.   (new operand)
+  LIREF=&lbrc. NO | ID | ACTUAL &rbrc.                        (new operand)
+  OLSEQ=':pv.sequence codes:epv.'                            (new option)
+:exmp.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.Document changes for R4.1
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.Add LINUX-awareness
+:li.Add default value for :xph.DEFTEXT.ARTLABEL=:exph.
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.Define :q.:xph.&period.GOTO:exph.:eq. as a valid control word
+:li.Define subscript symbols :xph.&amp.sub0-&amp.sub9:exph.
+and superscript symbols :xph.&amp.sup0-&amp.subp:exph.
+:li.Any text specified on the :xph.&colon.MINDEX:exph. tag now
+totally ignored
+:eul.
+.*----------
+:h2 id=soar40.Updates for &sysname. Release 4.0, 4.01 and 4.02
+.*---
+:p.:hp2.New or enhanced support of &bm./GML/Script markup&colon.:ehp2.
+:ul.
+:li.New &bm./GML tags now supported
+:ul compact.
+:li.(:hp1.R4.01:ehp1.)
+Syntax :q.railroad:eq. diagrams now supported
+(:xph.&colon.SYNTAX.:exph. family of tags)
+:li.:xph.&colon.IBMLPS/&colon.EIBMLPS:exph. and
+:xph.&colon.WARRANTY:exph. tags
+for IBM-internal Licensed Program Specification documents
+:li.:xph.&colon.LITDATA/&colon.ELITDATA:exph.
+:li.:xph.&colon.PGMNUM:exph.
+:eul.
+:li.New &script. control words now supported
+:ul compact.
+:li.:xph.&period.AN:exph., :xph.&period.OR:exph. and
+:xph.&period.DV:exph.
+:li.:xph.&period.GO:exph. and :xph....:pv.label:epv.:exph.
+(see :hdref refid=caveat. for restrictions).
+:li.:xph.&period.SU ON:exph. and :xph.&period.SU OFF:exph.
+:eul.
+:li.Enhanced support for existing markup
+:ul compact.
+:li.:xph.&period.DD:exph. control word:
+:xph.DD:exph. and :xph.DSN:exph. options supported
+:li.:xph.&period.NAMEFILE:exph. macro:
+:xph.TSOFULL=:exph. and :xph.TSOPART=:exph. attributes supported
+:li.:q.:xph.SCALE=:exph.:eq. attribute on the :xph.&colon.XMP:exph.
+tag is now supported
+:li.The :q.:xph.&period.BL:exph.:eq. (Blank Line) control word is
+now generated by &sysname. and executed whenever a blank line is
+processed (unless a blank line is already significant, such as
+within a :q.:xph.&colon.XMP/&colon.EXMP:exph.:eq.)
+:li.The blank separating a &script. control word from the first
+parameter is now optional (e.g. :q.:xph.&period.CP24:exph.:eq. and
+:q.:xph.&period.CP 24:exph.:eq. are synonymous)
+:li.:xph.&colon.PD:exph. no longer generates a new-paragraph before
+the text
+:eul.
+:li.Support the &amp.$YEAR symbol (4-digit year) added to &bm
+for Year2000 support
+:eul.
+.*---
+:p.:hp2.&sysname.-specific updates&colon.:ehp2.
+:ul.
+:li.(:hp1.R4.01:ehp1.) Under MVS, the output file can now be
+specified either by referencing the dataset name or by DD
+:li.(:hp1.R4.01:ehp1.) If an error occurs while writing an output
+file (e.g. output disk fills up), issue message B2H317 and stop
+:li.MVS is now a supported platform
+:li.Value of :xph.GMLTYPE=:exph. attribute on
+:xph.&period.NAMEIT:exph. macro now validated.
+Error message B2H458 issued if an invalid value is detected.
+:li.When running on VM/CMS:
+:ul compact.
+:li.Default destination platform is now :q.:xph.VM:exph.:eq.
+(was :q.:xph.OS2:exph.:eq.)
+:li.Default value for :xph.HTMLEXT=:exph. and :xph.HTMPEXT=:exph.
+options now :q.:xph.HTML:exph.:eq. (was :q.:xph.HTM:exph.:eq.)
+:eul.
+:li.The name :q.Advantis:eq. changed to :q.IBM Corporation:eq.
+within all files of the package as Advantis is now a part of IBM
+:li.:xph.CHARSET=:exph. option added to support coded character sets
+associated with the generated &html. document
+:eul.
+.*---
+:p.:hp2.New or updated &sysname. options&colon.:ehp2.
+(For information on all &sysname. options, see :hdref refid=cmdparm.)
+:xmp.
+  B2HREQ=&lbrc. :pk def.YES:epk. | NO &rbrc.                           (new default)
+  CHARSET=':pv.coded-character-set-name:epv.'
+  DEFTEXT.:pv.name:epv.=':pv.text:epv.'                           (new names)&cont.
+ (:hp1.R4.0 &amp. R4.01:ehp1.)
+  DESTSYS=VM                                    (new default for VM/CMS)
+  HRTAG.:pv.x:epv.=':pv.tag:epv.'                                 (new operand)&cont.
+ (:hp1.R4.01:ehp1.)
+  HTMLEXT=html                                  (new default for VM/CMS)
+  HTMPEXT=HTML                                  (new default for VM/CMS)
+  MVSALLOC.:pv.name:epv.='ALLOC-command-operands'
+  OUTPUTP=:pv.physical-output-file:epv.                  (new operands for MVS)&cont.
+ (:hp1.R4.01:ehp1.)
+  PROCACT='NOINDEX=:pv.action:epv. ...'                  (new situation)
+  SYNFONT=&lbrc. YES | :pk def.NO:epk. &rbrc. &cont.
+                         (:hp1.R4.02:ehp1.)
+:exmp.
+.*---
+:p.:hp2.Updates to the User's Guide&colon.:ehp2.
+:ul compact.
+:li.(:hp1.R4.01:ehp1.)
+Include example of a syntax diagram
+:li.(:hp1.R4.01:ehp1.)
+Document new B2H317, B2H462 and B2H463 error messages
+:li.(:hp1.R4.01:ehp1.)
+Show :q.:xph.&period..TA:exph.:eq. control word ignored
+(was inadvertently listed as supported)
+:li.MVS-related installation, customization and usage information added
+:li.:hdref refid=outfmt. added to :hdref refid=useb2h..
+:li.Additional items added to :hdref refid=faq..
+:li.Bibliography of related documents added (:hdref refid=biblig.)
+:li.Additional miscellaneous changes
+:eul.
+.*---
+:p.:hp2.System profile updates&colon.:ehp2.
+:ul compact.
+:li.(:hp1.R4.02:ehp1.) Define :xph.SYNFONT=NO:exph. default value
+:li.(:hp1.R4.01:ehp1.)
+Define :xph.HRTAG.5:exph. and :xph.DEFTEXT.:pv.name:epv.:exph.
+for syntax diagrams
+:li.Numerous changes for Release 4.0
+:eul.
+.*---
+:p.:hp2.System symbol table updates&colon.:ehp2.
+:ul compact.
+:li.(:hp1.R4.01:ehp1.)
+Define the syntax diagram :q.family:eq. of tags as now handled
+by &sysname
+:li.Numerous changes for Release 4.0
+:eul.

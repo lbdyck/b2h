@@ -1,0 +1,118 @@
+#!/bin/ksh
+#------------------------------------------------------------------------------
+# b2hname - Rename the b2h filenames for use on AIX
+#
+# Unzip the files from b2h.zip and run b2hname to rename the 8.3
+# DOS-style names to their full AIX names.
+#------------------------------------------------------------------------------
+ 
+ Rexx="/usr/bin/rexx"               # rexx for AIX executable
+ Tmpf="b2hname.$$"                  # Temp file
+ 
+ #-----------------------------------------------------------------------------
+ # Define traps to get rid of temporary files after we exit
+ #-----------------------------------------------------------------------------
+ 
+ TMP="$Tmpf"                                   # List temp files in TMP
+ trap "rm -f $TMP; trap 0; exit 1" 1 2 3 15    # Remove if hangup/int/quit/etc.
+ trap "rm -f $TMP; exit 0" 0                   # Remove if true returned
+ 
+#------------------------------------------------------------------------------
+# FUNCTION: AddExec : Prepends the #! magic to an executable script file
+#------------------------------------------------------------------------------
+ 
+function AddExec
+{
+ typeset filename=$1                # Name of executable file
+ typeset binname=$2                 # Name of executable binary
+ 
+ print "  adding #!$binname magic"
+ 
+ print "#!$binname" >$Tmpf          # Add #! magic to temp file
+ cat $filename >>$Tmpf              # Append original file to temp file
+ mv -f $Tmpf $filename              # Replace original file with temp file
+ chmod +x $filename                 # Be sure it's executable
+}
+ 
+#------------------------------------------------------------------------------
+# FUNCTION: ChangeSuffix : Changes a file's suffix
+#------------------------------------------------------------------------------
+ 
+function ChangeSuffix
+{
+ typeset oldname=$1                 # Old name of file
+ typeset suffix=$2                  # New suffix to add to file
+ 
+ oldsuffix=${oldname##*.}           # Remove up to last . to get old suffix
+ oldbase=${oldname%.*}              # Remove old suffix to get old base
+ 
+ cmd="mv -f $oldname $oldbase$suffix"
+ print "  $cmd"
+ chmod go-w $oldname
+ eval $cmd
+}
+ 
+ #-----------------------------------------------------------------------------
+ # Inspect each file and rename as necessary. Shell scripts also need to have
+ # the #! magic prepended to them.
+ #-----------------------------------------------------------------------------
+ 
+ for F in *
+ do
+    case $F in
+ 
+       *.cmd)
+          print "Processing $F ..."
+          AddExec      $F $Rexx
+          ChangeSuffix $F ""
+          ;;
+ 
+       *.ksh)
+          print "Processing $F ..."
+         #AddExec      $F "/bin/ksh"
+          ChangeSuffix $F ""
+          ;;
+ 
+       *.ann)
+          print "Processing $F ..."
+          ChangeSuffix $F ".announce"
+          ;;
+ 
+       *.sct)
+          print "Processing $F ..."
+          ChangeSuffix $F ".script"
+          ;;
+ 
+       *.hlp)
+          print "Processing $F ..."
+          ChangeSuffix $F ".helpcms"
+          ;;
+ 
+       *.htm)
+          print "Processing $F ..."
+          ChangeSuffix $F ".html"
+          ;;
+ 
+       *.new)
+          print "Processing $F ..."
+          ChangeSuffix $F ".news"
+          ;;
+ 
+       *.pkg)
+          print "Processing $F ..."
+          ChangeSuffix $F ".package"
+          ;;
+ 
+       *.pro)
+          print "Processing $F ..."
+          ChangeSuffix $F ".profile"
+          ;;
+ 
+       *.sym)
+          print "Processing $F ..."
+          ChangeSuffix $F ".symbols"
+          ;;
+ 
+    esac
+ done
+

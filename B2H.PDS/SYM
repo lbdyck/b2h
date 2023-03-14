@@ -1,0 +1,495 @@
+*--------------------------------------------------------------------
+* COPYRIGHT (c) Copyright 2001-2002 AT&T
+*
+* B2H System Symbol file: Release 4.7 - 20 May 2002
+*   AIX:    b2h.symbols
+*   Linux:  b2h.symbols
+*   MVS:    B2H.SYMBOLS
+*   OS/2:   B2H.SYM
+*   VM/ESA: B2H SYMBOLS
+*   Win95:  B2H.SYM
+*   WinNT:  B2H.SYM
+*   Unix:   b2h.symbols
+*
+* This file defines the processing information for SCRIPT/VS control words,
+* '&symbols', Bookmaster/GML macros and Bookmaster/GML tags, plus any
+* character translations to be performed.
+*
+* Blank records or records with an asterisk in column one are
+* considered comments and are ignored.
+*
+* Refer to the B2H User's Guide for more information
+*--------------------------------------------------------------------
+ 
+*----- CHARGES and XEDITG box drawing characters -----
+(PC)   :XLATEI.  E5 2D C4 2D 11 7C B3 7C
+(CMS)  :XLATEI.  33 60 BF 60 11 4F FA 4F
+(MVS)  :XLATEI.  33 60 BF 60 11 4F FA 4F
+ 
+*----- No default single-byte-to-string translations defined -----
+*      :XLATEI.  xx V='string'
+ 
+*----- Script/VS control words (.name) -----
+:CMD. AA    AP AR BC    BM BT CC CD CL CM CO CW  V='=IGNORE'
+:CMD. DA       DF DH DI DL DR DS DU    EB EC EM  V='=IGNORE'
+:CMD. EQ ES ET EZ FI FL FM FS FT FV GR GS HE HM  V='=IGNORE'
+:CMD. HN HS HW HY IC IE IL IN IR IS IT IX JU KP  V='=IGNORE'
+:CMD. LL LO LS LT LY MC ME MS NB NC    NJ NL NV  V='=IGNORE'
+:CMD. OB OC OF OT       PL PM PN    PS PT PW PX  V='=IGNORE'
+:CMD. RD    RI RN RT SB SC SD SL SS    SV TA TB  V='=IGNORE'
+:CMD. TD TE TM TP TS TT TU UD UN UW VR WF WS     V='=IGNORE'
+:CMD. WZ ZZ                                      V='=IGNORE'
+ 
+:CMD.  AN BF CE CS DC DD DM DV EF EL FN FO GO IF V='=INTERNAL'
+:CMD.  IM LB LI MG NF OR PF PI QU QQ RC RE RF RH V='=INTERNAL'
+:CMD.  RV SA SE SI       SU SX TH TI TR TY       V='=INTERNAL'
+:CMD.  UC UP US AND GOTO ELSE THEN               V='=INTERNAL'
+:CMD.  SK SP                                     V='&nbsp;<BR>'
+ 
+:CMD.  BL CB                                     V='<P>'        TV='<P>'
+:CMD.  BR                                        V='<BR>'       TV='<BR>'
+:CMD.  BX HR                                     V='<HR>'       TV='<BR>'
+:CMD.  CP                                        V='<P><P>'     TV='<P>'
+:CMD.  CT                                        V='&text'      TV='=IGNOREW'
+:CMD.  H0                                        V=':H0.&text'  TV='=IGNOREW'
+:CMD.  H1                                        V=':H1.&text'  TV='=IGNOREW'
+:CMD.  H2                                        V=':H2.&text'  TV='=IGNOREW'
+:CMD.  H3                                        V=':H3.&text'  TV='=IGNOREW'
+:CMD.  H4                                        V=':H4.&text'  TV='=IGNOREW'
+:CMD.  H5                                        V=':H5.&text'  TV='=IGNOREW'
+:CMD.  H6                                        V=':H6.&text'  TV='=IGNOREW'
+:CMD.  PA EP OP                                  V='<P><P>'     TV='=IGNORE'
+:CMD.  PP                                        V='<P>&nbsp;&nbsp;&nbsp;&text' TV='<P>&nbsp;&nbsp;&nbsp;&text'
+:CMD.  TC                                        V=':TOC.'      TV='=IGNOREW'
+ 
+*----- Control words used internally by B2H itself -----
+:TAG.  BHMAC                                     V='=INTERNAL'
+ 
+*----- GML and Bookmaster macros (.macroname) -----
+:CMD.  BLOCK BOOKMARK CCPTOC CCTOC GETREF GETWMAX        V='=IGNORE'
+:CMD.  GETWSUM INCLUDE MOD MODSET MODTRAP                V='=IGNORE'
+:CMD.  NAMEEPS NAMEF NAMESTYL PGCHECK TABREAK USING      V='=IGNORE'
+:CMD.  GETW IM INWIDTH NAMECTR NAMEFILE NAMEIT           V='=INTERNAL'
+:CMD.  SETDVCF SETUP TABRACK                             V='=INTERNAL'
+:CMD.  LAYOUT                                            V='<BR>'
+ 
+*----- GML and Bookmaster tags (:tagname.) -----
+:TAG.  ALINE EC CAUSE CMT FROM     IT=N VAT=N ATT=N SE=N V='=IGNORE'
+:TAG.  EGDOC MAPQFIX EMAPQFIX      IT=N VAT=N ATT=N SE=N V='=IGNORE'
+:TAG.  ENOTICES EOVERLAY EPTOC     IT=N VAT=N ATT=N SE=N V='=IGNORE'
+:TAG.  ESTEP ECLETTER ENOTE ETOC   IT=N VAT=N ATT=N SE=N V='=IGNORE'
+:TAG.  EUSERDOC EIBMLPS EDOCPROF   IT=N VAT=N ATT=N SE=N V='=IGNORE'
+ 
+:TAG.  AUTOLINK CI CIREF CT        IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  DFREF DIALDEF DOCDESC       IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  FIGSEG FT GRIDAREA GRIDDEF  IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  MARK NITEM OVERART OVERLAY  IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  QT SCRDEF ST STEP STEPREF   IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  SYNNT TCE0 TCE1 TCE2        IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  TCE3 TCE4 TCE5 TCE6 TCE7    IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  TCE8 TCE9 TCE10 TCE11 TCE12 IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  TCE13 TCE14 TCE15 TCE16     IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  TCE17 TCE18 TCE19 TCE20     IT=N VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  MINDEX                      IT=N VAT=N ATT=Y SE=N V='=IGNOREALL'
+ 
+:TAG.  CLETTER DFDEF               IT=N VAT=Y ATT=Y SE=N V='=IGNORE'
+:TAG.  GRIDSEG MAPDEF MARKLIST     IT=N VAT=Y ATT=Y SE=N V='=IGNORE'
+ 
+:TAG.  COMPANY DEPT INIT IZIP LOC  IT=Y VAT=N ATT=N SE=N V='=IGNORE'
+:TAG.  NAME NETID PHONE REF TO     IT=Y VAT=N ATT=N SE=N V='=IGNORE'
+:TAG.  TPCODE                      IT=Y VAT=N ATT=N SE=N V='=IGNORE'
+ 
+:TAG.  MKACTION MKCLASS            IT=Y VAT=N ATT=Y SE=N V='=IGNORE'
+:TAG.  PNINDEX SCHNOTE SIG         IT=Y VAT=N ATT=Y SE=N V='=IGNORE'
+ 
+:TAG.  CC DC                       IT=Y VAT=Y ATT=Y SE=N V='=IGNORE'
+ 
+:TAG.  EDF EMAP ETLE EMARKNT EGRID IT=N VAT=N ATT=N SE=Y V='=IGNORE'
+:TAG.  COMPL ECOMPL F EF EFLE      IT=N VAT=N ATT=N SE=Y V='=IGNORE'
+:TAG.  EIBMX MARKDESC EMARKDESC    IT=N VAT=N ATT=N SE=Y V='=IGNORE'
+:TAG.  EPARTSASM SNOTICE ESNOTICE  IT=N VAT=N ATT=N SE=Y V='=IGNORE'
+ 
+:TAG.  FLE GRID MARKNT             IT=N VAT=N ATT=Y SE=Y V='=IGNORE'
+:TAG.  REVCW EREVCW REVPF EREVPF   IT=N VAT=N ATT=Y SE=Y V='=IGNORE'
+:TAG.  REVPP EREVPP REVPT EREVPT   IT=N VAT=N ATT=Y SE=Y V='=IGNORE'
+:TAG.  REVSLUG EREVSLUG TLE        IT=N VAT=N ATT=Y SE=Y V='=IGNORE'
+ 
+:TAG.  DF MAP                      IT=N VAT=Y ATT=Y SE=Y V='=IGNORE'
+ 
+:TAG.  IBMX                        IT=Y VAT=N ATT=N SE=Y V='=IGNORE'
+ 
+:TAG.  PARTSASM SYNTAX             IT=Y VAT=N ATT=Y SE=Y V='=IGNORE'
+ 
+:TAG.  EPD EPT EROW ETNOTE         IT=N VAT=N ATT=N SE=N V='=IGNORE'       TV='=IGNORE'
+ 
+:TAG.  RETKEY                      IT=N VAT=N ATT=N SE=N V='=IGNOREALL'
+:TAG.  SUBJECT                     IT=Y VAT=N ATT=Y SE=N V='=IGNOREALL'
+ 
+:TAG.  ANNOT EANNOT BACKM BODY     IT=N VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  APPENDIX EAPPENDIX FRONTM   IT=N VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  COPREXT EDIRECT FIGDESC     IT=N VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  ELEN ELERS EPSC GDG TLINE   IT=N VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  TITLEP ETITLEP SYS USER     IT=N VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  ETITLE TIPAGE LP            IT=N VAT=N ATT=N SE=N V='=INTERNAL'
+ 
+:TAG.  ANSREF ANSWER BLANK CHOICE  IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  DOCPROF FIGDEF FIGREF FNREF IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  GDOC HDREF IBMLPS IREF      IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  LDESC LEN LERS LERSDEF      IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  LIBRARY LIREF MATCH PSC     IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  QITEM QREF REVISION SCHDATE IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  SCHDEF SPOT SPOTREF SYNDEF  IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  SYNNTREF TITLE TOPIC TREF   IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  USERDOC WARRANTY            IT=N VAT=N ATT=Y SE=N V='=INTERNAL'
+ 
+:TAG.  C                           IT=N VAT=Y ATT=N SE=N V='=INTERNAL'
+ 
+:TAG.  ARTDEF ARTWORK CGDEF DIRDEF IT=N VAT=Y ATT=Y SE=N V='=INTERNAL'
+:TAG.  DIRECT DLDEF FRAGREF LEDI   IT=N VAT=Y ATT=Y SE=N V='=INTERNAL'
+:TAG.  MCDEF PTOC RDEF SEP TABDDEF IT=N VAT=Y ATT=Y SE=N V='=INTERNAL'
+:TAG.  TDEF TFT THD XMPDEF COVER   IT=N VAT=Y ATT=Y SE=N V='=INTERNAL'
+ 
+:TAG.  CODE COPRNOTE DATE DENTRY   IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  DEST DIRHDR DIRSUB FIGCAP   IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  GRPSEP MODULE MSG MSGNO     IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  NUMBYTES ORESP PRESP        IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  PROBD RELEASE SEVERITY      IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  SPRESP SYSACT TCAP URESP    IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  VERSION XPL VOLNUM FILENUM  IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  PARTNUM BINDNUM VENDOR      IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+:TAG.  PRTLOC                      IT=Y VAT=N ATT=N SE=N V='=INTERNAL'
+ 
+:TAG.  ABBREV ABSTRACT BIBLIOG     IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  GLOSSARY H0 H1 H2 H3 H4 H5  IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  H6 H7 H8 H9 H10 H11 H12 H13 IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  H14 H15 H16 H17 H18 H19 H20 IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  IH1 IH2 IH3 INDEX I1 I2 I3  IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  LEGEND PREFACE SAFETY       IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  SCHI SOA AUTHOR             IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+:TAG.  PGMNUM DOCNUM               IT=Y VAT=N ATT=Y SE=N V='=INTERNAL'
+ 
+:TAG.  REPSEP                      IT=Y VAT=Y ATT=N SE=N V='=INTERNAL'
+ 
+:TAG.  DELIM FIGLIST KWD OPER      IT=Y VAT=Y ATT=Y SE=N V='=INTERNAL'
+:TAG.  TLIST TOC VAR               IT=Y VAT=Y ATT=Y SE=N V='=INTERNAL'
+ 
+:TAG.  GROUP                       IT=Y VAT=Y ATT=N SE=Y V='=INTERNAL'
+ 
+:TAG.  ADDRESS EADDRESS EFIG EFN   IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  EL ELBLBOX ENT EQUALIF EXMP IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  EQUESTION ESCHEDULE ESCREEN IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  ETABDATA ETABLE ETFT ETHD   IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  TDESC ETDESC EARTALT ESYNNT IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  VNOTICE EVNOTICE ELITDATA   IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  EFRAGMENT EGROUP ESYNTAX    IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  ECODEL EMSGL ECGRAPHIC      IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+:TAG.  PROLOG EPROLOG              IT=N VAT=N ATT=N SE=Y V='=INTERNAL'
+ 
+:TAG.  FIG FN L NT REV EREV XMP    IT=N VAT=N ATT=Y SE=Y V='=INTERNAL'
+:TAG.  LITDATA SCHEDULE SCREEN     IT=N VAT=N ATT=Y SE=Y V='=INTERNAL'
+:TAG.  SYNNT CGRAPHIC              IT=N VAT=N ATT=Y SE=Y V='=INTERNAL'
+ 
+:TAG.  ARTALT                      IT=N VAT=Y ATT=Y SE=Y V='=INTERNAL'
+:TAG.  QUESTION TABDATA TABLE      IT=N VAT=Y ATT=Y SE=Y V='=INTERNAL'
+ 
+:TAG.  LBLBOX QUALIF               IT=Y VAT=N ATT=N SE=Y V='=INTERNAL'
+ 
+:TAG.  FRAGMENT NOTE SYNTAX        IT=Y VAT=N ATT=Y SE=Y V='=INTERNAL'
+ 
+:TAG.  ECIT                        IT=N VAT=N ATT=N SE=Y V='=INTERNAL'     TV='</CITE>'
+:TAG.  EPK                         IT=N VAT=N ATT=N SE=Y V='=INTERNAL'     TV='</STRONG>'
+:TAG.  LI                          IT=N VAT=N ATT=Y SE=N V='=INTERNAL'     TV='<BR>'
+:TAG.  LINES                       IT=N VAT=N ATT=Y SE=Y V='=INTERNAL'     TV='<BR>'
+:TAG.  ELINES                      IT=N VAT=N ATT=N SE=Y V='=INTERNAL'     TV='<BR>'
+:TAG.  CIT                         IT=N VAT=N ATT=Y SE=Y V='=INTERNAL'     TV='<CITE>'
+ 
+:TAG.  DD DT GD                    IT=N VAT=N ATT=N SE=N V='=INTERNAL'     TV='<P>'
+ 
+:TAG.  DDHD DTHD GT                IT=Y VAT=N ATT=N SE=N V='=INTERNAL'     TV='<P>'
+ 
+:TAG.  EDIALOG ENOTEL              IT=N VAT=N ATT=N SE=Y V='=INTERNAL'     TV='<P>'
+:TAG.  EDL EGL EOL ESL EUL         IT=N VAT=N ATT=N SE=Y V='=INTERNAL'     TV='<P>'
+ 
+:TAG.  DIALOG                      IT=N VAT=N ATT=Y SE=Y V='=INTERNAL'     TV='<P>'
+ 
+:TAG.  DL GL OL SL UL NOTEL        IT=N VAT=Y ATT=Y SE=Y V='=INTERNAL'     TV='<P>'
+ 
+:TAG.  PK                          IT=N VAT=Y ATT=N SE=Y V='=INTERNAL'     TV='<STRONG>'
+:TAG.  TNOTE                       IT=N VAT=N ATT=Y SE=N V='=INTERNAL'     TV='=INTERNAL'
+:TAG.  ROW                         IT=N VAT=Y ATT=Y SE=N V='=INTERNAL'     TV='=INTERNAL'
+:TAG.  CODEL MSGL                  IT=N VAT=Y ATT=Y SE=Y V='=INTERNAL'     TV='=INTERNAL'
+ 
+:TAG.  APL  ASMLIST                IT=N VAT=N ATT=N SE=Y V=':XMP.'
+:TAG. EAPL EASMLIST                IT=N VAT=N ATT=N SE=Y V=':EXMP.'
+:TAG.  ATTACH                      IT=Y VAT=N ATT=N SE=N V='<B>Attachment&colon.</B>'
+:TAG.  BIN                         IT=N VAT=N ATT=N SE=Y V="B'"            TV="B'"
+:TAG. EBIN EHEX                    IT=N VAT=N ATT=N SE=Y V="'"             TV="'"
+:TAG.  CAUTION                     IT=N VAT=N ATT=Y SE=Y V='<P><B>Caution:<BR><I>'
+:TAG. ECAUTION                     IT=N VAT=N ATT=N SE=Y V='</I></B><P>'
+:TAG.  CHAR ECHAR                  IT=N VAT=N ATT=N SE=Y V="'"
+:TAG.  DANGER                      IT=N VAT=N ATT=Y SE=Y V='<P><B>DANGER!<BR><I>'
+:TAG. EDANGER                      IT=N VAT=N ATT=N SE=Y V='</I></B><P>'
+:TAG.  HEX                         IT=N VAT=N ATT=N SE=Y V="X'"            TV="X'"
+:TAG.  HP0 EHP0                    IT=N VAT=N ATT=N SE=Y V='&rbl.'         TV='&rbl.'
+:TAG.  HP1  MV                     IT=N VAT=N ATT=N SE=Y V='<I>'           TV='<I>'
+:TAG. EHP1 EMV                     IT=N VAT=N ATT=N SE=Y V='</I>'          TV='</I>'
+:TAG.  HP2                         IT=N VAT=N ATT=N SE=Y V='<B>'           TV='<B>'
+:TAG. EHP2                         IT=N VAT=N ATT=N SE=Y V='</B>'          TV='</B>'
+:TAG.  HP3                         IT=N VAT=N ATT=N SE=Y V='<B><I>'        TV='<B><I>'
+:TAG. EHP3                         IT=N VAT=N ATT=N SE=Y V='</I></B>'      TV='</I></B>'
+:TAG.  HP4                         IT=N VAT=N ATT=N SE=Y V='<TT>'          TV='<TT>'
+:TAG. EHP4                         IT=N VAT=N ATT=N SE=Y V='</TT>'         TV='</TT>'
+:TAG.  HP5                         IT=N VAT=N ATT=N SE=Y V='<U>'           TV='<U>'
+:TAG. EHP5                         IT=N VAT=N ATT=N SE=Y V='</U>'          TV='</U>'
+:TAG.  HP6                         IT=N VAT=N ATT=N SE=Y V='<I><U>'        TV='<I><U>'
+:TAG. EHP6                         IT=N VAT=N ATT=N SE=Y V='</U></I>'      TV='</U></I>'
+:TAG.  HP7                         IT=N VAT=N ATT=N SE=Y V='<B><U>'        TV='<B><U>'
+:TAG. EHP7                         IT=N VAT=N ATT=N SE=Y V='</U></B>'      TV='</U></B>'
+:TAG.  HP8                         IT=N VAT=N ATT=N SE=Y V='<B><U><I>'     TV='<B><U><I>'
+:TAG. EHP8                         IT=N VAT=N ATT=N SE=Y V='</I></U></B>'  TV='</I></U></B>'
+:TAG.  HP9                         IT=N VAT=N ATT=N SE=Y V='<TT><U>'       TV='<TT><U>'
+:TAG. EHP9                         IT=N VAT=N ATT=N SE=Y V='</U></TT>'     TV='</U></TT>'
+:TAG.  IBM                         IT=Y VAT=N ATT=N SE=N
+:TAG.  P PC                        IT=N VAT=N ATT=N SE=N V='<P>'           TV='<P>'
+:TAG.  LQ                          IT=N VAT=N ATT=N SE=Y V='<BLOCKQUOTE>'  TV="'"
+:TAG. ELQ                          IT=N VAT=N ATT=N SE=Y V='</BLOCKQUOTE>' TV="'"
+:TAG.  MD                          IT=N VAT=N ATT=N SE=Y V='<STRIKE>'
+:TAG. EMD                          IT=N VAT=N ATT=N SE=Y V='</STRIKE>'
+:TAG.  NOTICES                     IT=N VAT=N ATT=N SE=N V='<BR>'
+:TAG.  PARML                       IT=N VAT=Y ATT=Y SE=Y V='<DL>'          TV='<P>'
+:TAG. EPARML                       IT=N VAT=N ATT=N SE=Y V='</DL>'         TV='<P>'
+:TAG.  PD                          IT=N VAT=N ATT=N SE=N V='<DD>'          TV='<P>'
+:TAG.  PT                          IT=N VAT=N ATT=N SE=N V='<P><DT>'       TV='<P>'
+:TAG.  PV                          IT=N VAT=Y ATT=N SE=Y V='<VAR>'         TV='<VAR>'
+:TAG. EPV                          IT=N VAT=N ATT=N SE=Y V='</VAR>'        TV='</VAR>'
+:TAG.  Q EQ                        IT=N VAT=N ATT=N SE=Y V='"'             TV='"'
+:TAG.  RK  TP                      IT=N VAT=N ATT=N SE=Y V='<B>('
+:TAG. ERK ETP                      IT=N VAT=N ATT=N SE=Y V=')</B>'
+:TAG.  SUB                         IT=N VAT=N ATT=N SE=Y V='<SUB>'
+:TAG. ESUB                         IT=N VAT=N ATT=N SE=Y V='</SUB>'
+:TAG.  SUP                         IT=N VAT=N ATT=N SE=Y V='<SUP>'
+:TAG. ESUP                         IT=N VAT=N ATT=N SE=Y V='</SUP>'
+:TAG.  SYNOPSIS ESYNOPSIS          IT=N VAT=N ATT=N SE=Y V='<P>'
+:TAG.  VNHD                        IT=Y VAT=N ATT=N SE=N V='<P><B>&textall</B>'
+:TAG.  WARNING                     IT=N VAT=N ATT=Y SE=Y V='<P><B>Warning!<BR><I>'
+:TAG. EWARNING                     IT=N VAT=N ATT=N SE=Y V='</I></B><P>'
+:TAG.  X                           IT=Y VAT=N ATT=N SE=N
+:TAG.  XPH                         IT=N VAT=N ATT=N SE=Y V='<TT>'          TV=' '
+:TAG. EXPH                         IT=N VAT=N ATT=N SE=Y V='</TT>'         TV=' '
+ 
+*----- Tags used internally by B2H itself -----
+:TAG.  BHCMT BHFIG BHL BHOPT             IT=N VAT=Y ATT=Y V='=INTERNAL'
+:TAG.  BHSPLIT BHSYM BHTAB BHTABLE BHTFT IT=N VAT=Y ATT=Y V='=INTERNAL'
+ 
+*----- Symbol and &variable definitions -----
+*----- ISO Latin-1 8859-1 characters and BookMaster/GML equivalents
+:SYM. $rb $RB blank finespace rbl ssbl nbsp V='&nbsp;'  -- blank
+:SYM. xclam xclm                    V='&#33;'       -- Exclamation point (!)
+:SYM. cdq odq sdq                   V='&quot;'      -- double quote      (")
+:SYM. odqg cdqg                     V='&quot;'      -- double quote      (")
+:SYM. odqf                          V='&laquo;'     -- French open quote (")
+:SYM. cdqf                          V='&raquo;'     -- French close quote(")
+:SYM. numsign                       V='&#35;'       -- Number sign       (#)
+:SYM. dollar                        V='&#36;'       -- US dollar sign    ($)
+:SYM. percent                       V='&#37;'       -- Percent sign      (%)
+:SYM. amp                           V='&amp;'       -- Ampersand         (&)
+:SYM. csq osq ssq char echar apos   V='&#39;'       -- quote/apostrophe  (')
+:SYM. osqg csqg prime               V='&#39;'       -- quote/apostrophe  (')
+:SYM. lpar lparen                   V='&#40;'       -- Left parenthesis  (()
+:SYM. rpar rparen                   V='&#41;'       -- Right parenthesis ())
+:SYM. lbullet STAR asterisk         V='&#42;'       -- large bullet      (*)
+:SYM. plusop plus plusend           V='&#43;'       -- plus operation    (+)
+:SYM. comma                         V='&#44;'       -- Comma             (,)
+:SYM. minus minusop hyphen          V='&#45;'       -- minus sign        (-)
+:SYM. dot period per                V='&#46;'       -- dot               (.)
+:SYM. divslash slash slr            V='&#47;'       -- divide slash      (/)
+:SYM. colon gml                     V='&#58;'       -- Colon             (:)
+:SYM. egml                          V='&#58;e'      -- GML end-tag
+:SYM. semi                          V='&#59;'       -- Semi-colon        (;)
+:SYM. lt ltsym lahead               V='&lt;'        -- Less-than sign    (<)
+:SYM. eq eqsym equals               V='&#61;'       -- Equals sign       (=)
+:SYM. gt gtsym rahead               V='&gt;'        -- Greater-than sign (>)
+:SYM. quest                         V='&#63;'       -- Question mark     (?)
+:SYM. atsign                        V='&#64;'       -- Commercial at     (@)
+:SYM. lbracket lbrk                 V='&#91;'       -- Left square bracket ([)
+:SYM. bsl bslash                    V='&#92;'       -- Reverse solidus (backslash) (\)
+:SYM. rbracket rbrk                 V='&#93;'       -- Right square bracket (])
+:SYM. caret and                     V='&#94;'       -- Caret             (^)
+:SYM. us                            V='&#95;'       -- Horizontal bar (underscore) (_)
+:SYM. grave                         V='&#96;'       -- grave accent
+:SYM. lbrc lbrace                   V='&#123;'      -- Left curly brace  ({)
+:SYM. vbar lor                      V='&#124;'      -- Vertical bar      (|)
+:SYM. rbrc rbrace                   V='&#125;'      -- Right curly brace (})
+:SYM. tilde                         V='&#126;'      -- Tilde             (~)
+:SYM. florin                        V='&#402;'      -- Turkish florin
+:SYM. iexcl inve                    V='&iexcl;'     -- inverted exclamation mark
+:SYM. cent                          V='&cent;'      -- cent sign
+:SYM. Lsterling pound               V='&pound;'     -- pound sterling sign
+:SYM. curren currency               V='&curren;'    -- general currency sign
+:SYM. yen                           V='&yen;'       -- yen sign
+:SYM. splitvbar brvbar brkbar       V='&brvbar;'    -- broken (vertical) bar
+:SYM. dbls sect section             V='&sect;'      -- section sign
+:SYM. ue uml                        V='&uml;'       -- umlaut (dieresis)
+:SYM. copr copy copyr               V='&copy;'      -- copyright       ((C))
+:SYM. female ordf                   V='&ordf;'      -- ordinal indicator, female
+:SYM. laquo                         V='&laquo;'     -- angle quotation mark, left
+:SYM. lnot not notsym               V='&not;'       -- not sign
+:SYM. shy                           V='&shy;'       -- soft hyphen
+:SYM. reg regtm                     V='&reg;'       -- registered sign
+:SYM. macr overline                 V='&macr;'      -- macron
+:SYM. deg degree                    V='&deg;'       -- degree sign
+:SYM. plusmin plusmn pm             V='&plusmn;'    -- plus-or-minus sign
+:SYM. acute                         V='&acute;'     -- acute accent
+:SYM. micro mu                      V='&micro;'     -- micro sign
+:SYM. par para                      V='&para;'      -- pilcrow (paragraph sign)
+:SYM. middot vellip smultdot        V='&middot;'    -- vertical ellipsis
+:SYM. invellip                      V='&nbsp;&nbsp;&middot;'  -- indented vert ellipsis
+:SYM. cc cedil                      V='&cedil;'     -- cedilla
+:SYM. male ordm                     V='&ordm;'      -- ordinal indicator, male
+:SYM. raquo                         V='&raquo;'     -- angle quotation mark, right
+:SYM. frac14                        V='&frac14;'    -- fraction one-quarter
+:SYM. frac12                        V='&frac12;'    -- fraction one-half
+:SYM. frac34                        V='&frac34;'    -- fraction three-quarters
+:SYM. invq iquest cedilla           V='&iquest;'    -- inverted question mark
+:SYM. Agrave Ag                     V='&Agrave;'    -- capital A, grave accent
+:SYM. Aacute Aa                     V='&Aacute;'    -- capital A, acute accent
+:SYM. Acirc Ac                      V='&Acirc;'     -- capital A, circumflex accent
+:SYM. Atilde At                     V='&Atilde;'    -- capital A, tilde
+:SYM. Auml Ae Aumlaut               V='&Auml;'      -- capital A, dieresis or umlaut mark
+:SYM. Aring Ao                      V='&Aring;'     -- capital A, ring
+:SYM. AElig                         V='&AElig;'     -- capital AE diphthong (ligature)
+:SYM. Ccedil Cc                     V='&Ccedil;'    -- capital C, cedilla
+:SYM. Egrave Eg                     V='&Egrave;'    -- capital E, grave accent
+:SYM. Eacute Ea                     V='&Eacute;'    -- capital E, acute accent
+:SYM. Ecirc Ec                      V='&Ecirc;'     -- capital E, circumflex accent
+:SYM. Euml Ee                       V='&Euml;'      -- capital E, dieresis or umlaut mark
+:SYM. Igrave Ig                     V='&Igrave;'    -- capital I, grave accent
+:SYM. Iacute Ia                     V='&Iacute;'    -- capital I, acute accent
+:SYM. Icirc Ic                      V='&Icirc;'     -- capital I, circumflex accent
+:SYM. Iuml Ie                       V='&Iuml;'      -- capital I, dieresis or umlaut mark
+:SYM. ETH Eth                       V='&ETH;'       -- capital Eth, Icelandic
+:SYM. Ntilde Nt                     V='&Ntilde;'    -- capital N, tilde
+:SYM. Ograve Og                     V='&Ograve;'    -- capital O, grave accent
+:SYM. Oacute Oa                     V='&Oacute;'    -- capital O, acute accent
+:SYM. Ocirc Oc                      V='&Ocirc;'     -- capital O, circumflex accent
+:SYM. Otilde Ot                     V='&Otilde;'    -- capital O, tilde
+:SYM. Ouml Oe                       V='&Ouml;'      -- capital O, dieresis or umlaut mark
+:SYM. mult times                    V='&times;'     -- multiply sign
+:SYM. Oslash Os                     V='&Oslash;'    -- capital O, slash
+:SYM. Ugrave Ug                     V='&Ugrave;'    -- capital U, grave accent
+:SYM. Uacute Ua                     V='&Uacute;'    -- capital U, acute accent
+:SYM. Ucirc Uc                      V='&Ucirc;'     -- capital U, circumflex accent
+:SYM. Uuml Ue                       V='&Uuml;'      -- capital U, dieresis or umlaut mark
+:SYM. Yacute Ya                     V='&Yacute;'    -- capital Y, acute accent
+:SYM. THORN Thorn                   V='&THORN;'     -- capital THORN, Icelandic
+:SYM. szlig ss                      V='&szlig;'     -- small sharp s, German (sz ligature)
+:SYM. agrave ag                     V='&agrave;'    -- small a, grave accent
+:SYM. aacute aa                     V='&aacute;'    -- small a, acute accent
+:SYM. acirc ac                      V='&acirc;'     -- small a, circumflex accent
+:SYM. atilde at                     V='&atilde;'    -- small a, tilde
+:SYM. auml aumlaut ae               V='&auml;'      -- small a, dieresis or umlaut mark
+:SYM. aring ao acircle              V='&aring;'     -- small a, ring
+:SYM. aelig                         V='&aelig;'     -- small ae diphthong (ligature)
+:SYM. ccedil cc                     V='&ccedil;'    -- small c, cedilla
+:SYM. egrave eg                     V='&egrave;'    -- small e, grave accent
+:SYM. eacute ea                     V='&eacute;'    -- small e, acute accent
+:SYM. ecirc ec ecircfl              V='&ecirc;'     -- small e, circumflex accent
+:SYM. euml ee                       V='&euml;'      -- small e, dieresis or umlaut mark
+:SYM. igrave ig                     V='&igrave;'    -- small i, grave accent
+:SYM. iacute ia                     V='&iacute;'    -- small i, acute accent
+:SYM. icirc ic                      V='&icirc;'     -- small i, circumflex accent
+:SYM. iuml ie                       V='&iuml;'      -- small i, dieresis or umlaut mark
+:SYM. eth                           V='&eth;'       -- small eth, Icelandic
+:SYM. ntilde nt                     V='&ntilde;'    -- small n, tilde
+:SYM. ograve og                     V='&ograve;'    -- small o, grave accent
+:SYM. oacute oa                     V='&oacute;'    -- small o, acute accent
+:SYM. ocirc oc                      V='&ocirc;'     -- small o, circumflex accent
+:SYM. otilde ot                     V='&otilde;'    -- small o, tilde
+:SYM. ouml oumlaut oe               V='&ouml;'      -- small o, dieresis or umlaut mark
+:SYM. div divid divide              V='&divide;'    -- divide sign
+:SYM. oslash os                     V='&oslash;'    -- small o, slash
+:SYM. ugrave ug                     V='&ugrave;'    -- small u, grave accent
+:SYM. uacute ua                     V='&uacute;'    -- small u, acute accent
+:SYM. ucirc uc                      V='&ucirc;'     -- small u, circumflex accent
+:SYM. uuml uumlaut ue               V='&uuml;'      -- small u, dieresis or umlaut mark
+:SYM. yacute ya                     V='&yacute;'    -- small y, acute accent
+:SYM. thorn                         V='&thorn;'     -- small thorn, Icelandic
+:SYM. yuml ye                       V='&yuml;'      -- small y, dieresis or umlaut mark
+:SYM. euro                          V='&euro;'      -- European currency symbol
+*SYM. euro                          V='&#128;'      -- European currency symbol (alt)
+ 
+*----- miscellaneous symbols
+:SYM. concat                     V='&#124;&#124;'   -- concatenate  (||)
+:SYM. dblxclam dblxclm           V='&#33;&#33;'     -- double exclamation
+:SYM. dotdot                     V='&#46;&#46;'     -- dotdot (..)
+:SYM. frac38                     V='3/8'            -- three eights (3/8)
+:SYM. frac78                     V='7/8'            -- seven eights (7/8)
+:SYM. ge gesym                   V='&gt;&#61;'      -- greater or equal   (>=)
+:SYM. iff                        V='&lt;&#61;&gt;'  -- if and only if     (<=>)
+:SYM. le lesym ldarraw           V='&lt;&#61;'      -- less than or equal (<=)
+:SYM. ne nesym                   V='&lt;&gt;'       -- not equal (<>)
+:SYM. rdarrow                    V='&#61;&gt;'      -- left double arrow  (=>)
+:SYM. aus                        V='<U>a</U>'       -- underscored-a
+:SYM. ous                        V='<U>o</U>'       -- underscored-o
+ 
+*----- BookMaster/GML characters not covered by above
+:SYM. Beta                       V='B'
+:SYM. bin                        V="B'"
+:SYM. bul bullet mathast         V='*'
+:SYM. ebin ehex                  V="'"
+:SYM. ellip ellipsis             V='...'
+:SYM. emdash mdash               V='&dash.&dash.'
+:SYM. endash ndash dash          V='-'
+:SYM. frac18                     V='1/8'
+:SYM. frac58                     V='5/8'
+:SYM. hex                        V="X'"
+:SYM. sub0                       V=':sub.0:esub.'
+:SYM. sub1                       V=':sub.1:esub.'
+:SYM. sub2                       V=':sub.2:esub.'
+:SYM. sub3                       V=':sub.3:esub.'
+:SYM. sub4                       V=':sub.4:esub.'
+:SYM. sub5                       V=':sub.5:esub.'
+:SYM. sub6                       V=':sub.6:esub.'
+:SYM. sub7                       V=':sub.7:esub.'
+:SYM. sub8                       V=':sub.8:esub.'
+:SYM. sub9                       V=':sub.9:esub.'
+:SYM. sup0                       V=':sup.0:esup.'
+:SYM. sup1                       V=':sup.1:esup.'
+:SYM. sup2                       V=':sup.2:esup.'
+:SYM. sup3                       V=':sup.3:esup.'
+:SYM. sup4                       V=':sup.4:esup.'
+:SYM. sup5                       V=':sup.5:esup.'
+:SYM. sup6                       V=':sup.6:esup.'
+:SYM. sup7                       V=':sup.7:esup.'
+:SYM. sup8                       V=':sup.8:esup.'
+:SYM. sup9                       V=':sup.9:esup.'
+:SYM. telephone                  V='Tel.'
+:SYM. tm                         V='(TM)'
+:SYM. fi                         V='fi'
+:SYM. fl                         V='fl'
+:SYM. oelig                      V='oe'
+:SYM. OElig                      V='OE'
+ 
+*----- Symbols to support XEDITG and Bookmaster CHARGES drawings -----
+*----- Arrows                                              Au
+:SYM. Al larrow                  V='&lt;'  --           ^
+:SYM. Ar rarrow                  V='&gt;'  --     Al <--|--> Ar
+:SYM. Au uarrow                  V='&#94;' --           V
+:SYM. Ad darrow dahead           V='V'     --           Ad
+*----- Edges and junctions -----
+:SYM. bxas bxbj bxcr bxcj        V='*'
+:SYM. bxh Lh                     V='-'
+:SYM. bxle bxde bxtj             V='*'     --  bxul         Et Td         bxur
+:SYM. bxll Ll                    V='*'     --     Ul *--------*--------* Ur
+:SYM. bxlr Lr                    V='*'     --        |        |        |
+:SYM. bxri                       V='*'     --        |  bxh   | Ju     |
+:SYM. bxul Ul                    V='*'     -- Tl  El *--------+--------* Er Tr
+:SYM. bxur Ur                    V='*'     --        |        |        | bxv
+:SYM. bxv Lv                     V='|'     --        |        |        |
+:SYM. Eb                         V='*'     --     Ll *--------*--------* Lr
+:SYM. El Er Et Td Tl Tr Tu       V='*'     --  bxll         Eb Tu         bxlr
+:SYM. Ju                         V='+'
+*---- Added by LBD to support HCD Graphic Reports 07/28/2017
+:SYM. bx0022 bx0220              V='*'
+:SYM. bx0202 bx2020 bx2200       V='|'     --        |        |        |
+:SYM. bx2002                     V='|'     --        |        |        |

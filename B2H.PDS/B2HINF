@@ -1,0 +1,1389 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HINF: General Information, invoking and customizing
+.*         Imbedded by B2H SCRIPT
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+.setup b2hsetup
+.*--------------------
+:h1.What is &sysname.?
+:p.&sysname. reads files written in &bm., Generalized Markup
+Language (GML), &script., and even &flat. files, and converts them
+into &html. format suitable for use in an Internet World-Wide-Web
+environment.
+:p.&sysname. is a REXX program that runs under AIX, Linux, MVS
+(OS/390), OS/2, VM/ESA, &win9x., &winnt.
+:rev refid=r47.
+and Unix.
+:erev refid=r47.
+On VM/ESA, &sysname. can run either as a stand-alone EXEC or as a
+CMS pipeline filter.
+On MVS, &sysname. can run either as a stand-alone program or as an
+MVS/BatchPipeWorks pipeline filter.
+:p.&sysname. will be of interest to two audiences:  those who simply
+want to convert existing &bm., GML, &script. or &flat. files to
+&html., and those who want to rapidly create &html. pages with many
+internal links, but avoid the tedious hypertext link syntax.
+:p.You do not need to know &bm., GML, &script. or &html. to do a
+conversion.  However, these skills may be desirable if you want to
+create &bm., GML or &script. source files, or massage the &html.
+output.
+:p.&sysname. supports most commonly-used &bm., GML and &script.
+tags, macros and symbols.  This document demonstrates many of the
+features of &sysname. and serves as an example of acceptable tag
+coding when restrictions apply.  See also :hdref refid=caveat..
+.*----------
+:h2.Highlights and Features of &sysname.
+:ul.
+:li.Converts most commonly-used markup, tags and constructs of &bm.,
+GML and &script. (DCF)
+:li.Supports conversion of &flat. files
+:li.Output conforms to &html. Release 2,
+:rev refid=r42.
+3 or 4,
+:erev refid=r42.
+as specified at execution time
+:li.Can generate full and partial tables-of-contents; and if
+generated, options are available for specifying the
+table-of-content's format
+:li.Can generate an index; and if generated, options are available
+for specifying the index's format
+:li.Can generate figure and table lists
+:li.Can automatically generate hypertext links within the document
+itself:
+:ul compact.
+:li.Table-of-Contents (TOC):
+:ul compact.
+:li.From the TOC to each section
+:li.From each section back to the main TOC
+:li.If a partial TOC is available:
+:ul compact.
+:li.From a partial TOC to each associated section
+:li.From each section back to the most-recent partial TOC
+:li.From each partial TOC back to the main TOC
+:eul.
+:eul.
+:li.Figure Lists and Table Lists:
+:ul compact.
+:li.From the List of Figures to each figure
+:li.From the List of Tables to each table
+:li.From each figure or table back to it's associated list
+:eul.
+:li.Footnotes:
+:ul compact.
+:li.From a footnote's reference to it's definition
+:li.From each footnote definition back to it's initial reference
+:eul.
+:li.Index (if generated):
+:ul compact.
+:li.From the index back to each referenced item
+:li.An optional Index TOC for the index itself can be generated
+:eul.
+:li.Cross-references
+(e.g. :xph.&colon.hdref:exph., :xph.&colon.figref:exph.)
+are converted into a hypertext link to the target
+:li.From a question's answer back to the original question
+:eul.
+:li.Supports cross-referencing of multi-volume documents
+:li.:q.Boilerplate:eq. records can be automatically inserted into
+the beginning and/or end of the output &html. file.
+:fn.
+For example, this might be used to ensure that all files contain
+standardized navigational links.
+:efn.
+:li.:q.Mast Head:eq. information can be included in the output
+:li.Explicit &html. statements can be included in the source file to
+support specialized requirements
+:li.The output &html. file can be split into multiple &html. files,
+useful for large source files -- allowing the reader to retrieve
+only sections which are of interest, reducing document load time.
+When splitting the output file, &sysname. can be instructed to
+automatically insert nextpage/prevpage/table-of-content hyperlinks
+into the output files to ease navigation.
+:li.Supports line drawings created by XEDITG and CHARGES
+:li.Supports syntax (:q.railroad:eq.) diagrams
+:li.Supports &bm. Question and Answer tags and can generate either
+textual output (as &bm. does) or interactive &html. FORMs which can
+be used with a installation-provided CGI program to verify the
+user's answers
+:li.Large number of options are available for controlling the
+conversion
+:li.Runs on AIX, Linux, MVS (OS/390), OS/2, VM/ESA, &win9x., &winnt.
+:rev refid=r47.
+and Unix.
+:erev refid=r47.
+platforms (on VM, &sysname. can run as a stand-alone EXEC or as a
+CMS Pipeline filter; on MVS, &sysname. can run either as a
+stand-alone program or as an MVS/BatchPipeWorks pipeline filter).
+.* :li.&sysname. is Year2000 ready.
+:li.Conversion can be performed on one platform (e.g. VM/ESA) and
+the output transferred, stored and used on another platform
+(e.g. AIX or Windows NT).
+:li.On MVS, the &html. output can be either sequential files or
+members of a partitioned data set (PDS); if using OpenEdition, the
+files can then optionally be transferred to a Hierarchical File
+System (HFS) directory
+:li.Execution can be customized by use of profiles; options can be
+assigned based on the current and/or destination platform
+:li.A symbol table defines how symbols, control words, macros and
+tags are handled.  User-provided symbol tables can be used to
+support installation-specific symbols, control words, macros and
+tags.
+:li.Installation-provided exit routines can be invoked to provide
+custom processing for designated control words, macros and tags
+:li.The output &html. file can contain many META-type statements to
+support HTTP search queries (e.g. keywords, owner, contact, document
+review and expiration dates)
+:eul.
+.*--------------------
+:h1.Obtaining and Installing &sysname
+.*----------
+:h2 id=prereq.Prerequisites
+:rev refid=r47.
+:h3 id=rexx.REXX
+:p.&sysname. is written in REXX and requires that REXX be installed
+on the machine on which it is executed.  Two different :q.flavors:eq.
+of REXX can be used:
+:ul.
+:li.:hp2.IBM's REXX:ehp2.
+.br;IBM provides REXX for a variety of platforms.
+:ul compact.
+:li.On VM and MVS (OS/390), a REXX interpreter is :q.built-in:eq..
+An optional REXX compiler is available for a fee.
+:li.For PC platforms, IBM has a variety of :hp1.Object REXX:ehp1. fee
+products available. Each PC operating system requires its own REXX product.
+More information on these is available at
+.website &URLrexibm
+:eul.
+:li.:hp2.Regina REXX:ehp2.
+.br;Regina is a free REXX interpreter that has been ported to most Unix platforms
+(Linux, FreeBSD, Solaris, AIX, HP-UX, etc.) and also to OS/2, eCS, DOS,
+Win9x/Me/NT/2k/XP, Amiga, QNX, BeOS, MacOS X, EPOC32, AtheOS, OpenVMS and
+OpenEdition.  More information on Regina REXX is available at
+.website &URLrexreg
+:eul.
+:erev refid=r47.
+:h3.Platforms
+.*------ platforms
+:p.One of the following platforms on which to run &sysname.&colon.
+:ul.
+.*-- AIX
+:li.:hp2.AIX:ehp2.
+:p.AIX support requires REXX to be installed.  For IBM's
+:cit.&rexaix.:ecit., check out the Object REXX home page at
+.website &URLrexibm
+:rev refid=r47.
+For Regina REXX, check out the Regina REXX home page at
+.website &URLrexreg
+:erev refid=r47.
+.*-- LINUX
+:li.:hp2.Linux:ehp2.
+:p.Linux support requires REXX to be installed. For IBM's
+:cit.&rexlinx.:ecit.., check out the Object REXX home page at
+.website &URLrexibm
+:rev refid=r47.
+For Regina REXX, check out the Regina REXX home page at
+.website &URLrexreg
+:erev refid=r47.
+.*-- MVS/TSO
+:li.:hp2.TSO/E under MVS or OS/390:ehp2.
+:fn.
+The MVS version of &sysname. was tested using MVS/ESA 5.2.2 with
+TSO/E R2.05 and OS/390 2.04 with TSO/E R2.06
+:efn.
+:p.The REXX Compiler run-time libraries are required if the compiled
+version of &sysname. is to be used.
+.*-- OS/2
+:li.:hp2.OS/2 2.1:ehp2.
+:fn.
+&sysname. may run on earlier versions of OS/2, but it has not been tested.
+:efn.
+:hp2.or OS/2 Warp:ehp2. using either the FAT or HPFS file systems
+:rev refid=r47.
+:p.You can either use IBM's REXX provided with OS/2 or you can use
+Regina REXX. For Regina REXX, check out its home page at
+.website &URLrexreg
+:erev refid=r47.
+.*-- VM/ESA
+:li.:hp2.VM/ESA:ehp2.
+:p.The REXX Compiler run-time libraries are required if the compiled
+version of &sysname. is to be used.
+.*-- Win9x/NT
+:li.:hp2.&win9x. or &winnt.:ehp2.
+:p.Support for &win9x. and &winnt. requires REXX to be installed.
+For IBM's :cit.&rexwin.:ecit., check out the Object REXX home page at
+.website &URLrexibm
+:rev refid=r47.
+For Regina REXX, check out the Regina REXX home page at
+.website &URLrexreg
+:erev refid=r47.
+.*-- UNIX
+:rev refid=r47.
+:li.:hp2.Unix:ehp2.
+:p.Support for Unix requires REXX to be installed.
+For Regina REXX, check out the Regina REXX home page at
+.website &URLrexreg
+:erev refid=r47.
+:eul.
+A web browser to view the output &html. file.
+:h3.Hardware
+:p.No known restrictions
+.*----------
+:h2.Obtaining &sysname.
+.*-----
+:h3.Via the Internet
+:p.&sysname. is available on IBM's VM download page on the Internet at
+.website &URLdl
+:p.On that site, you can download either of two files containing the
+&sysname. system:  :hp2.B2H.VMARC:ehp2. (a VMARC-type file) or
+:hp2.B2H.ZIP:ehp2. (a "traditional" ZIP-type file).  The VMARC file
+contains the "base" install files, plus the following:  a copy of
+B2H compiled for VM; a copy of B2H compiled for MVS; a LIST3820
+version of the B2H User's Guide; and a copy of the ZIP file itself.
+The ZIP file contains just the "base" install files.
+:ul compact.
+:li.If you will be using &sysname. on a PC workstation, download the
+ZIP file
+:li.If you will be using &sysname. on VM, download the VMARC file.
+Follow the instruction on the download page about uploading it to VM
+and extracting the files
+:li.If you will be using &sysname. on MVS:
+:ul compact.
+:li.If you have access to VM, download the VMARC file (because it
+contains a copy of &sysname. compiled for MVS) and follow the
+instructions on the download page about uploading it to VM and
+extracting the files; then send the files to the desired TSO user ID
+:li.If you do not have access to VM, download the ZIP file, extract
+the files and then upload them to the desired TSO user ID.
+:eul.
+:eul.
+.*-----
+:h3.IBM employees
+:p.&sysname. resides on the VMTOOLS disk.  If your site supports
+the VM :q.:xph.TOOLCAT:exph.:eq. command, the following will request
+a copy:
+:xmp.
+  TOOLCAT VMTOOLS GET B2H PACKAGE
+:exmp.
+:p.If :q.:xph.TOOLCAT:exph.:eq. is not available in your
+environment, you can request &sysname. from the VMTOOLS master disk
+(note that it may
+:q.batch:eq. your request with others and deliver the files on an
+overnight basis):
+:xmp.
+  TOOLS SENDTO RALVM17 VMTOOLS VMTOOLS GET B2H PACKAGE
+:exmp.
+:p.If you would like to subscribe to &sysname. so updates are
+automatically sent to you, enter:
+:xmp.
+  TOOLCAT VMTOOLS SUBSCRIBE B2H PACKAGE
+ 
+          (or)
+ 
+  TOOLS SENDTO RALVM17 VMTOOLS VMTOOLS SUBSCRIBE B2H PACKAGE
+:exmp.
+.*----------
+:h2.&sysname. installation
+:p.&sysname. is easy to install and use right :q.out-of-the-box:eq..
+Later, you may wish to do some customization to tailor &sysname.'s
+operation to your environment and to take advantage of some of the
+more powerful &sysname. and &html. features.
+.*-----
+:h3 id=qpc.Installation on a PC&cont.
+&rbl.(AIX, Linux, OS/2, &win9x., &winnt. and Unix)
+:ol.
+:li.If you downloaded the ZIP file from the Internet directly onto
+your PC, go to step :liref refid=pciaix..
+:p.If you retrieved the VMARC file from the Internet, follow the
+instructions on the web page to upload the VMARC file to VM and then
+:q.extract:eq. the component pieces onto a read/write disk
+(typically your A-disk).
+:p.If you ordered the package from an internal IBM tools disk,
+receive the files to a read/write disk (typically your A-disk).
+:li.There are two ways to get the &sysname. files onto your
+workstation:
+:ul.
+:li.Download &zipvm. and use one of the UNZIP-type programs to
+extract the files
+:fn.
+On AIX, Linux
+:rev refid=r47.
+and Unix,
+:erev refid=r47.
+you may need to specify the :q.-a:eq. option
+when unzipping to remove the ctrl-M characters.
+:efn.
+(:hp2.THIS IS THE RECOMMENDED METHOD!:ehp2.)
+:p.or
+:li.Download the individual files (:hp2.NOT RECOMMENDED!:ehp2.)
+:rev refid=r45.
+:p.:caution.If you :hp5.must:ehp5. download the individual files:
+:ul compact.
+:li.Ensure that you download :xph.B2H&rbl.SEXEC:exph. and
+:hp3.NOT:ehp3. the other EXEC-type files
+(they are the compiled versions for other platforms).
+:li.The files were created on a U.S. system.
+If downloading to a non-U.S. system, be careful to ensure you use
+the correct translate table.  An incorrect translate table during
+download can often cause "Invalid character in program" error
+messages when trying to execute &sysname..
+:eul.
+:erev refid=r45.
+:ecaution.
+:p.If downloading individual files, the suggested naming convention is:
+:table id=namecon
+       cols='6* 4* 5* 4*'
+       align='L'
+       split=yes.
+:tcap.Suggested naming conventions if downloading individual files
+:tdesc.
+For use on a workstation, it is recommended that you download
+&zipvm. and use one of the UNZIP-type programs to extract the files
+as opposed to downloading individual files.
+:etdesc.
+:thd.
+:c.VM/ESA
+:c.AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+:c.OS/2
+.br;:hp1.(this is also the name contained within &zipvm.):ehp1.
+:c.&win9x. and &winnt.
+:ethd.
+.* - - - VM/ESA - - - - - - AIX/Linux/Unix  - OS/2 - - - - - Windows - -
+:row. :c.B2H ANNOUNCE    :c.b2h.announce    :c.B2H.ANN     :c.B2H.ANN
+:row. :c.B2H SEXEC (REXX&rbl.source)
+:c.b2h.exec
+:c.B2H.CMD
+:c.B2H.CMD or B2H.REX
+:row. :c.B2H HELPCMS     :c.b2h.helpcms     :c.B2H.HLP     :c.B2H.HLP
+:row. :c.B2H NEWS        :c.b2h.new         :c.B2H.NEW     :c.B2H.NEW
+:row. :c.B2H PROFILE     :c.b2h.profile     :c.B2H.PRO     :c.B2H.PRO
+:row.
+:c.B2H:pv.xxx:epv. SCRIPT
+:c.b2h:pv.xxx:epv..script
+:c.B2H:pv.xxx:epv..SCT
+:c.B2H:pv.xxx:epv..SCT
+:row. :c.B2H HTML        :c.b2h.html        :c.B2H.HTM     :c.B2H.HTM
+:row. :c.B2HR2 HTML      :c.b2hr2.html      :c.B2HR2.HTM   :c.B2HR2.HTM
+:row. :c.B2H SYMBOLS     :c.b2h.symbols     :c.B2H.SYM     :c.B2H.SYM
+:row. :c.B2HLINK GIFBIN  :c.b2hlink.gif     :c.B2HLINK.GIF :c.B2HLINK.GIF
+:row. :c.B2HIBM FOOTER   :c.b2hibm.footer   :c.B2HIBM.FOT  :c.B2HIBM.FOT
+:row. :c.B2HUSER EXEC    :c.B2HUSER.EXEC    :c.B2HUSER.CMD :c.B2HUSER.CMD
+:row. :c.B2HUSER SYMBOLS :c.b2huser.symbols :c.B2HUSER.SYM :c.B2HUSER.SYM
+:etable.
+:eul.
+.*-----
+:li id=pciaix.:hp2.Further installation information for AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+users&colon.:ehp2.
+:ul.
+:li.Review :hdref refid=prereq. to insure you have all software
+prerequisites installed.
+:li.If you downloaded the ZIP file and have not unzipped it yet, do
+so now (you may need to specify the :q.-a:eq. option when unzipping
+to remove the ctrl-M characters).
+:li.You will need to rename the files from their OS/2 names to their
+AIX/Linux/:rev refid=r47.Unix:erev refid=r47.
+equivalent.  The :xph.B2HNAME:exph. script will do the
+necessary renames and :q.fix-up:eq. to allow easy execution of
+&sysname. in an AIX/Linux/:rev refid=r47.Unix:erev refid=r47.
+environment.  In the subdirectory into
+which you placed the files, run the following two commands:
+:xmp.
+  chmod +x b2hname
+  ./b2hname
+:exmp.
+:eul.
+.*-----
+:li.:hp2.Further installation information for &win9x. and
+&winnt. users&colon.:ehp2.
+:ul.
+:li.Review :hdref refid=prereq. to insure you have all software
+prerequisites installed.
+:li.Depending on how REXX is installed, you may need to
+rename :xph.B2H.CMD:exph. to :xph.B2H.REX:exph.
+:eul.
+:li.&sysname. is now installed and ready to run!
+:eol.
+.*-----
+:p.Let's try some examples:
+:ul.
+:li.Try converting a test file which is typical of the &bm., GML or
+&script. source files you will be processing:
+.getw symbol=dhlen gmltype=hp2 text='W I N D O W S  9  5 '
+:dl termhi=0 break=fit tsize=&dhlen..
+:dt.AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+:dd.:xph.&pgmcmd. :pv.file:epv.:exph.
+.br;Now point your browser at the resulting &html. file
+(:xph.":pv.file:epv..html":exph.).
+:dt.OS/2
+:dd.:xph.&PGMCMD. :pv.fn.ext:epv.:exph.
+.br;Now point your browser at the resulting &html. file
+(:xph.":pv.fn:epv..htm":exph.).
+:dt.&win9x.
+:dd.:xph.&PGMCMDW. :pv.fn.ext:epv.:exph.
+.br;Now point your browser at the resulting &html. file
+(:xph.":pv.fn:epv..htm":exph.).
+:dt.&winnt.
+:dd.:xph.&PGMCMDW. :pv.fn.ext:epv.:exph.
+.br;Now point your browser at the resulting &html. file
+(:xph.":pv.fn:epv..htm":exph.).
+:edl.
+:li.Try running &sysname. again, this time using different options
+to vary the output format.  For example, specify your own title and
+do not generate a table-of-contents:
+:fn id=aixpar.
+Note that the left-parenthesis must be quoted in AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+to prevent the shell from interpreting it and causing an error.
+:efn.
+:dl termhi=0 break=fit tsize=&dhlen..
+:dt.AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+:dd.:xph.&pgmcmd. :pv.file:epv. '(' TOC=NO  TITLE='My sample title':exph.
+:fnref refid=aixpar.
+:dt.OS/2
+:dd.:xph.&PGMCMD. :pv.fn.ext:epv. ( TOC=NO  TITLE='My sample title':exph.
+:dt.&win9x.
+:dd.:xph.&PGMCMDW. :pv.fn.ext:epv. ( TOC=NO  TITLE='My sample title':exph.
+:dt.&winnt.
+:dd.:xph.&PGMCMDW. :pv.fn.ext:epv. ( TOC=NO  TITLE='My sample title':exph.
+:edl.
+.nameit symbol=ffile text='c&colon.&bsl.config.sys'
+:li.Try converting the &flat. file :xph.&ffile:exph.&colon.
+:dl termhi=0 break=fit tsize=&dhlen..
+:dt.AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+:dd.:xph.&pgmcmd. &ffile. '(' SOURCE=FLAT TITLE='My config.sys':exph.
+:fnref refid=aixpar.
+:dt.OS/2
+:dd.:xph.&PGMCMD. &ffile. ( SOURCE=FLAT TITLE='My config.sys':exph.
+:dt.&win9x.
+:dd.:xph.&PGMCMDW. &ffile. ( SOURCE=FLAT TITLE='My config.sys':exph.
+:dt.&winnt.
+:dd.:xph.&PGMCMDW. &ffile. ( SOURCE=FLAT TITLE='My config.sys':exph.
+:edl.
+:li.To see the online help, type:
+:dl termhi=0 break=fit tsize=&dhlen..
+:dt.AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+:dd.:xph.&pgmcmd. ?:exph.
+:dt.OS/2
+:dd.:xph.&PGMCMD. ?:exph.
+:dt.&win9x.
+:dd.:xph.&PGMCMDW. ?:exph.
+:dt.&winnt.
+:dd.:xph.&PGMCMDW. ?:exph.
+:edl.
+:eul.
+:p.If desired, customize to your needs (see :hdref refid=custins.).
+.*-----
+:h3.Installation on MVS
+:ol.
+:li.If you downloaded the ZIP file from the Internet directly onto
+your PC, unzip the file and upload the files to your TSO user ID.
+:rev refid=r45.
+:p.:caution.The files were created on a U.S. system.  If uploading
+to a non-U.S. system, be careful to ensure you use the correct
+translate table.  An incorrect translate table during upload can
+often cause "Invalid character in program" error messages when
+trying to execute &sysname..
+:ecaution.
+:erev refid=r45.
+:p.If you retrieved the VMARC file from the Internet, follow the
+instructions on the web page to upload the VMARC file to VM and then
+:q.extract:eq. the component pieces onto a read/write disk
+(typically your A-disk).:fnref refid=dsczip. Then send the files to
+the TSO user ID doing the installation.
+:p.If you ordered the package from an internal IBM tools disk, have
+the files sent directly to your TSO user ID.
+.*---
+:li.Three groups of files comprise &sysname.:
+the program itself, the system files, and the optional files.
+:ul.
+:li.:hp2.Installing the &sysname. program itself:ehp2.
+:p.Two versions of the &sysname. program are available for MVS:
+:xph.B2H&rbl.SEXEC:exph. is the REXX source code and
+:xph.B2H&rbl.MVSCEXEC:exph. is the MVS REXX compiled version.
+(Note:  if you retrieved just the ZIP file from the Internet, only
+the REXX source code (B2H.CMD) is provided within the ZIP file.)
+The compiled version runs much faster but requires the REXX compiler
+run-time libraries.  The source code runs slower, but has no
+additional dependencies.  Select the version that best meets your
+needs.
+:p.Determine the partitioned data set (PDS) to hold the &sysname.
+program.
+:ul compact.
+:li.If you have a PDS already containing other REXX execs, you may
+wish to use that one; otherwise
+:li.Allocate a new PDS using the following dataset attributes:
+:ul compact.
+:li.For the REXX source code:
+.br;:xph.RECFM(VB) LRECL(120) BLKSIZE(27998):exph..
+:li.For the compiled REXX code:
+.br;:xph.RECFM(VB) LRECL(1028) BLKSIZE(27998):exph..
+.br;(if you desire, you can use the :xph.REXXF:exph. program provided
+with the REXX compiler to reblock the compiled version)
+:eul.
+:eul.
+Place the selected program file into
+the PDS using a member name of :q.&PGMCMD.:eq.
+:p.Once placed, you can run &sysname.&colon.
+:ul compact.
+:li.:hp1.Explicitly:ehp1. by using the :xph.EXEC:exph. command
+followed by the PDS and member name and the :q.:xph.EXEC:exph.:eq.
+keyword operand, or
+:li.:hp1.Implicitly:ehp1. by entering just the member name.
+Implicit execution is available only if the PDS that contains
+&sysname. was allocated to either the :xph.SYSEXEC:exph. (preferred)
+or :xph.SYSPROC:exph. system file.
+:eul.
+:p.It is STRONGLY suggested that the implicit execution environment
+be established (the examples within this User's Guide assume that
+this has been done).  For further information on explicit and
+implicit execution of REXX programs, see :q.:cit.TSO/E REXX/MVS
+Reference:ecit.:eq., order number SC28-1883, specifically the
+section entitled :q.Using SYSPROC and SYSEXEC for REXX Execs:eq..
+:p.Example: assume the program has been loaded into the PDS
+:xph.:pv.userid:epv..MYPGMS.EXEC(&PGMCMD.):exph.
+:ul.
+:li.If the PDS is allocated to :xph.SYSEXEC:exph. or
+:xph.SYSPROC:exph., then &sysname. can be invoked implictly like this:
+.br;:xph.   &PGMCMD. :pv.filespec:epv. ( &cont.
+parm:sub.1:esub. parm:sub.2:esub. ... parm:sub.x:esub.:exph.
+:li.If the PDS is :hp1.not:ehp1. allocated to :xph.SYSEXEC:exph. or
+:xph.SYSPROC:exph., then &sysname. must be invoked explicitly like this:
+.br;:xph.   EXEC MYPGMS(&PGMCMD.) &cont.
+':pv.filespec:epv. ( &cont.
+parm:sub.1:esub. parm:sub.2:esub. ... parm:sub.x:esub.' EXEC:exph.
+:eul.
+:li.:hp2.Installing the &sysname. system files:ehp2.
+:spot id=mvsdd xreftext='Installing the &sysname. system files'.
+:p.When &sysname. starts, it looks for it's three system files:  the
+system profile, the system symbol table and the help file.  For each
+file, &sysname. first checks to see if a dataset has been
+preallocated to a particular FILE/DDcard.  If not preallocated,
+&sysname. then attempts to locate the file using the default dataset
+name.
+:p.If you intend to preallocate the system files before invoking
+&sysname., then install the system files into the dataset names of
+your choosing; if not, install the system files into the dataset
+names shown in the following table.
+:table id=mvssysd
+       cols='2* * 2*'
+       split=yes
+       frame=box.
+:tcap.FILE and DSN= defaults for system datasets under MVS
+:tdesc.
+If you need to change these defaults, you must edit the REXX source.
+(The default FILE/DDcard and dataset names are defined near the
+beginning of the REXX source code.)
+:etdesc.
+:thd.
+:c.File
+:c.Default FILE/DDcard
+:c.Default dataset name
+:ethd.
+:row.
+:c.&sysname. system profile
+:c.&mvsprodd.
+:c.&mvsprodsn.
+:row.
+:c.&sysname. system symbol table
+:c.&mvssymdd.
+:c.&mvssymdsn.
+:row.
+:c.&sysname. help file
+:c.&mvsheldd.
+:c.&mvsheldsn.
+:etable.
+:li.:hp2.Installing the optional files:ehp2.
+:p.The remainder of the files in the &sysname. package are optional.
+These consist of such files as the User's Guide (in &bm. source,
+LIST3820 and &html. formats) and various sample files.  See :hdref
+refid=packcon. for the list of all files.  Whether they should be
+received and saved is at your discretion.
+:eul.
+:eol.
+:p.The following examples assume that &sysname. can be implicitly
+invoked (the PDS in which it resides has been allocated to either
+:xph.SYSEXEC:exph. or :xph.SYSPROC:exph.) and that the system files
+have already been allocated similar to the following:
+:xmp.
+ALLOC FI(&mvsprodd.)  DA(:pv.system-profile-dataset:epv.)      SHR REUSE
+ALLOC FI(&mvssymdd.)  DA(:pv.system-symbol-table-dataset:epv.) SHR REUSE
+ALLOC FI(&mvsheldd.) DA(:pv.system-helpfile-dataset:epv.)     SHR REUSE
+:exmp.
+:ul.
+:li.Try converting a test file which is typical of the Bookmaster/GML
+files you will be processing:
+:xmp.
+.* &PGMCMD. :pv.filespec:epv.
+.* &PGMCMD. DD&colon.:pv.ddname:epv.
+.* &PGMCMD. DD&colon.:pv.ddname:epv.(:pv.membername:epv.)
+.*
+  Convert files stored under your userid:
+    &PGMCMD. test1.script             Output: TEST1.HTML
+    &PGMCMD. proj23.script(chap1)             PROJ23.CHAP1.HTML
+ 
+  Convert files NOT stored under your userid:
+    &PGMCMD. 'SYS3.ISO9000.SCRIPT'    Output: 'SYS3.ISO9000.HTML'
+    &PGMCMD. 'mvs1.org.text(guide)'           'MVS1.ORG.GUIDE.HTML'
+ 
+  Convert the sequential dataset allocated to 'DD1'
+    &PGMCMD. DD&colon.DD1
+ 
+  Convert the member 'MEM3A' from one of the datasets allocated to 'DD2'
+    &PGMCMD. DD&colon.DD2(MEM3A)
+:exmp.
+:li.If you will be moving the &html. output to a platform other than
+MVS and browsing it there, you can tell &sysname. to customize it's
+output for that platform, like:
+:xmp.
+  &PGMCMD. filespec ( DESTSYS=AIX
+  &PGMCMD. filespec ( DESTSYS=LINUX
+  &PGMCMD. filespec ( DESTSYS=CMS
+  &PGMCMD. filespec ( DESTSYS=OS2
+  &PGMCMD. filespec ( DESTSYS=WIN95
+  &PGMCMD. filespec ( DESTSYS=WINNT
+:rev refid=r47.
+  &PGMCMD. filespec ( DESTSYS=UNIX
+:erev refid=r47.
+:exmp.
+Transfer the &html. output file to the desired platform and point
+your web browser at it.
+:li.Try running &sysname. again, this time using different options
+to vary the output format.  For example, specify your own title and
+do not generate a table-of-contents:
+:xmp.
+  &PGMCMD. filespec ( TOC=NO TITLE="My sample title"
+:exmp.
+:li.Try converting the &flat. file 'SYS1.PROCLIB(TSO)':
+:xmp.
+  &PGMCMD. 'SYS1.PROCLIB(TSO)' ( SOURCE=FLAT TITLE="Member TSO"
+:exmp.
+:li.To see the online help (requires ISPF to be active):
+:xmp.
+  &PGMCMD. ?
+:exmp.
+:eul.
+:p.If desired, customize to your needs (see :hdref refid=custins.).
+.*-----
+:h3.Installation on VM
+:ol.
+:li.If you retrieved the VMARC file from the Internet, follow the
+instructions on the web page to upload the VMARC file to VM and then
+:q.extract:eq. the component pieces onto a read/write disk
+(typically your A-disk).:fnref refid=dsczip.
+:rev refid=r45.
+:p.If you downloaded the ZIP file from the Internet directly onto
+your PC, unzip the file and upload the files to your VM user ID.
+:p.:caution.The files were created on a U.S. system.  If uploading
+to a non-U.S. system, be careful to ensure you use the correct
+translate table.  An incorrect translate table during upload can
+often cause "Invalid character in program" error messages when
+trying to execute &sysname..
+:ecaution.
+:erev refid=r45.
+:p.If you ordered the package from an internal IBM tools disk,
+receive the files to a read/write disk (typically your A-disk).
+:fnref refid=dsczip.
+:fn id=dsczip.
+If you will not be installing &sysname. on a PC workstation, you can
+discard &zipvm..
+:efn.
+:p.Two versions of the &sysname. program are available for VM:
+:xph.B2H&rbl.SEXEC:exph. is the REXX source code and
+:xph.B2H&rbl.EXEC:exph. is the VM REXX compiled version.
+The compiled version runs much faster but requires the REXX compiler
+run-time libraries.  The source code runs slower, but has no
+additional dependencies.  Ensure that the filetype of the desired
+version is :q.:xph.EXEC:exph.:eq..
+:li.&sysname. is now installed and ready to run!
+:eol.
+:p.Let's try some examples:
+:ul.
+:li.Try converting a test file which is typical of the &bm., GML or
+&script. source files you will be processing:
+:xmp.
+  &PGMCMD. :pv.fn ft fm:epv.
+:exmp.
+If you have a VM-based web browser, point it at the &html. output
+file :xph.":pv.fn:epv.&rbl.HTML&rbl.A":exph..
+For example: :xph.WWW&rbl.file&colon.//:pv.fn:epv..html:exph.
+:li.If you will be browsing the &html. output on a platform other
+than VM, you can tell &sysname. to customize it's output for that
+platform, like:
+:xmp.
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=AIX
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=LINUX
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=MVS
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=OS2
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=WIN95
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=WINNT
+:rev refid=r47.
+  &PGMCMD. :pv.fn ft fm:epv. ( DESTSYS=UNIX
+:erev refid=r47.
+:exmp.
+Transfer the &html. output file to the desired platform and point
+your web browser at it.
+:li.Try running &sysname. again, this time using different options
+to vary the output format.  For example, specify your own title and
+do not generate a table-of-contents:
+:xmp.
+  &PGMCMD :pv.fn ft fm:epv. ( TOC=NO TITLE='My sample title'
+:exmp.
+:li.Try converting the &flat. file :xph.PROFILE&rbl.EXEC:exph.:
+:xmp.
+  &PGMCMD. PROFILE EXEC ( SOURCE=FLAT TITLE="My Profile Exec"
+:exmp.
+:li.To see the online help, type: :xph.&PGMCMD ?:exph.
+:eul.
+:p.If desired, customize &sysname. to your needs
+(see :hdref refid=custins.).
+.*-----
+.cp
+:h3 id=packcon.Content of the &sysname. package
+:p.The &sysname. :q.package:eq. contains the following files:
+:table cols='2* * 3*' align='l c l' split=yes.
+:thd.
+:c.File
+:c.Also within the ZIP file?
+:c.Description
+:ethd.
+:row.
+:c.B2H ANNOUNCE
+:c.Yes
+:rev refid=r45.(as B2H.ANN):erev refid=r45.
+:c.The announcement and installation instructions file
+:row.
+:c.B2H EXEC
+:c.No
+:c.Main routine, compiled REXX for use on VM (compiled using the VM
+REXX Compiler R4.00)
+:row.
+:c.B2H MVSCEXEC
+:c.No
+:c.Main routine, compiled REXX for use on MVS (compiled using the VM
+REXX Compiler R4.00 and converted to MVS-executable format)
+:row.
+:c.B2H SEXEC
+:c.Yes
+:rev refid=r45.(as B2H.CMD):erev refid=r45.
+:c.Main routine (REXX source)
+:row.
+:c.B2H HELPCMS
+:c.Yes
+:rev refid=r45.(as B2H.HLP):erev refid=r45.
+:c.Online help file
+:row.
+:c.B2H NEWS
+:c.Yes
+:rev refid=r45.(as B2H.NEW):erev refid=r45.
+:c.List of recent changes
+:row.
+:c.B2H PROFILE
+:c.Yes
+:rev refid=r45.(as B2H.PRO):erev refid=r45.
+:c.System profile
+:row.
+:c.B2H SYMBOLS
+:c.Yes
+:rev refid=r45.(as B2H.SYM):erev refid=r45.
+:c.System symbol definition file
+:row.
+:c.B2HLINK GIFBIN
+:c.Yes
+:rev refid=r45.(as B2HLINK.GIF):erev refid=r45.
+:c.Default graphic image for use with :xph.ARTSHOW=LINK:exph. option
+:row.
+:c.B2H SCRIPT
+.br;B2HSETUP SCRIPT
+.br;B2HINF SCRIPT
+.br;B2HSYS SCRIPT
+.br;B2HUSE SCRIPT
+.br;B2HEXA SCRIPT
+.br;B2HAPP SCRIPT
+.br;B2HMSG SCRIPT
+:c.Yes
+:rev refid=r45.(as B2H:pv.xxx:epv..SCT):erev refid=r45.
+:c.User's Guide (&bm. source)
+:row.
+:c.B2H LIST3820
+:c.No
+:c.User's Guide (3820 print-ready)
+:row.
+:c.B2H HTML
+:c.Yes
+:rev refid=r45.(as B2H.HTM):erev refid=r45.
+:c.User's Guide (&html. 3 format)
+:row.
+:c.B2HR2 HTML
+:c.Yes
+:rev refid=r45.(as B2HR2.HTM):erev refid=r45.
+:c.User's Guide (&html. 2 format)
+:row.
+:c.B2HIBM FOOTER
+:c.Yes
+:rev refid=r45.(as B2HIBM.FOT):erev refid=r45.
+:c.Sample :q.footer:eq. file containing standard IBM Home page
+linkages
+:row.
+:c.B2HUSER EXEC
+:c.Yes
+:rev refid=r45.(as B2HUSER.CMD):erev refid=r45.
+:c.Sample user exit
+:row.
+:c.B2HUSER SYMBOLS
+:c.Yes
+:rev refid=r45.(as B2HUSER.SYM):erev refid=r45.
+:c.Sample user symbol definitions (as distributed, allows &sysname.
+to support users of the BookHype HTML converter program)
+:row.
+:c.B2H ZIP
+:c.
+:c.Contains the above marked files to simplify downloading to a
+workstation
+:etable.
+.************************************************************************
+:h1 id=invoke.Invoking &sysname
+.*-----
+:h2 id=howplat.How &sysname. determines the current platform
+:p.At startup,
+:rev refid=r47.
+&sysname. first determines under which REXX it is running
+(see also :hdref refid=rexx.).
+:erev refid=r47.
+&sysname. then queries the environment to determine on
+what platform it is running.  If on OS/2, it further determines
+whether it should run in :q.FAT:eq. or :q.HPFS:eq. mode by examining
+the name of the input file.  If the name contains more than one
+period, the filename is longer then eight characters or the
+extension is longer then three characters, then :q.HPFS:eq. mode is
+assumed; otherwise, :q.FAT:eq. mode is assumed.
+.*-----
+:h2 id=sfile.Specifying a file
+:p.A file's specification (:q.:hp1.filespec:ehp1.:eq.) must satisfy
+the naming convention of the platform for which the file is being
+specified.  For example, when running &sysname. on AIX, the
+:hp1.input:ehp1. filespec must conform to AIX naming conventions.
+.br;e.g. :xph.&PGMCMD.&rbl./u/johndoe/project2/overview.script:exph.
+:p.Many &sysname. :hp1.options:ehp1. allow you to specify a
+filespec, which also must conform to the naming convention of the
+appropriate platform.  For example, if you run &sysname. on OS/2 and
+explicitly specify the name of the physical output file, the output
+filespec must conform to OS/2 naming conventions.
+.br;e.g. :xph.&PGMCMD ... ( OUTPUTP=c&colon.&bsl.pubs&bsl.abc.htm:exph.
+:h3 id=vmfile.Specifying a file under VM/CMS
+:p.If specifying a file using VM/CMS naming conventions on a
+&sysname. option, you :hp1.must:ehp1. enclose it within single or
+double-quotes since the name contains blanks
+.br;e.g. :xph.&PGMCMD ... ( OUTPUTP='ABC&rbl.HTML&rbl.A':exph.
+.*---
+:rev refid=r44.
+:h3 id=mvsfile.Specifying a dataset under MVS (OS/390)
+:p.When specifying a dataset under MVS, you should follow normal
+TSO/E naming conventions:  if enclosed in single-quotes, the dataset
+is used as-is, else it is preceded by your TSO/E prefix
+(normally your user ID).  You can also identify the dataset by
+specifying the DD to which the dataset is allocated.
+:p.:tref refid=mvsf. lists the various ways that any of the three
+datasets referenced in the following example can be specified:
+:xmp.
+ &PGMCMD. :pv.dataset:sub.1:esub.:epv. ( &cont.
+OUTPUTP=:pv.dataset:sub.2:esub.:epv. &cont.
+HEADER=:pv.dataset:sub.3:esub.:epv.
+:exmp.
+:table id=mvsf cols='* 2*' split=yes.
+:tcap.Specifying a dataset under MVS (OS/390)
+:thd.
+:c.Value specified
+:c.Refers to
+:ethd.
+:row.
+:c.:xph.ABC.SCRIPT:exph.
+:c.:pv.userid:epv.:xph..ABC.SCRIPT:exph.
+:row.
+:c.:xph.'ABC.SCRIPT':exph.
+:c.:xph.ABC.SCRIPT:exph.
+:row.
+:c.:xph.ABC.SCRIPT(MEM1):exph.
+:c.Member :xph.MEM1:exph. of :pv.userid:epv.:xph..ABC.SCRIPT:exph.
+:row.
+:c.:xph.'ABC.SCRIPT(MEM1)':exph.
+:c.Member :xph.MEM1:exph. of :xph.ABC.SCRIPT:exph.
+:row.
+:c.:xph.DD&colon.:pv.ddname:epv.:exph.
+:c.The sequential dataset(s) allocated to :pv.ddname:epv.
+:row.
+:c.:xph.DD&colon.:pv.ddname:epv.(:pv.member:epv.):exph.
+:c.Member :pv.member:epv. within the partition data set(s)
+allocated to :pv.ddname:epv.
+:etable.
+:erev refid=r44.
+.*-----
+:h2.Invoking &sysname. under AIX, Linux or Unix
+:p.This assumes you have installed &sysname. according to the steps
+described in :hdref refid=qpc..
+:xmp.
+  &pgmcmd  :pv.file:epv.  &lbrk. '(' &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&rbrk. :fnref refid=aixpar2.
+:exmp.
+:fn id=aixpar2.
+Note that the left-parenthesis must be quoted in AIX, Linux
+:rev refid=r47.
+and Unix
+:erev refid=r47.
+to prevent the shell from interpreting it and causing an error.
+:efn.
+.*-----
+:h2.Invoking &sysname. under MVS as a stand-alone program
+:p.Ensure that &sysname. can find its system files by either FILE/DDcard
+:fn.
+An example of allocating the system files for stand-alone execution:
+:xmp.
+ALLOC FI(&mvsprodd.)  DA(:pv.system-profile-dataset:epv.)      SHR REUSE
+ALLOC FI(&mvssymdd.)  DA(:pv.system-symbol-table-dataset:epv.) SHR REUSE
+ALLOC FI(&mvsheldd.) DA(:pv.system-helpfile-dataset:epv.)     SHR REUSE
+:exmp.
+:efn.
+or dataset name (see :spotref refid=mvsdd. and
+:spotref refid=locsysf. for more information).
+:xmp.
+If installed to allow implicit execution:
+  &PGMCMD  :pv.inputfilespec:epv.  &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk.
+ 
+If exlicit execution is required:
+  EXEC :pv.PDSfilespec:epv.(&PGMCMD.) &cont.
+':pv.inputfilespec:epv.  &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk.&cont.
+' EXEC
+:exmp.
+:rev refid=r44.
+See :hdref refid=mvsfile. for specifying the :pv.inputfilespec:epv..
+:erev refid=r44.
+.*-----
+:h2.Invoking &sysname. under MVS as a BatchPipeWorks pipeline filter
+:p.Ensure that &sysname. can find its system files by either FILE/DDcard
+:fn.
+An example of allocating the system files for pipeline execution:
+:xmp.
+ALLOC FI(&mvsprodd.)  DA(:pv.system-profile-dataset:epv.)      SHR REUSE
+ALLOC FI(&mvssymdd.)  DA(:pv.system-symbol-table-dataset:epv.) SHR REUSE
+:exmp.
+:efn.
+or dataset name (see :spotref refid=mvsdd. and
+:spotref refid=locsysf. for more information).
+:xmp.
+  PIPE ... | &cont.
+REXX &PGMCMD &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk. | ...
+:exmp.
+In order to invoke a &sysname. as a pipeline filter, you must
+allocate the file :xph.REXX:exph. to the partition data set
+containing the &sysname. program.  Further information on invoking
+user-written pipeline filters is available in
+:q.:cit.IBM BatchPipes/MVS BatchPipeWorks Reference:ecit.:eq.,
+order number GC28-1217.
+.*-----
+:h2.Invoking &sysname. under OS/2
+:xmp.
+  &PGMCMD  :pv.fn.ext:epv.  &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk.
+:exmp.
+.*-----
+:h2.Invoking &sysname. under VM/ESA as a stand-alone EXEC
+:xmp.
+  &PGMCMD  :pv.fn fn:epv. &lbrk.:pv.ft:epv.&rbrk.   &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk.
+:exmp.
+.*-----
+:h2.Invoking &sysname. under VM/ESA as a CMS pipeline filter
+:xmp.
+  PIPE ... | &cont.
+REXX (&PGMCMD EXEC) &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk. | ...
+:exmp.
+:p.or, if you copy :xph.B2H EXEC:exph. to :xph.B2H REXX:exph. ...
+:xmp.
+  PIPE ... | &cont.
+&PGMCMD &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk. | ...
+:exmp.
+.*-----
+:h2.Invoking &sysname. under &win9x. and &winnt.
+:xmp.
+  &PGMCMDW  :pv.fn.ext:epv.  &lbrk. ( &cont.
+:pv.option:sub.1:esub.:epv.=:pv.value:sub.1:esub.:epv. ... &cont.
+:pv.option:sub.x:esub.:epv.=:pv.value:sub.x:esub.:epv. &cont.
+&lbrk.)&rbrk. &rbrk.
+:exmp.
+.*----------
+.cp 14
+:h2 id=rcs.Return codes
+:p.When &sysname. ends, it sets a return code corresponding to the
+most severe condition encountered.
+:dl tsize=3m.
+:dthd.RC
+:ddhd.Description
+:dt.0
+:dd.No warnings, errors or termination messages issued
+:dt.4
+:dd.At least one warning message issued
+:dt.8
+:dd.At least one error message issued
+:dt.12
+:dd.&sysname. abnormally terminated
+:edl.
+:rev refid=r42.
+:p.You can use the :spotref refid=procact. to control how &sysname.
+handles various processing situations
+(which also affects the return code).
+:erev refid=r42.
+.*----------
+.cp 30
+:h2 id=spcopts.Specifying &sysname. options
+:p.&sysname. supports a wide variety of processing options (for a
+complete list, see :hdref refid=cmdparm.). The options can be
+specified in a number of places, such as within a profile, as
+parameters on the command line when &sysname. is invoked, even
+within the source file itself.
+:p.The following describes the various ways you can specify options
+and is listed in hierarchical order:
+:ul.
+:li.:hp2.On a :q.&optioncmd2.:eq. statement within the source file
+itself:ehp2.
+.br;This allows you to provide processing options unique to a
+specific file.  And since the &optioncmd2 statement :q.looks:eq.
+like a &script comment, you can leave it in the source file without
+harm.  See :hdref refid=b2hstmt. for further information.
+:li.:hp2.On &bm.'s &colon.DOCPROF. tag:ehp2.
+.br;The following attributes on &bm.'s :xph.&colon.DOCPROF:exph. tag are
+also recognized as &sysname. options:
+:rev refid=r42.
+:xph.APPHD1=:exph., :xph.APPHD1X=:exph.,
+:erev refid=r42.
+:xph.BODYHD0=:exph., :xph.BODYHD0X=:exph.,
+:xph.BODYHD1=:exph., :xph.BODYHD1X=:exph.,
+:rev refid=R42.:xph.DIALOG=:exph.:erev refid=R42.,
+:xph.FBC=:exph., :xph.FTSEP=:exph.,
+:xph.HEADNUM=:exph., :xph.OLSEQ=:exph.,
+:xph.PTOC=:exph., :xph.QRESET=:exph., :xph.SCREEN=:exph.
+and :xph.TOC=:exph.
+:li.:hp2.As a parameter on the &PGMCMD command itself:ehp2.
+.br;The syntax for this was shown previously
+:li.:hp2.Within a system or user profile:ehp2..
+.br;This is discussed in more detail in :hdref refid=profile..
+:li.:hp2.Using :q.hardcoded:eq. defaults within &sysname. itself:ehp2.
+:eul.
+.************************************************************************
+:rev refid=r42.
+:h1 id=custins.Customizing &sysname
+:erev refid=r42.
+:p.If you will be using &sysname. extensively, you may wish to
+customize it to reflect your personal requirements.
+Here are some suggested steps for customization:
+.*-----
+:p.:hp7.Step 1 - Place &sysname. into the active execution path
+(PC workstation only):ehp7.
+:p.To run &sysname. from within any directory on your workstation,
+ensure that the directory in which &sysname. resides is among those
+searched for commands.
+:ul.
+:li.:hp2.Under AIX, Linux
+:rev refid=r47.
+or Unix
+:erev refid=r47.
+:ehp2.
+:p.Include the directory name within the PATH environment variable
+of your shell, which is usually defined within your profile (e.g.
+:xph./etc/profile:exph. and/or :xph.$HOME/.profile:exph.). You can
+also temporarily alter your path by assigning a new value to this
+environment variable and EXPORTing it (Korn shell).
+:p.Alternatively, within a directory which is already within your
+current path (e.g. :xph.$HOME/bin:exph.), you can place a
+:hp1.symbolic:ehp1. link to the directory where you keep &sysname.,
+e.g. :xph.$HOME/b2h:exph.&colon
+:xmp.
+  (&tilde./bin)  ln -s ../b2h/b2h b2h
+  (&tilde./bin)
+:exmp.
+With this alternate approach, there is no need to alter the
+environment or execute a modified profile.
+:li.:hp2.Under OS/2:ehp2.
+:p.Include the directory in your PATH statement defined within
+CONFIG.SYS.  Reboot after adding the directory to your PATH
+statement.
+:li.:hp2.Under &win9x. and &winnt.:ehp2.
+:p.Include the directory in your PATH statement defined within
+AUTOEXEC.BAT.
+Reboot after adding the directory to your PATH statement.
+:eul.
+.*-----
+:p.:hp7.Step 2 - Specify the location of the system files:ehp7.
+:spot id=locsysf
+      xreftext='Step 2 - Specify the location of the system files'.
+:ul.
+:li.:hp2.On a PC workstation:ehp2.
+:p.To more easily run &sysname. from different directories on AIX,
+Linux, OS/2, &win9x., &winnt.
+:rev refid=r47.
+or Unix,
+:erev refid=r47.
+place the system profile,
+symbol table and help file into a common directory and set the
+:q.:xph.B2HPATH:exph.:eq. environment variable to point to the
+directory.  (Multiple directories can be specified and
+searched, just separate the directory names with semi-colons.)
+:p.&sysname. follows these steps to locate these files:
+:ol.
+:li.The working directory is checked
+:li.The directory(s) specified by the :q.:xph.B2HPATH:exph.:eq.
+environment variable are checked
+:li.The directory from which the operating system loaded the
+&sysname. program itself is checked
+:eol.
+:note.&sysname. also follows the above steps when attempting to
+locate :hp1.user:ehp1. profiles or symbol tables.
+:li.:hp2.On MVS:ehp2.
+:p.When &sysname. starts, it looks for it's three system files:
+the system profile, the system symbol table and the help file.
+For each file, &sysname. first checks to see if a dataset has been
+preallocated to a particular FILE or DDcard.  If not preallocated,
+&sysname. attempts to locate the file using the default dataset
+name.
+:ul.
+:li.If you are installing &sysname. for your personal use, it's
+probably easiest just to preallocate the FILE/DDnames to the
+appropriate datasets.
+:li.If you are installing &sysname. for site-wide use, any of the
+following are possibilities:
+:ul compact.
+:li.Provide a common startup EXEC/CLIST that allocates the system
+files, invokes &sysname., and then frees the files
+:li.Install the system files into datasets whose names match
+&sysname.'s default system file names
+:li.Install the system files into datasets of your choosing and then
+modify &sysname. to reflect the new dataset names.  The default
+FILE/DDcard and dataset names are defined in the initialization
+section of the REXX source code.
+:eul.
+:eul.
+:p.See :tref refid=mvssysd. for a list of the system files and
+their default FILE/DDcard and dataset names.
+:eul.
+.*-----
+:p.:hp7.Step 3 - Update the &sysname. profile:ehp7.
+:p.If you wish to change the value of one or more &sysname. options,
+it's best to create a :hp1.user:ehp1. profile and add the
+appropriate options to it and then add a :xph.USERPROF=:exph.
+statement to the system profile to point to your user profile.
+By not updating the system profile, you will not lose your
+customizations when you install an update to &sysname. itself -- all
+you need do is re-add the :xph.USERPROF=:exph. statement to the
+system profile.
+:p.You can also override these values using any of the
+methods described in :hdref refid=spcopts..
+.cp 10
+:p.Options whose values are commonly changed:
+:rev refid=r42.
+:xmp.
+  BODYTAG=         HEADER=          IMBPATH=
+  DESTSYS=         HTML=            IMGPATH=
+  DLFMT=           IMBEDID=         LOG=
+  FOOTER=          IMBFT=
+  GLFMT=           IMBFTEXT=
+:exmp.
+:erev refid=r42.
+:p.Refer to :hdref refid=cmdparm. for a list of all available options.
+.*-----
+:p.:hp7.Step 4 - Update the &sysname. symbol file:ehp7.
+:p.If you have custom symbols, control words, macros or tags for
+which you want to provide specialized definitions, it's best to
+create a :hp1.user:ehp1. symbol file, add the appropriate
+definitions to it and then add a :xph.USERSYM=:exph. statement to
+the system or user profile to point to your user symbol file.
+By not updating the system symbol file, you will not lose your
+customizations when you install an update to &sysname. itself.
+.*-----
+:p.:hp7.Step 5 - Set up Header and Footer files:ehp7.
+:p.Use these if you want each output &html. file to contain similar
+information at the beginning and/or end of the file.  A sample
+footer file containing the standard IBM home page navigational links
+is provided as part of the &sysname. package.
+:p.You can have multiple header and footer files.
+See the description of the :xph.HEADER=:exph. and :xph.FOOTER=:exph.
+options in :hdref refid=cmdparm. for more information.
+:note text=Tip.If you customize the header and footer files, it's
+best to rename them to something else and use the new names with the
+:xph.HEADER=:exph. and :xph.FOOTER=:exph. options.
+Otherwise you may lose your customization if you install an update
+to &sysname. itself.
+.*-----
+:p.:hp7.Step 6 - Set default mast head:ehp7.
+:p.If you want a common mast head image displayed at the top of your
+files, set the :xph.MASTIMG=:exph. and :xph.MASTALT=:exph. options
+in your profile.
+.*-----
+.cp 10
+:p.:hp7.Step 7 - Customize the generated &html:ehp7.
+:spot id=custhtm xreftext='Step 7 - Customize the generated HTML'.
+:p.Using the default options, the &html. markup generated by
+&sysname should satisfy most people.  However, if you have special
+needs, facilities are available by which you can customize the
+generated &html. markup:
+:ul.
+.*---
+:li.:hp7.&html.-specific items:ehp7.
+:ul compact.
+:li.The :xph.BODYTAG=:exph. option allows you to specify things like
+a background image or color for your &html. file
+:li.The :xph.HTMLATT.:pv.x:epv.=:exph. option allows you to specify
+custom attributes when certain &html. tags are generated
+:rev refid=r42.
+:li.The :xph.HTMLDOCID.:pv.x:epv.=:exph. option allows you to
+specify the Document Type Definition (DTD) value for the first
+record of the &html. output
+:erev refid=r42.
+:eul.
+.*---
+:li.:hp7.How certain &script. control words and GML/&bm. tags should be
+handled:ehp7.
+:ul compact.
+:li.The :xph.ARTSHOW=:exph. option allows you to specify how the
+:xph.&colon.ARTWORK:exph. tag and :xph.&period.SI:exph. control word
+should be handled
+:rev refid=r46.
+:li.The :xph.BORDERTAG.:pv.x:epv.=:exph. option allows you to
+specify the size of table borders to generate in various situations.
+:erev refid=r46.
+:li.The :xph.DLFMT=:exph. option allows you to specify how a
+definition list (:xph.&colon.DL:exph. tag) should be handled
+:rev refid=r45.
+:li.The :xph.FONTTAG=:exph. and :xph.FONTTAG.:pv.name:epv.=:exph.
+option allows you to specify how fonts (:xph..BF:exph.
+and :xph..PF:exph.) should be handled
+:erev refid=r45.
+:li.The :xph.GLFMT=:exph. option allows you to specify how a
+glossary list (:xph.&colon.GL:exph. tag) should be handled
+:li.The :xph.HRTAG.:pv.x:epv.=:exph. option allows you to specify
+whether horizontal-rules should be generated in various situations,
+and if so, what type of horizontal-rule
+:rev refid=r45.
+:li.The :xph.INDEXREFLINK=:exph. option allows you to specify how
+certain types of index entries (:xph.&colon.I:pv.x:epv.:exph.
+and :xph.&period.PI:exph.) should be handled
+:erev refid=r45.
+:li.The :xph.LINES=:exph. option allows you to specify how the
+:xph.&colon.LINES:exph. tag should be handled
+:li.The :xph.LIREF=:exph. option allows you to specify how the
+:xph.&colon.LIREF:exph. tag should be handled
+:li.the :xph.QUESTION=:exph. option allows you to specify the type
+of &html. generated for the :xph.&colon.QUESTION:exph. tag
+:li.The :xph.REVTAG=:exph. and :xph.REVTAG.:pv.x:epv.=:exph. options
+allow you to specify how revisions (:xph.&colon.REV:exph. and
+:xph.&period.RC:exph.) should be handled
+:li.The :xph.TABLE2=:exph. option allows you to specify the graphic
+characters used when an &html. 2 table is built
+:eul.
+.*---
+:li.:hp7.The actual &html. markup generated for the following:ehp7.
+:ul compact.
+:li.Definition lists (:xph.&colon.DL:exph.)
+- see the :xph.DLTAG.:pv.x:epv.=:exph. option
+:rev refid=r42.
+:li.Interactive dialogs (:xph.&colon.DIALOG:exph.)
+- see the :xph.DIALOGTAG.:pv.x:epv.=:exph. option
+:erev refid=r42.
+:li.Figure and Table lists (:xph.&colon.FIGLIST:exph. and
+:xph.&colon.TLIST:exph.)
+- see the :xph.TFIGLISTTAG.:pv.x:epv.=:exph. option
+:rev refid=r42.
+:li.Footnotes (:xph.&colon.FN:exph.)
+- see the :xph.FNTAG=:exph. option
+:erev refid=r42.
+:li.Glossary lists (:xph.&colon.GL:exph.)
+- see the :xph.GLTAG.:pv.x:epv.=:exph. option
+:rev refid=r42.
+:li.Header tags (:xph.&colon.H:pv.x:epv.:exph.)
+- see the :xph.HTAG=:exph. and :xph.HTAG.:pv.x:epv.=:exph. options
+:erev refid=r42.
+:li.The index (:xph.&colon.INDEX:exph.)
+- see the :xph.INDEXTAG.:pv.x:epv.=:exph. and
+:xph.INDEXTOC=:exph. options
+:li.Note lists (:xph.&colon.NOTEL:exph.)
+- see the :xph.NOTELTAG.:pv.x:epv.=:exph. option
+:li.Ordered lists (:xph.&colon.OL:exph.)
+- see the :xph.OLTAG.:pv.x:epv.=:exph. option
+:li.Revisions (:xph.&period.RC:exph. and :xph.&colon.REV:exph.)
+- see the :xph.REVTAG=:exph. and :xph.REVTAG.:pv.x:epv.=:exph. options
+:li.Shading (:xph.SHADE=:exph. on various &bm. tags)
+- see the :xph.SHADE.:pv.x:epv.=:exph. option
+:li.Simple lists (:xph.&colon.SL:exph.)
+- see the :xph.SLTAG.:pv.x:epv.=:exph. option
+:li.Table of Contents (:xph.&colon.TOC:exph. and :xph.&colon.PTOC:exph.)
+- see the :xph.TOCC=:exph., :xph.TOCINDENT=:exph. and
+:xph.TOCTAG=:exph. options
+:li.Unordered lists (:xph.&colon.UL:exph.)
+- see the :xph.ULTAG.:pv.x:epv.=:exph. option
+:eul.
+.*---
+:li.:hp7.Miscellaneous:ehp7.
+:ul compact.
+:li.The :xph.FIGCAPLOC=:exph. option allows you to place the caption
+of a figure either before or after the figure itself
+:li.If an index is generated, the :xph.INDEXTOC=:exph. option
+specifies if a table-of-contents for the index itself should be
+generated, and if so, the :xph.INDEXTOCTAG=:exph. option specifies
+the &html. markup to use
+:li.When converting a &flat. file, the :xph.SOURCE=:exph. option
+provides custom conversion options
+:rev refid=r42.
+:li.The :xph.SETUPTAG.:pv.name:epv.=:exph. option allows you to
+place text before and after various GML/&bm. tags.
+:li.Control words and tags that are supported by a definition in the
+&sysname. symbol table can be customized by updating the symbol
+table definition (see :hdref refid=symbol. for more information)
+:erev refid=r42.
+:eul.
+:eul.

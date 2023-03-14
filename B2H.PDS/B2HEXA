@@ -1,0 +1,1390 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HEXA: Various examples
+.*         Imbedded by B2H SCRIPT
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+.setup b2hsetup
+.*--------------------
+:h1 id=exampl.Examples
+:ptoc.
+:p.The following are examples of various GML and &bm. markup.  They
+are provided so you can compare how they look using &bm. versus when
+converted to &html. and viewed by a Web browser.  Of course, some of
+these constructs also appear earlier in this document.
+:psc xproc=html.
+:p.You are currently reading the &bm. version of the User's Guide.
+You may wish to compare these &bm.-formatted examples with the
+&html. 2 and &html. 3 versions.
+:epsc.
+:psc proc=html.
+:note.You are currently browsing the &html. &b2hhtml version of the
+User's Guide.
+:epsc.
+.*-----
+:h2.Lists
+:p.&sysname. provides options to specify which &html. tags should be
+used for any given list.  If you do not like a list's default
+appearance, you can change it.
+.*b2h option liref=actual
+:p.:hp2.An ordered list using &sysname.'s :xph.LIREF=ACTUAL:exph.
+option (the default)&colon.:ehp2.
+:xmp.
+  &colon.ol.
+  &colon.li.List item number one
+  &colon.li.List item number two
+  &colon.ol compact.
+  &colon.li id=ltst2b.Nested compact ordered list&colon. item one
+  &colon.li.item two
+  &colon.eol.
+  &colon.li.Maybe loop back to step &colon.liref refid=ltst2b.
+  &colon.li.Resume original list, final item
+  &colon.eol.
+:exmp.
+Results in:
+:ol.
+:li.List item number one
+:li.List item number two
+:ol compact.
+:li id=ltst2a.Nested compact ordered list: item one
+:li.item two
+:eol.
+:li.Maybe loop back to step :liref refid=ltst2a.
+:li.Resume original list, final item
+:eol.
+:psc proc=html.
+.*b2h option liref=id
+:p.:hp2.Same ordered list using &sysname.'s
+:xph.LIREF=ID:exph. option&colon.:ehp2.
+:ol.
+:li.List item number one
+:li.List item number two
+:ol compact.
+:li id=ltst2b.Nested compact ordered list: item one
+:li.item two
+:eol.
+:li.Maybe loop back to step :liref refid=ltst2b.
+:li.Resume original list, final item
+:eol.
+.*b2h option liref=actual
+:epsc.
+.*---
+:p.:hp2.An un-ordered list&colon.:ehp2.
+:xmp.
+  &colon.ul.
+  &colon.li.List item number one
+  &colon.li.List item number two
+  &colon.ul compact.
+  &colon.li.Nested compact un-ordered list&colon. item one
+  &colon.li.item two
+  &colon.eul.
+  &colon.li.Resume original list, final item
+  &colon.eul.
+:exmp.
+Results in:
+:ul.
+:li.List item number one
+:li.List item number two
+:ul compact.
+:li.Nested compact un-ordered list: item one
+:li.item two
+:eul.
+:li.Resume original list, final item
+:eul.
+.*---
+:p.:hp2.A simple list&colon.:ehp2.
+:xmp.
+  &colon.sl.
+  &colon.li.List item number one
+  &colon.li.List item number two
+  &colon.sl compact.
+  &colon.li.Nested compact simple list&colon. item one
+  &colon.li.item two
+  &colon.esl.
+  &colon.li.Resume original list, final item
+  &colon.esl.
+:exmp.
+Results in:
+:sl.
+:li.List item number one
+:li.List item number two
+:sl compact.
+:li.Nested compact simple list: item one
+:li.item two
+:esl.
+:li.Resume original list, final item
+:esl.
+.*---
+:psc proc='html3 html4'.
+:p.:hp2.A definition list using &sysname.'s
+:xph.DLFMT=DL:exph. option (the default)&colon.:ehp2.
+.*b2h option dlfmt=dl
+:epsc.
+:psc xproc='html3 html4'.
+:p.:hp2.A definition list&colon.:ehp2.
+:epsc.
+:xmp.
+  &colon.dl termhi=3 tsize=4m.
+  &colon.dthd.Term
+  &colon.ddhd.Definition
+  &colon.dt.term1
+  &colon.dd.Definition for term1
+  &colon.dt.term2
+  &colon.dd.Definition for term2
+  &colon.dl tsize=4m compact.
+  &colon.dt.term2a
+  &colon.dd.Nested compact definition list&colon. text for term2a
+  &colon.dt.term2b
+  &colon.dd.Definition for term2b
+  &colon.edl.
+  &colon.dt.term3
+  &colon.dd.Definition for term3
+  &colon.edl.
+:exmp.
+Results in:
+:dl termhi=3 tsize=4m.
+:dthd.Term
+:ddhd.Definition
+:dt.term1
+:dd.Definition for term1
+:dt.term2
+:dd.Definition for term2
+:dl tsize=4m compact.
+:dt.term2a
+:dd.Nested compact definition list: text for term2a
+:dt.term2b
+:dd.Definition for term2b
+:edl.
+:dt.term3
+:dd.Definition for term3
+:edl.
+.*---
+:psc proc='html3 html4'.
+.*b2h option dlfmt=table
+:p.:hp2.Same definition list using &sysname.'s :xph.DLFMT=TABLE:exph.
+option (&html. 3 or higher only)&colon.:ehp2.
+:dl termhi=3 tsize=4m.
+:dthd.Term
+:ddhd.Definition
+:dt.term1
+:dd.Definition for term1
+:dt.term2
+:dd.Definition for term2
+:dl tsize=4m compact.
+:dt.term2a
+:dd.Nested compact definition list: text for term2a
+:dt.term2b
+:dd.Definition for term2b
+:edl.
+:dt.term3
+:dd.Definition for term3
+:edl.
+:epsc.
+.*---
+:psc proc='html3 html4'.
+:p.:hp2.A glossary list using &sysname.'s
+:xph.DLFMT=DL:exph. option (the default)&colon.:ehp2.
+.*b2h option glfmt=dl
+:epsc.
+:psc xproc='html3 html4'.
+:p.:hp2.A glossary list&colon.:ehp2.
+:epsc.
+:xmp.
+  &colon.gl.
+  &colon.gt.binding edge
+  &colon.gd.The edge of a page to be bound, stapled, or drilled.
+  Defined with the BIND option of the SCRIPT command.
+  &colon.gt.boldface
+  &colon.gd.A heavy-faced type
+  &colon.grpsep.C
+  &colon.gt.caption
+  &colon.gd.Text accompanying and describing an illustration
+  &colon.grpsep.T
+  &colon.gt.troglodyte
+  &colon.gdg.
+  &colon.gd.A prehistoric cave dweller
+  &colon.gd.A person who is still using index cards
+  &colon.gd.A computer nerd who keeps saying &colon.q.I'll take a byte out of that!&colon.eq.
+  &colon.gt.Zebra
+  &colon.gd.A striped animal from Africa
+  &colon.egl.
+:exmp.
+Results in:
+:gl.
+:gt.binding edge
+:gd.The edge of a page to be bound, stapled, or drilled.
+Defined with the BIND option of the SCRIPT command.
+:gt.boldface
+:gd.A heavy-faced type
+:grpsep.C
+:gt.caption
+:gd.Text accompanying and describing an illustration
+:grpsep.T
+:gt.troglodyte
+:gdg.
+:gd.A prehistoric cave dweller
+:gd.A person who is still using index cards
+:gd.A computer nerd who keeps saying :q.I'll take a byte out of that!:eq.
+:gt.Zebra
+:gd.A striped animal from Africa
+:egl.
+.*---
+:psc proc='html3 html4'.
+.*b2h option glfmt=table
+:p.:hp2.Same glossary list using &sysname.'s :xph.GLFMT=TABLE:exph.
+option (&html. 3 or higher only)&colon.:ehp2.
+:gl.
+:gt.binding edge
+:gd.The edge of a page to be bound, stapled, or drilled.
+Defined with the BIND option of the SCRIPT command.
+:gt.boldface
+:gd.A heavy-faced type
+:grpsep.C
+:gt.caption
+:gd.Text accompanying and describing an illustration
+:grpsep.T
+:gt.troglodyte
+:gdg.
+:gd.A prehistoric cave dweller
+:gd.A person who is still using index cards
+:gd.A computer nerd who keeps saying :q.I'll take a byte out of that!:eq.
+:gt.Zebra
+:gd.A striped animal from Africa
+:egl.
+:epsc.
+.*-----
+:h2.Tables
+:p.There is a big difference in the appearance of the following
+tables between &html. 2 and &html. 3. This is described further
+in :hdref refid=spect..
+:p.:hp2.A simple table with caption and no frame, defined with
+&colon.table cols='* 2* * *' frame=none.:ehp2.
+:table cols='* 2* * *' frame=none.
+:tcap.Example&colon. The caption for a simple table with no frame
+:thd.
+:c.Head C1
+:c.Head C2
+:c.Head C3
+:c.Head C4
+:ethd.
+:row.
+:c.Row 1, Col 1
+:c.Row 1, Col 2 of 4
+:c.Row 1, Col 3
+:c.Row 1, Col 4
+:row.
+:c.Row 2, Col 1
+:c.Row 2, Col 2
+:c.Row 2, Col 3 of 4
+:c.Row 2, Col 4
+:etable.
+.*---
+:p.:hp2.Same as above, but with a frame, defined as
+&colon.table cols='* 2* * *'.:ehp2.
+:table cols='* 2* * *'.
+:tcap.Example&colon. A simple table with a frame
+:thd.
+:c.Head C1
+:c.Head C2
+:c.Head C3
+:c.Head C4
+:ethd.
+:row.
+:c.Row 1, Col 1
+:c.Row 1, Col 2 of 4
+:c.Row 1, Col 3
+:c.Row 1, Col 4
+:row.
+:c.Row 2, Col 1
+:c.Row 2, Col 2
+:c.Row 2, Col 3 of 4
+:c.Row 2, Col 4
+:etable.
+.*---
+:p.:hp2.Same table, but adding a table description,
+an ordered list in a cell and a table note:ehp2.
+:table cols='* 2* * *'.
+:tcap.Example&colon. Same table with additional embellishments
+:tdesc.
+This is some table description text using the
+&colon.TDESC. tag
+:etdesc.
+:thd.
+:c.Head C1 :c.Head C2 :c.Head C3 :c.Head C4
+:ethd.
+:row.
+:c.Row 1, Col 1
+:ol compact.
+:li.Ordered list item #1
+:li.Ordered list item #2
+:eol.
+:c.Row 1, Col 2 of 4
+:c.Row 1, Col 3
+:c.Row 1, Col 4
+:tnote.This is a tnote:etnote.
+:row.
+:c.Row 2, Col 1
+:c.Row 2, Col 2
+:c.Row 2, Col 3 of 4
+:c.Row 2, Col 4
+:etable.
+.*---
+.cp 40
+:p.:hp2.A complex table with varying columns by row:ehp2.
+:table refid=alliasi.
+:tcap.Example&colon. A complex table with varying columns by row
+:thd.
+:c.Head C1
+:c.Head C2
+:c.Head C3
+:c.Head C4
+:c.Head C5
+:ethd.
+:tft.
+:c.Foot C1
+:c.Foot C2
+:c.Foot C3
+:c.Foot C4
+:c.Foot C5
+:etft.
+:row.
+:c.aR1 C1
+:c.aR1 C2
+:c.aR1 C3
+:c.aR1 C4
+:c.aR1 C5
+:tnote.This is tnote text:etnote.
+:row.
+:c.aR2 C1
+:c.aR2 C2
+:c.aR2 C3
+:c.aR2 C4
+:c.aR2 C5
+:row refid=adrcl temp.
+:c.This is left-justified data for the single column
+:row refid=adrcb temp.
+:c.This is the :q.quoted:eq. data in cell one of two
+:row.
+:c.bR1 C1 :c.bR1 C2 :c.bR1 C3 :c.bR1 C4 :c.bR1 C5
+:row refid=adrcc temp.
+:c.This is cell 1 of 3 :p.(no data in cell 2)
+:c. :c.This is cell 3 of 3
+:tnote.
+This is a second tnote
+:etnote.
+:row.
+:c.cR1 C1
+:c.cR1 C2
+:c.cR1 C3
+:c.cR1 C4
+:c.cR1 C5
+:row refid=adrc temp.
+:c.Single column again (centered)
+:row.
+:c.dR1 C1
+:c.dR1 C2
+:c.dR1 C3
+:c.dR1 C4
+:c.dR1 C5
+:row refid=adrcr temp split=yes.
+:c.This is right-justified data in a single column
+:row.
+:c.eR1 C1
+:c.eR1 C2
+:c.eR1 C3
+:c.eR1 C4
+:c.eR1 C5
+:etable.
+.*---
+.cp 40
+:p.:hp2.A table with both horizontal and vertical cells:ehp2.
+.br;defined like
+:xmp.
+  &colon.table
+    cols='* * 2* 2*'
+    align='c c l c'
+    valign='c c t'
+    arrange='1 2 3 3'
+    arrange='1 2 4 5'.
+:exmp.
+:psc proc='html2'.
+Remember that in &html. 2, vertical cells are accepted, but laid out
+horizontally.
+:epsc.
+:table refid=arr1.
+:thd refid=arr2 temp.
+:c.Application
+:c.Location
+:c.Description
+:c.Test Procedure
+:c.Frequency
+:ethd.
+:row.
+:c.Dial Cost Estimator
+:c.AMTOOLC
+:c.Return best phone number and estimated call cost
+:c.Run D1, D2 and D3 transcripts
+:c.When database is refreshed or the application code changes
+:row.
+:c.SERVQMF
+:c.AMTOOL2
+:c.Submit Service Manager QMF queries
+:c.Submit APPLID canned query using ABCD as account ID
+:c.Weekly
+:row.
+:c.CMRLIST
+:c.ADVTOOLS main server on CARVM8
+:c.Build and load customer master list
+:c.Submit AMCMRJOB
+:c.Nightly at 18&colon.30 pm
+:row.
+:c.PRTRANGE
+:c.AMTOOL2, MVSAP2 and MVSAP5
+:c.Extract customer problem entry(ies) from the currently-active
+NOTIFY system
+:c.Submit request for ATAP 16300
+:c.Executed by Customer Assistance upon a processor switch
+:etable.
+.*-----
+:h2 id=xshade.Shading
+:p.The following table shows you how the default shading
+values appear
+:psc proc='html2'.
+(note that shading is not supported with &html. 2 output)
+:epsc.
+:psc proc='html3 html4'.
+(the appearance may vary based on your browser and display)
+:epsc.
+:xmp.
+  &colon.tdef id=shade  cols='* 3*'.
+  &colon.tdef id=xlight refid=shade shade='no xlight'.
+  &colon.tdef id=light  refid=shade shade='no light'.
+  &colon.tdef id=medium refid=shade shade='no medium'.
+  &colon.tdef id=dark   refid=shade shade='no dark'.
+  &colon.tdef id=xdark  refid=shade shade='no xdark'.
+  &colon.table refid=shade.
+  &colon.tcap.Default appearances for SHADE
+  &colon.thd.&colon.c.Shade Type &colon.c.Actual appearance&colon.ethd.
+  &colon.row.
+  &colon.c.SHADE=NO
+  &colon.c.Some text with no shading
+  &colon.row refid=xlight.
+  &colon.c.SHADE=XLIGHT
+  &colon.c.Some sample text with extra-light shading
+  &colon.row refid=light.
+  &colon.c.SHADE=LIGHT
+  &colon.c.Some sample text with light shading
+  &invellip
+  &colon.etable.
+:exmp.
+:tdef id=shade  cols='* 3*'.
+:tdef id=xlight refid=shade shade='no xlight'.
+:tdef id=light  refid=shade shade='no light'.
+:tdef id=medium refid=shade shade='no medium'.
+:tdef id=dark   refid=shade shade='no dark'.
+:tdef id=xdark  refid=shade shade='no xdark'.
+:table refid=shade alignh='l c'.
+:tcap.Default appearances for SHADE
+:thd.
+:c.Shade Type
+:c.Actual appearance
+:ethd.
+:row.
+:c.SHADE=NO
+:c.Some text with no shading
+:row refid=xlight.
+:c.SHADE=XLIGHT
+:c.Some sample text with extra-light shading
+:row refid=light.
+:c.SHADE=LIGHT
+:c.Some sample text with light shading
+:row refid=medium.
+:c.SHADE=MEDIUM
+:c.Some sample text with medium shading
+:row refid=dark.
+:c.SHADE=DARK
+:c.Some sample text with dark shading
+:row refid=xdark.
+:c.SHADE=XDARK
+:c.Some sample text with extra-dark shading
+:etable.
+:p.:hp2.Figure with custom blue shading:ehp2.
+.*B2H OPTION SHADE.LIGHT=C5FFFF
+:xmp.
+  &period.*B2H OPTION SHADE.LIGHT=C5FFFF
+  &colon.fig shade=light.
+  &colon.figcap.Example figure with light blue shading
+ 
+    This is a small figure illustrating
+    light blue background shading
+ 
+  &colon.efig.
+:exmp.
+:fig shade=light.
+:figcap.Example&colon. figure with light blue shading
+:xmp.
+    This is a small figure illustrating
+    light blue background shading
+:exmp.
+:efig.
+.*-----
+:h2.Directory lists
+:p.:hp2.Three columns, each with a hard-coded width of 8:ehp2.
+:xmp.
+  &colon.direct layout=2 cols='8 8 8'.
+  &colon.dirhdr.Module Called Entry
+  &colon.dirhdr.Name By Point
+  &colon.dentry.IJK30276 IJK30111 IJKA9762
+  &colon.dentry.     IJK30276 IJK30111 IJKA9762
+  &colon.dentry.IJK30276    IJK30111  IJKA9762
+  &colon.dentry.  IJK30276    IJK30111  IJKA9762
+  &colon.edirect.
+:exmp.
+:direct layout=2 cols='8 8 8'.
+:dirhdr.Module Called Entry
+:dirhdr.Name By Point
+:dentry.IJK30276 IJK30111 IJKA9762
+:dentry.     IJK30276 IJK30111 IJKA9762
+:dentry.IJK30276    IJK30111  IJKA9762
+:dentry.  IJK30276    IJK30111  IJKA9762
+:edirect.
+.*---
+:p.:hp2.Three columns, width specified as COLS='3i .5i 1i' and a
+&colon.DIRSUB:ehp2.
+:xmp.
+  &colon.direct cols='3i .5i 1i'.
+  &colon.dirhdr.  Name  Ext 'Dept/Room'
+  &colon.dentry.'Doe, Alice' VC5  'Pav 301'
+  &colon.dentry.'Doe, John'  VC5  'Pav 302'
+  &colon.dentry.'Doe, Ken'   VC5  'Pav 312'
+  &colon.dentry.'Doe, Mary'  VC5  'Pav 312'
+  &colon.dentry.'Richtmeyer, Gary' VC5 'Spectrum 3046'
+  &colon.dentry.'Smith, John' VC1  'Pav 324'
+  &colon.dentry.'Smith, Mary' VC2  'Pav 322'
+  &colon.dentry.'Smith, Tom' VC3  'Pav 202'
+  &colon.dirsub.This is a &amp.colon.dirsub. line
+  &colon.dentry.'Descarte, Rene'  VC5  'Pav 1024'
+  &colon.dentry.   'Doe, Jane'  VA1  'Pav 234'
+  &colon.dentry. 'Doe, John'  VC5  'Pav 302'
+  &colon.edirect.
+:exmp.
+:direct cols='3i .5i 1i'.
+:dirhdr.  Name  Ext 'Dept/Room'
+:dentry.'Doe, Alice' VC5  'Pav 301'
+:dentry.'Doe, John'  VC5  'Pav 302'
+:dentry.'Doe, Ken'   VC5  'Pav 312'
+:dentry.'Doe, Mary'  VC5  'Pav 312'
+:dentry.'Richtmeyer, Gary' VC5 'Spectrum 3046'
+:dentry.'Smith, John' VC1  'Pav 324'
+:dentry.'Smith, Mary' VC2  'Pav 322'
+:dentry.'Smith, Tom' VC3  'Pav 202'
+:dirsub.This is a &colon.dirsub. line
+:dentry.'Descarte, Rene'  VC5  'Pav 1024'
+:dentry.   'Doe, Jane'  VA1  'Pav 234'
+:dentry. 'Doe, John'  VC5  'Pav 302'
+:edirect.
+.*---
+:p.:hp2.Same as above, but with COMPACT:ehp2.
+:direct compact cols='3i .5i 1i'.
+:dirhdr.  Name  Ext 'Dept/Room'
+:dentry.'Doe, Alice' VC5  'Pav 301'
+:dentry.'Doe, John'  VC5  'Pav 302'
+:dentry.'Doe, Ken'   VC5  'Pav 312'
+:dentry.'Doe, Mary'  VC5  'Pav 312'
+:dentry.'Richtmeyer, Gary' VC5 'Spectrum 3046'
+:dentry.'Smith, John' VC1  'Pav 324'
+:dentry.'Smith, Mary' VC2  'Pav 322'
+:dentry.'Smith, Tom' VC3  'Pav 202'
+:dirsub.This is a &colon.dirsub. line
+:dentry.'Descarte, Rene'  VC5  'Pav 1024'
+:dentry.   'Doe, Jane'  VA1  'Pav 234'
+:dentry. 'Doe, John'  VC5  'Pav 302'
+:edirect.
+.*-----
+:h2.Notes
+:p.:hp2.A single paragraph using the :xph.&colon.NOTE:exph. tag:ehp2.
+.br;defined like
+:xmp.
+  &colon.note.This is a sample note
+:exmp.
+:note.This is a sample note
+:p.:hp2.Multiple paragraphs using the
+:xph.&colon.NT/&colon.ENT:exph. tags:ehp2.
+.br;defined like
+:xmp.
+  &colon.nt.This is the first paragraph.
+  &colon.p.And the last paragraph.
+  &colon.ent.
+:exmp.
+:nt.This is the first paragraph.
+:p.And the last paragraph.
+:ent.
+:p.:hp2.A list of notes using the
+:xph.&colon.NOTEL/&colon.ENOTEL:exph. tags:ehp2.
+.br;defined like
+:xmp.
+  &colon.notel.
+  &colon.li.Note list item number 1
+  &colon.li.Note list item number 2
+  &colon.enotel.
+:exmp.
+:notel.
+:li.Note list item number 1
+:li.Note list item number 2
+:enotel.
+.*-----
+:h2 id=samques.Question and Answers (TEXT mode)
+.nameit symbol='usaz' text='Arizona'.
+.nameit symbol='usca' text='California'.
+.nameit symbol='usct' text='Connecticut'.
+.nameit symbol='usme' text='Maine'.
+.nameit symbol='usnc' text='North Carolina'.
+.nameit symbol='ustx' text='Texas'.
+.*B2H OPTION QUESTION=TEXT
+.*-----
+:h3.Fill-in-the-blank
+:p.Example 1
+:xmp.
+  &colon.question form=fillin id=strb.
+  The right hand side of a boat is called the
+  &colon.blank width=9p ans='starboard'. side.
+  &colon.equestion.
+:exmp.
+:question form=fillin id=strb.
+The right hand side of a boat is called the
+:blank width=9p ans='starboard'. side.
+:equestion.
+:p.Example 2
+:xmp.
+  &colon.question form=fillin dingbat='A.'.
+  The right hand side of a boat is called the
+  &colon.blank width=9p ans='starboard'. side.
+  &colon.equestion.
+:exmp.
+:question form=fillin dingbat='A.'.
+The right hand side of a boat is called the
+:blank width=9p ans='starboard'. side.
+:equestion.
+:p.Example 3
+:xmp.
+  &colon.question form=fillin id=sail2.
+  The three edges of a fore-and-aft sail are the&colon.
+  &colon.lines.
+  &colon.blank width=6p ans='foot'.
+  &colon.blank width=6p ans='leech'.
+  &colon.blank width=6p ans='luff'.
+  &colon.elines.
+  &colon.equestion.
+:exmp.
+:question form=fillin id=sail2.
+The three edges of a fore-and-aft sail are the:
+:lines.
+:blank width=6p ans='foot'.
+:blank width=6p ans='leech'.
+:blank width=6p ans='luff'.
+:elines.
+:equestion.
+.*-----
+:h3.True/False
+:xmp.
+  &colon.question form=tf id=yawl ans=F keep=6p.
+  A &colon.hp1.yawl&colon.ehp1. is a sailboat with only one mast.
+  &colon.equestion.
+:exmp.
+:question form=tf id=yawl ans=F keep=6p.
+A :hp1.yawl:ehp1. is a sailboat with only one mast.
+:equestion.
+.*-----
+:h3.Multiple-choice
+:xmp.
+  &colon.question form=mc id=cpz ansid=cpzac keep=12p.
+  After capsizing a small sailboat, the first thing you should do is
+  &colon.choice.uncleat all sheets.
+  &colon.choice.swim around the boat and hang on the centerboard
+  &colon.choice id=cpzac.account for everyone aboard.
+  &colon.equestion.
+:exmp.
+:question form=mc id=cpz ansid=cpzac keep=12p.
+After capsizing a small sailboat, the first thing you should do is
+:choice.uncleat all sheets.
+:choice.swim around the boat and hang on the centerboard
+:choice id=cpzac.account for everyone aboard.
+:equestion.
+.*-----
+:h3.Matching
+:xmp.
+  &colon.question form=match id=trm keep=20p.
+  Match the following nautical terms with their correct meanings.
+  &colon.choice id=trmha.halyard
+  &colon.choice id=trmsh.sheet
+  &colon.choice id=trmji.jib
+  &colon.choice id=trmhd.head
+  &colon.match ansid=trmsh.line used to trim a sail
+  &colon.match ansid=trmhd.toilet
+  &colon.match ansid=trmha.line used to hoist and lower a sail
+  &colon.match ansid=trmji.triangular sail attached to the forestay of
+  the foremost mast
+  &colon.equestion.
+:exmp.
+:question form=match id=trm keep=20p.
+Match the following nautical terms with their correct meanings.
+:choice id=trmha.halyard
+:choice id=trmsh.sheet
+:choice id=trmji.jib
+:choice id=trmhd.head
+:match ansid=trmsh.line used to trim a sail
+:match ansid=trmhd.toilet
+:match ansid=trmha.line used to hoist and lower a sail
+:match ansid=trmji.triangular sail attached to the forestay of
+the foremost mast
+:equestion.
+.*-----
+:h3.Ordering
+:xmp.
+  &colon.question form=order id=coast keep=18p compact.
+  Place the following states in order from longest coastline to shortest.
+  &colon.qitem ans=4.&usme.
+  &colon.qitem ans=2.&ustx.
+  &colon.qitem ans=3.&usnc.
+  &colon.qitem ans=1.&usca.
+  &colon.qitem ans=6.&usaz.
+  &colon.qitem ans=5.&usct.
+  &colon.equestion.
+:exmp.
+:question form=order id=coast keep=18p compact.
+Place the following states in order from longest coastline to shortest.
+:qitem ans=4.&usme.
+:qitem ans=2.&ustx.
+:qitem ans=3.&usnc.
+:qitem ans=1.&usca.
+:qitem ans=6.&usaz.
+:qitem ans=5.&usct.
+:equestion.
+.*-----
+:h3.Answers to sample questions
+:xmp.
+  &colon.p.These are the answers to the sample questions
+  starting with &colon.qref refid=strb.
+  &colon.answer refid=strb.
+  &colon.answer refid=sail2.
+  &colon.answer refid=yawl.
+  &colon.answer refid=cpz.
+  &colon.answer refid=coast.
+  &colon.answer refid=trm.
+:exmp.
+:p.These are the answers to the sample questions
+starting with :qref refid=strb.
+:answer refid=strb.
+:answer refid=sail2.
+:answer refid=yawl.
+:answer refid=cpz.
+:answer refid=coast.
+:answer refid=trm.
+:psc proc='html'.
+:h2 id=samque2.Question and Answers (&html. FORM mode)
+.*B2H OPTION QUESTION='FORM,GET,,HIDDEN'
+:p.The following examples were generated using the &sysname. option:
+:xmp.
+  &period.*&sysname. OPTION QUESTION='FORM,GET,,HIDDEN'
+:exmp.
+.*-----
+:h3.Fill-in-the-blank
+:p.Example 1
+:xmp.
+  &colon.question form=fillin id=qtrb.
+  The right hand side of a boat is called the
+  &colon.blank width=9p ans='starboard'. side.
+  &colon.equestion.
+:exmp.
+:question form=fillin id=qtrb.
+The right hand side of a boat is called the
+:blank width=9p ans='starboard'. side.
+:equestion.
+:p.Example 2
+:xmp.
+  &colon.question form=fillin dingbat='A.'.
+  The right hand side of a boat is called the
+  &colon.blank width=9p ans='starboard'. side.
+  &colon.equestion.
+:exmp.
+:question form=fillin dingbat='A.'.
+The right hand side of a boat is called the
+:blank width=9p ans='starboard'. side.
+:equestion.
+:p.Example 3
+:xmp.
+  &colon.question form=fillin id=qail2.
+  The three edges of a fore-and-aft sail are the&colon.
+  &colon.lines.
+  &colon.blank width=6p ans='foot'.
+  &colon.blank width=6p ans='leech'.
+  &colon.blank width=6p ans='luff'.
+  &colon.elines.
+  &colon.equestion.
+:exmp.
+:question form=fillin id=qail2.
+The three edges of a fore-and-aft sail are the:
+:lines.
+:blank width=6p ans='foot'.
+:blank width=6p ans='leech'.
+:blank width=6p ans='luff'.
+:elines.
+:equestion.
+.*-----
+:h3.True/False
+:xmp.
+  &colon.question form=tf id=qawl ans=F keep=6p.
+  A &colon.hp1.yawl&colon.ehp1. is a sailboat with only one mast.
+  &colon.equestion.
+:exmp.
+:question form=tf id=qawl ans=F keep=6p.
+A :hp1.yawl:ehp1. is a sailboat with only one mast.
+:equestion.
+.*-----
+:h3.Multiple-choice
+:xmp.
+  &colon.question form=mc id=qpz ansid=qpzac keep=12p.
+  After capsizing a small sailboat, the first thing you should do is
+  &colon.choice.uncleat all sheets.
+  &colon.choice.swim around the boat and hang on the centerboard
+  &colon.choice id=qpzac.account for everyone aboard.
+  &colon.equestion.
+:exmp.
+:question form=mc id=qpz ansid=qpzac keep=12p.
+After capsizing a small sailboat, the first thing you should do is
+:choice.uncleat all sheets.
+:choice.swim around the boat and hang on the centerboard
+:choice id=qpzac.account for everyone aboard.
+:equestion.
+.*-----
+:h3.Matching
+:xmp.
+  &colon.question form=match id=qrm keep=20p.
+  Match the following nautical terms with their correct meanings.
+  &colon.choice id=qrmha.halyard
+  &colon.choice id=qrmsh.sheet
+  &colon.choice id=qrmji.jib
+  &colon.choice id=qrmhd.head
+  &colon.match ansid=qrmsh.line used to trim a sail
+  &colon.match ansid=qrmhd.toilet
+  &colon.match ansid=qrmha.line used to hoist and lower a sail
+  &colon.match ansid=qrmji.triangular sail attached to the forestay of
+  the foremost mast
+  &colon.equestion.
+:exmp.
+:question form=match id=qrm keep=20p.
+Match the following nautical terms with their correct meanings.
+:choice id=qrmha.halyard
+:choice id=qrmsh.sheet
+:choice id=qrmji.jib
+:choice id=qrmhd.head
+:match ansid=qrmsh.line used to trim a sail
+:match ansid=qrmhd.toilet
+:match ansid=qrmha.line used to hoist and lower a sail
+:match ansid=qrmji.triangular sail attached to the forestay of
+the foremost mast
+:equestion.
+.*-----
+:h3.Ordering
+:xmp.
+  &colon.question form=order id=qoast keep=18p compact.
+  Place the following states in order from longest coastline to shortest.
+  &colon.qitem ans=4.&usme.
+  &colon.qitem ans=2.&ustx.
+  &colon.qitem ans=3.&usnc.
+  &colon.qitem ans=1.&usca.
+  &colon.qitem ans=6.&usaz.
+  &colon.qitem ans=5.&usct.
+  &colon.equestion.
+:exmp.
+:question form=order id=qoast keep=18p compact.
+Place the following states in order from longest coastline to shortest.
+:qitem ans=4.&usme.
+:qitem ans=2.&ustx.
+:qitem ans=3.&usnc.
+:qitem ans=1.&usca.
+:qitem ans=6.&usaz.
+:qitem ans=5.&usct.
+:equestion.
+.*-----
+:h3.Answers to sample questions
+:xmp.
+  &colon.p.These are answers to the sample questions
+  starting with &colon.qref refid=qtrb.
+  &colon.answer refid=qtrb.
+  &colon.answer refid=qail2.
+  &colon.answer refid=qawl.
+  &colon.answer refid=qpz.
+  &colon.answer refid=qoast.
+  &colon.answer refid=qrm.
+:exmp.
+:p.These are answers to the sample questions
+starting with :qref refid=qtrb.
+:answer refid=qtrb.
+:answer refid=qail2.
+:answer refid=qawl.
+:answer refid=qpz.
+:answer refid=qoast.
+:answer refid=qrm.
+:epsc.
+.*-----
+.cp 34
+:h2.Figure with a screen image
+:p.Since :q.:xph.&colon.DOCPROF SCREEN=SHADE.:exph.:eq. was specified,
+the following screen will be shaded if &html. 3 (or higher)
+output is being generated.
+:fig frame=none.
+:screen.
+ADVTOOLS ----------------- Advantis Field Support Tools ----------------------
+ 
+                    GENERAL Information
+_ 1   Getting Started    ADVTOOLS   Information on ADVTOOLS itself
+_ 2+  Advantis Itself    ADVANTIS   Sales Support; Marketing Programs;
+                                    Configuration; Qualified Devices
+_ 3   QuickFind          QUICKFIND  Answers to SELECTED common questions
+ 
+                    PRODUCT Information
+_ 4+  Message Services   MESSAGE    EDI, Electronic Mailboxing, Email, IE, BBS
+_ 5+  Network Services   NETWORK    APPN, Dial, LAN Leased, Wireless, X.25
+_ 6+  Information Svcs   INFORMAT   Information Providers, Software Mall
+_ 7+  Capacity Services  CAPACITY   Outsourcing (Ded Proc, Shared Capacity, RCS
+_ 8+  Cross-Product Svcs CROSS      International, Custom Services (Sp. Bids)
+ 
+                    SUPPORT Information
+_ 9+  Customer Info      CUSTOMER   Billing, Customer Sat, Lists, Acct Profile
+_ 10+ Admin & HQ Support ADMIN      Educ, Field Notes, Forms, Contracts, Pubs,
+                                    All Helplogs, Orders, Processes, Reqm'ts
+_ 11+ Other Information  OTHER      Survey; SE College; VM Tools; Skills; ADVPW
+ 
+===&gt.
+1=Help      2=FeedBack  3=Exit        4=Recent News 5=            6=
+7=QuickFind 8=Profile   9=FastPaths  10=MenuMap    11=Search All 12=Exit
+:escreen.
+:figcap.Example&colon. This is the figure caption using the &colon.figcap. tag
+:figdesc.This is some text using the &colon.figdesc. tag.
+:efig.
+.*-----
+:h2.Labeled box
+:xmp.
+  &colon.lblbox.This is the label for the box
+  This is verbiage for within the box.
+  It is formatted normally.
+  &colon.elblbox.
+:exmp.
+:lblbox.This is the label for the box
+This is verbiage for within the box.
+It is formatted normally.
+:elblbox.
+.*-----
+:h2.Tabbed data
+:p.:hp2.Using &colon.TABDATA:ehp2.
+:xmp.
+  &colon.tabdata cols='w1 w1 w1 w1' char='~'
+           w1='&amp.bul. SieMMMmens MM '.
+  &amp.bul. Apple**   ~&amp.bul. DEC    ~&amp.bul. NET     ~&amp.bul. Novell**
+  &amp.bul. Siemens** ~&amp.bul. SSI    ~&amp.bul. SUN**   ~&amp.bul. 3COM**
+  &amp.bul. BAY**     ~&amp.bul. NTI    ~&amp.bul. CISCO** ~&amp.bul. etc.
+  &colon.etabdata.
+:exmp.
+Results in:
+:tabdata cols='w1 w1 w1 w1' char='~'
+         w1='&bul. SieMMMmens MM '.
+&bul. Apple**   ~&bul. DEC    ~&bul. NET     ~&bul. Novell**
+&bul. Siemens** ~&bul. SSI    ~&bul. SUN**   ~&bul. 3COM**
+&bul. BAY**     ~&bul. NTI    ~&bul. CISCO** ~&bul. etc.
+:etabdata.
+:p.:hp2.Using .TABRACK:ehp2.
+:xmp.
+  &colon.lines.
+  .tabrack 'Los Angeles, California' 'Adams Hilton'
+  &colon.hp1.
+  Location&amp.tab.Hotel&amp.tab.Date
+  &colon.ehp1.
+  Phoenix, Arizona&amp.tab.Adams Hilton&amp.tab.May 22-25, 1989
+  New York, New York&amp.tab.Hilton&amp.tab.Aug 21-26, 1989
+  Salt Lake City, Utah&amp.tab.Hotel Utah&amp.tab.Nov 15, 1990
+  &colon.elines.
+:exmp.
+:psc xproc='html'.
+Results in:
+:epsc.
+:psc proc='html'.
+.*B2H OPTIONS LINES=PRE
+Results in (using :xph.LINES=PRE:exph., the default):
+:epsc.
+:lines.
+.tabrack 'Los Angeles, California' 'Adams Hilton'
+:hp1.
+Location&tab.Hotel&tab.Date
+:ehp1.
+Phoenix, Arizona&tab.Adams Hilton&tab.May 22-25, 1989
+New York, New York&tab.Hilton&tab.Aug 21-26, 1989
+Salt Lake City, Utah&tab.Hotel Utah&tab.Nov 15, 1990
+:elines.
+:psc proc='html'.
+:p.Same records, but now processed using :xph.LINES=BR:exph.):
+.*B2H OPTION LINES=BR
+:lines.
+.tabrack 'Los Angeles, California' 'Adams Hilton'
+:hp1.
+Location&tab.Hotel&tab.Date
+:ehp1.
+Phoenix, Arizona&tab.Adams Hilton&tab.May 22-25, 1989
+New York, New York&tab.Hilton&tab.Aug 21-26, 1989
+Salt Lake City, Utah&tab.Hotel Utah&tab.Nov 15, 1990
+:elines.
+.*B2H OPTION LINES=BR
+:epsc.
+.*-----
+:h2.&colon.LINES and &colon.XMP
+:p.:hp2.Some lines from CONFIG.SYS using &colon.LINES:ehp2.
+:lines.
+PROTSHELL=C&colon.\OS2\PMSHELL.EXE
+SET USER_INI=C&colon.\OS2\OS2.INI
+SET SYSTEM_INI=C&colon.\OS2\OS2SYS.INI
+SET OS2_SHELL=C&colon.\OS2\CMD.EXE
+SET AUTOSTART=PROGRAMS,TASKLIST,FOLDERS,LAUNCHPAD
+:elines.
+:p.:hp2.Same lines, now using &colon.XMP:ehp2.
+:xmp.
+PROTSHELL=C&colon.\OS2\PMSHELL.EXE
+SET USER_INI=C&colon.\OS2\OS2.INI
+SET SYSTEM_INI=C&colon.\OS2\OS2SYS.INI
+SET OS2_SHELL=C&colon.\OS2\CMD.EXE
+SET AUTOSTART=PROGRAMS,TASKLIST,FOLDERS,LAUNCHPAD
+:exmp.
+.*-----
+.cp 22
+:h2.Schedules
+:p.Only schedule date :hp1.tables:ehp1. are supported, not schedule
+:hp1.charts:ehp1..
+:xmp.
+  &colon.schedule start='09/96' end='12/98' dateform='mm/dd/yy'
+            listid=sch009 legend=yes scale='0.8'
+            frame=box actsize='15' chart=no
+            shade=yes split=yes width=column cmtsize=6.
+  &invellip.
+  &invellip.
+  &colon.eschedule.
+  &colon.schdate listref=sch009
+           width=column actsize='15' cmtsize='6'
+           split=yes scale='0.8' frame=box.
+:exmp.
+Results in:
+:schedule start='09/96' end='12/98' dateform='mm/dd/yy'
+          frame=box actsize='15' chart=no
+          listid=sch009 legend=yes scale='0.8'
+          shade=yes split=yes width=column cmtsize=6.
+:schi pstart='09/08/96' pend='09/12/96'
+      astart='09/08/96' aend='09/12/96'
+      cmt='Moe'.Part 1 - Set up user ID
+:schi pstart='09/12/96' pend='09/15/96'
+      astart='09/12/96' aend='        '
+      pstart1='10/01/96' pend1='10/15/96'
+      cmt='Curly'.Part 1 - Project ABC cleanup
+:schi pstart='09/12/96' pend='09/15/96'
+      astart='09/12/96' aend='09/14/96'
+      cmt='Larry'.Requirements/High Level Design
+:schi pstart='09/14/96' pend='10/06/96'
+      astart='09/13/96' aend='10/06/96'
+      cmt='Shemp'.Design and Documentation
+:schi pstart='09/22/96' pend='10/10/96'
+      ASTART='09/18/96' AEND='        '
+      cmt='Stan'.Code/Test
+:schi pstart='10/12/96' pend='10/12/96'
+      astart='        ' aend='        '
+      cmt='Ollie'.Design/Code Review
+:schi pstart='10/12/96' pend='10/19/96'
+      astart='        ' aend='        '
+      cmt='Buster'.Production Install
+:eschedule.
+:schdate listref='sch009'
+         width=column actsize='15' cmtsize='6'
+         split=yes scale='0.8' frame=box.
+.*-----
+:h2.Messages and Codes
+.*---
+:h3.A standard Message List with STYLE=RULE
+:xmp.
+  &colon.msgl style=rule.
+  &colon.msgno.ABC123
+  &colon.msg.This is a test message
+  &colon.msgno.ABC124
+  &colon.msg.This is another test message
+  &colon.severity.4
+  &colon.probd.Problem determination text
+  goes here
+  &colon.msgno.ABC125
+  &colon.msg.This is yet another test message
+  &colon.emsgl.
+:exmp.
+:msgl style=rule.
+:msgno.ABC123
+:msg.This is a test message
+:msgno.ABC124
+:msg.This is another test message
+:severity.4
+:probd.Problem determination text
+goes here
+:msgno.ABC125
+:msg.This is yet another test message
+:emsgl.
+.*---
+:h3.A modified Message List with COMPACT and STYLE=BOX
+:xmp.
+  &colon.msgl compact style=box xpl='Cause'
+        uresp='Recovery' spresp='Administrative Action' tsize=6m.
+  &colon.msgno.DJI7832E
+  &colon.msg.This message is issued when no data set of the
+  name &colon.mv.xxxxxxxx&colon.emv. is found.
+  &colon.xpl.The processor could not locate
+  the data set named &colon.mv.xxxxxxxx&colon.emv..
+  &colon.severity.8
+  &colon.probd.You would appear to have a problem!
+  &colon.uresp.Look for the data set.
+  &colon.oresp.Do not mount the lost data set.
+  &colon.presp.Help the user look for the data set.
+  &colon.sysact.The system goes and does something
+  else while everyone looks for the data set.
+  &invellip.
+  &invellip.
+  &colon.emsgl.
+:exmp.
+:msgl compact style=box xpl='Cause'
+      uresp='Recovery' spresp='Administrative Action' tsize=6m.
+:msgno.DJI7832E
+:msg.This message is issued when no data set of the
+name :mv.xxxxxxxx:emv. is found.
+:xpl.The processor could not locate
+the data set named :mv.xxxxxxxx:emv..
+:severity.8
+:probd.You would appear to have a problem!
+:uresp.Look for the data set.
+:oresp.Do not mount the lost data set.
+:presp.Help the user look for the data set.
+:sysact.The system goes and does something
+while everyone looks for the data set.
+:msgno.DJI7833E
+:msg.THIS MESSAGE IS NOT ISSUED WHEN A DATA SET
+OF THE NAME :MV.xxxxxxxx:EMV. IS FOUND.
+:xpl.The processor could not locate
+the data set named :mv.xxxxxxxx:emv..
+:severity.8
+:probd.You would appear to have a problem!
+:uresp.Look for the data set.
+:oresp.Do not mount the lost data set.
+:presp.Help the user look for the data set.
+:sysact.The system goes and does something
+else while everyone looks for the data set.
+:emsgl.
+.*---
+:h3.A standard Code List with COMPACT
+:xmp.
+  &colon.codel compact.
+  &colon.code.0C1
+  &colon.xpl.Occurs when an operation exception occurs.
+  &colon.severity.The program is terminated.
+  &colon.dest.Send the dump to the user.
+  &colon.code.0C4
+  &colon.xpl.Occurs when an invalid address is referenced.
+  &colon.severity.The program is terminated.
+  &colon.dest.Send the dump to the user.
+  &colon.ecodel.
+:exmp.
+:codel compact.
+:code.0C1
+:xpl.Occurs when an operation exception occurs.
+:severity.The program is terminated.
+:dest.Send the dump to the user.
+:code.0C4
+:xpl.Occurs when an invalid address is referenced.
+:severity.The program is terminated.
+:dest.Send the dump to the user.
+:ecodel.
+.*---
+:h3.A modified Code List with COMPACT and STYLE=BOX
+:xmp.
+  &colon.codel compact style=box xpl='Cause' dest='Do what?'.
+  &colon.code.0C1
+  &colon.xpl.Occurs when an operation exception occurs.
+  &colon.severity.The program is terminated.
+  &colon.dest.Send the dump to the user.
+  &colon.code.0C4
+  &colon.xpl.Occurs when an invalid address is referenced.
+  &colon.severity.The program is terminated.
+  &colon.dest.Send the dump to the user.
+  &colon.ecodel.
+:exmp.
+:codel compact style=box xpl='Cause' dest='Do what?'.
+:code.0C1
+:xpl.Occurs when an operation exception occurs.
+:severity.The program is terminated.
+:dest.Send the dump to the user.
+:code.0C4
+:xpl.Occurs when an invalid address is referenced.
+:severity.The program is terminated.
+:dest.Send the dump to the user.
+:ecodel.
+.*-----
+:rev refid=r42.
+:h2.Interactive dialogs
+:xmp.
+  &colon.dialog tsize=5p
+          user=You
+          sys=Mythical
+          keep=all.
+  &colon.sys.MYTHICAL IS READY FOR YOU.
+  ARE YOU READY FOR MYTHICAL?
+  &colon.user.yes
+  &colon.sys.THEN PROCEED.
+  &colon.user.now what do i do?
+  &colon.sys.WHAT DO YOU EXPECT A MYTHICAL PROGRAM TO DO?
+  &colon.user.very little
+  &colon.sys.THAT'S EXACTLY WHAT THIS PROGRAM DOES!
+  END.
+  &colon.edialog.
+:exmp.
+Results in:
+:dialog tsize=5p
+        user=You
+        sys=Mythical
+        keep=all.
+:sys.MYTHICAL IS READY FOR YOU.
+ARE YOU READY FOR MYTHICAL?
+:user.yes
+:sys.THEN PROCEED.
+:user.now what do i do?
+:sys.WHAT DO YOU EXPECT A MYTHICAL PROGRAM TO DO?
+:user.very little
+:sys.THAT'S EXACTLY WHAT THIS PROGRAM DOES!
+END.
+:edialog.
+:erev refid=r42.
+.*-----
+.cp 30
+:h2.Line drawings (e.g. XEDITG, CHARGES)
+:cgraphic.
+ 
+     &Ul.eeeeeeeeeeeeeeeeee&Ur.                           &Ul.eeeeeeeeeeeeeeeeee&Ur.
+      Submitter using                          1                    
+         ADVTOOLS,             &Ul.eeeeeeeeeeeeeeeeee&Tl.   Submitter's    
+         INTOOLS,                                     E-mail       
+         GETINFO,                                    location      
+        INTERNET or                &Ul.eeeeeeeeeeee&Ar.                  
+        other system                                              
+     &Ll.eeeee&Td.eeeeeeeeeeee&Lr.                         &Ll.eeeeeeeeeeeeeeeeee&Lr.
+                                                      &Au.        &Au.
+         1                                                    
+              &Ul.eeeeeeeeeeeeeeeee&Lr.                    4         
+                                                              
+                 &Ul.eeeeeeeeeeeeeeeeee&Lr.                          
+           &Ad.   &Ad.    3                                   &Ad.         6
+     &Ul.eeeeeeeeeeeee&Tu.eeee&Ur.  2                        &Ul.eeeeeeeeeeeee&Tu.eeee&Ur.
+                       &Tr.eeeeeeeeeeeeeeeeeeeeeeeeee&Ar.                  
+                                                                    
+          HELPLOG                   5                               
+                       &Al.eeeeeeeeeeeeeeeeeeeeeeeee&Ar.    Responder     
+       Server Machine                                               
+                                               6                    
+                       &Al.eeeeeeeeeeeeeeeeeeeeeeeeee&Tl.                  
+     &Ll.eeeeeeeeeeeeeeeeee&Lr.                           &Ll.eeeeeeeeeeeeeeeeee&Lr.
+ 
+:ecgraphic.
+.*-----
+.cp 30
+:h2 id=exsynd.Syntax drawings
+:xmp.
+  &colon.syntax style=lblbox.Sample syntax diagram
+    &colon.kwd.ERASE
+    &colon.group choice.
+      &colon.kwd.FORM
+      &colon.kwd.PROC
+      &colon.kwd.QUERY
+      &colon.kwd.TABLE
+      &colon.egroup.
+    &colon.group.
+      &colon.repsep.&amp.comma.
+      &colon.var.name
+      &colon.egroup.
+    &colon.group composite opt.
+      &colon.delim.(
+      &colon.kwd.CONFIRM
+      &colon.oper.=
+      &colon.group choice.
+        &colon.kwd def.YES
+        &colon.kwd.NO
+        &colon.kwd.LOCAL
+        &colon.var.yyyymmdd
+        &colon.egroup.
+      &colon.egroup.
+    &colon.esyntax.
+:exmp.
+.*B2H OPTION SYNFONT=NO
+:psc xproc=html.
+:syntax style=lblbox.Sample syntax diagram
+:epsc.
+:psc proc=html.
+:syntax style=lblbox.Sample syntax diagram (using &colon.SYNFONT=NO)
+:epsc.
+  :kwd.ERASE
+  :group choice.
+    :kwd.FORM
+    :kwd.PROC
+    :kwd.QUERY
+    :kwd.TABLE
+    :egroup.
+  :group.
+    :repsep.&comma.
+    :var.name
+    :egroup.
+  :group composite opt.
+    :delim.(
+    :kwd.CONFIRM
+    :oper.=
+    :group choice.
+      :kwd def.YES
+      :kwd.NO
+      :kwd.LOCAL
+      :var.yyyymmdd
+      :egroup.
+    :egroup.
+  :esyntax.
+:psc proc=html.
+.*B2H OPTION SYNFONT=YES
+:rev refid=r42.
+:p.The accuracy of the appearance of the following syntax diagram
+is dependent on your browser.
+:erev refid=r42.
+:syntax style=lblbox.Sample syntax diagram (using &colon.SYNFONT=YES)
+  :kwd.ERASE
+  :group choice.
+    :kwd.FORM
+    :kwd.PROC
+    :kwd.QUERY
+    :kwd.TABLE
+    :egroup.
+  :group.
+    :repsep.&comma.
+    :var.name
+    :egroup.
+  :group composite opt.
+    :delim.(
+    :kwd.CONFIRM
+    :oper.=
+    :group choice.
+      :kwd def.YES
+      :kwd.NO
+      :kwd.LOCAL
+      :var.yyyymmdd
+      :egroup.
+    :egroup.
+  :esyntax.
+:epsc.

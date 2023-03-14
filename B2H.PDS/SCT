@@ -1,0 +1,107 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2H: Main file, other sections are imbedded
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+:userdoc sec='Copyright (c) 2001-2002 AT&amp.T'.
+.setup b2hsetup ;.cm setup file
+.*---------- Synopsis ----------
+:synopsis.
+:p.:hp2.Synopsis&colon.:ehp2.
+&sysname. converts &flat. files and files written in &bm.,
+Generalized Markup Language (GML) and &script. into &html. format
+suitable for use in an Internet World-Wide-Web environment
+:esynopsis.
+.*b2h html <script language="JavaScript">
+.*b2h html <!-- Hide JavaScript
+.*b2h html document.write("<p><table border><tr><th>")
+.*b2h html document.write("You are viewing this User's Guide using ")
+.*b2h html document.write('the "' + navigator.appVersion + '" browser.')
+.*b2h html document.write("</th></tr></table>")
+.*b2h html // end hiding -->
+.*b2h html </script>
+.*---------- Abstract ----------
+:abstract.
+:p.&sysname. reads files written in &bm., Generalized Markup
+Language (GML), &script., and even &flat. files, and converts them
+into &html. format suitable for use in an Internet World-Wide-Web
+environment.  &sysname. supports most commonly-used &bm., GML and
+&script. tags, macros and symbols.
+:p.&sysname. will be of interest to two audiences:  those who simply
+want to convert existing &bm., GML, &script. or &flat. files to
+&html., and those who want to rapidly create &html. pages with many
+internal links, but avoid the tedious hypertext link syntax.
+:p.You don't need to know &bm., GML, &script. or &html. to do a
+conversion.  However, those skills may be desirable if you want to
+create &bm., GML or &script. source files, or massage the &html.
+output.
+:p.&sysname. is a REXX program that runs under AIX, Linux, MVS
+(OS/390), OS/2, VM/ESA, &win9x., &winnt.
+:rev refid=r47.
+and Unix.
+:erev refid=r47.
+On VM/ESA, &sysname. can run either as a stand-alone EXEC or as a
+CMS pipeline filter.
+On MVS, &sysname. can run either as a stand-alone program or as a
+MVS/BatchPipeWorks pipeline filter.
+.*---------- Release summary
+:soa.Release summary
+:p.Details on the changes made for each &sysname. release are
+documented in :hdref refid=soar..
+:ul compact.
+.*----- R4.7 -----
+:rev refid=r47.
+:li.Changes made for Release 4.7
+are described in :hdref refid=soar47..
+:psc proc=html.
+If your browser supports the &html. :xph.&lt.FONT COLOR=&gt:exph.
+tag, updates for R4.7 appear in red.
+:epsc.
+:psc xproc=html.
+Updates for R4.7 are marked with a vertical bar in the left margin.
+:epsc.
+:erev refid=r47.
+.*----- R4.6 -----
+:rev refid=r46.
+:li.Changes made for Release 4.6 are described in :hdref refid=soar46..
+:erev refid=r46.
+.*----- R4.5 -----
+:rev refid=r45.
+:li.Changes made for Release 4.5 are described in :hdref refid=soar45..
+:erev refid=r45.
+.*----- R4.4 -----
+:rev refid=r44.
+:li.Changes made for Release 4.4 are described in :hdref refid=soar44..
+:erev refid=r44.
+.*----- R4.3 -----
+:rev refid=r43.
+:li.Changes made for Release 4.3 are described in :hdref refid=soar43..
+:erev refid=r43.
+.*----- R4.2 -----
+:rev refid=r42.
+:li.Changes made for Release 4.2 are described in :hdref refid=soar42..
+:erev refid=r42.
+.*----- R4.1 -----
+:li.Changes made for Release 4.1 are described in :hdref refid=soar41..
+.*----- R4.0 & R4.0x -----
+:li.Changes made for Release 4.0, 4.01, and 4.02 are described in
+:hdref refid=soar40..
+:eul.
+.*---------- remainder of document body
+:toc.
+:figlist.
+:body.
+.im b2hinf ;.cm "What is B2H", "Invoking..." & "Customizing..."
+.im b2huse ;.cm Using B2h, Converting "flat", Caveats & Restrictions
+.im b2hsys ;.cm Profile and Symbol tables
+.im b2hexa ;.cm Examples
+.im b2happ ;.cm Appendices
+:euserdoc.

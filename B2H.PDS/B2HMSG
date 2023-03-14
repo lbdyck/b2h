@@ -1,0 +1,670 @@
+.*---------------------------------------------------------------
+.* COPYRIGHT (c) Copyright 2001-2002 AT&T
+.*
+.* B2H User's Guide
+.*
+.* B2HMSG: B2H Messages
+.*         Imbedded by B2HAPP SCRIPT
+.*
+.* Gary Richtmeyer - 20 May 2002
+.*---------------------------------------------------------------
+.*b2h (pc)    option imbft=sct
+.*b2h (aix)   option imbft=script
+.*b2h (linux) option imbft=script
+.*b2h (unix)  option imbft=script
+.setup b2hsetup
+:h1 id=b2hmsgs.&sysname. Messages
+.nameit symbol=mpref text='B2H'
+.nameit symbol=info  text='Informational'
+.nameit symbol=warn  text='Warning (RC set to 4)'
+.nameit symbol=error text='Error (RC set to 8)'
+.nameit symbol=term  text='Termination (RC set to 8)'
+:p.During a conversion, &sysname. generates many messages
+relative to the conversion.
+The :spotref refid=quiet. specify if the messages are displayed on
+the console and the :spotref refid=logopt. specifies if the messages
+are written to a disk file.  Whether the message :hp1.numbers:ehp1.
+are included with the message is specified by the :spotref
+refid=msgnum. (:xph.MSGNUM=YES:exph. is the default).
+:p.If a message refers to a specific record in a source file, two
+additional lines are also displayed.
+For example (assuming :xph.MSGNUM=YES:exph.):
+:xmp.
+B2H455 WARNING: No tag-ending period found         <-- message
+B2H455 WARNING:   &colon.li this is item one             <-- source line
+B2H455 WARNING:   (in line 351 of projdoc.script)  <-- source line location
+:exmp.
+.*-----
+:msgl compact style=rule.
+:msgno.&mpref.100
+:msg.CurrSys=:mv.sys:emv., DestSys=:mv.sys:emv.,
+Input=:mv.file:emv.
+:xpl.Shown at start of conversion, this displays the current
+platform, the destination platform and the full name of the input
+file.
+:severity.&info
+.*-----
+:msgno.&mpref.101
+:msg.PhysicalOut=:mv.file:emv., LogicalOut=:mv.file:emv.
+:xpl.The physical and logical output files being created
+(see :hdref refid=xplat. for more information).
+If splitting the output files
+(:rev refid=r42.:xph.AUTOSPLIT=:exph.:erev refid=r42. option is
+:hp1.not:ehp1. :xph.NO:exph.), messages 102 and 103 are shown
+instead of this message.
+:severity.&info
+.*-----
+:msgno.&mpref.102
+:msg.PhysicalOut=:mv.file:emv., :mv.file:sub.2:esub.:emv., ...
+:xpl.The physical files being created when splitting the output
+(see :hdref refid=split. and :hdref refid=xplat. for more information).
+:severity.&info
+.*-----
+:msgno.&mpref.103
+:msg.LogicalOut=:mv.file:emv., :mv.file:sub.2:esub.:emv., ...
+:xpl.The logical files being created when splitting the output
+(see :hdref refid=split. and :hdref refid=xplat. for more information).
+:severity.&info
+.*-----
+:msgno.&mpref.104
+:msg.Beginning pass :mv.x:emv. of :mv.y:emv. (:mv.description:emv.)
+:xpl.Shows the progress of the conversion.
+:severity.&info
+.*-----
+:msgno.&mpref.105
+:msg.Conversion started: :mv.yyyy-mm-dd hh&colon.mm&colon.ss:emv.
+:xpl.Shows the date and time at the start of the conversion.
+:severity.&info
+.*-----
+:msgno.&mpref.106
+:msg.Conversion completed in :mv.nn.nn:emv. seconds
+:xpl.Shows the duration of the conversion.
+:severity.&info
+.*-----
+:msgno.&mpref.107
+:msg.Highest RC=:mv.rc:emv.
+:xpl.The highest return code encountered during the conversion
+(see :hdref refid=rcs. for more information).
+:severity.&info
+.*-----
+:msgno.&mpref.108
+:msg.Setting options using :mv.text:emv.
+:xpl.&sysname. options are being set using the text record shown.
+:severity.&info
+.*-----
+:rev refid=r45.
+:msgno.&mpref.109
+:msg.Setting symbol table entry using :mv.text:emv.
+:xpl.A &sysname. symbol table entry is being set using
+the text record shown.
+:severity.&info
+:erev refid=r45.
+.*-----
+:msgno.&mpref.112
+:msg.Tracing: :mv.routine:emv. :mv.routine:sub.2:esub.:emv. ...
+:xpl.Used for problem determination by &sysname. support.
+Confirms the names of the routines to be traced as specified
+using the :xph.TRACELIST=:exph. option.
+:severity.&info
+.*-----
+:msgno.&mpref.114
+:msg.Generating the index ...
+:xpl.&sysname. is now generating the index.
+:severity.&info
+.*-----
+:msgno.&mpref.115
+:msg.INDEX requested, but &colon.INDEX tag not found!
+:xpl.The :xph.INDEX:exph. or :xph.INDEX=YES:exph. option was
+specified, but no :xph.&colon.INDEX:exph. tag was encountered
+in the source.
+:severity.Normally, &warn., but this behavior can be
+overridden using the :spotref refid=procact..
+:sysact.No index is generated.
+.*-----
+:msgno.&mpref.118
+:msg.:rev refid=r42.SPLITDIGITS=:mv.num:emv. too small, dynamically
+increasing to SPLITDIGITS=:mv.num:emv.:erev refid=r42.
+:xpl.When splitting the output &html. file, the number of output
+files exceeds what can be represented by the specified number of
+suffix digits.  See :hdref refid=split. and :spotref refid=partdig.
+for more information.
+:severity.&warn
+:sysact.The number of digits is increased by one.
+.*-----
+:msgno.&mpref.120
+:msg.:mv.value:emv. is an unknown
+:rev refid=r42.AUTOSPLIT:erev refid=r42. option!
+:xpl.The value shown was encountered within the
+:rev refid=r42.AUTOSPLIT:erev refid=r42. option,
+but is unknown.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.121
+:msg.:mv.value:emv. not an ascending range for :mv.option:emv.
+:xpl.A hexadecimal range has been specified (e.g. F0-F4), but the
+second value is not larger than the first.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.122
+:msg.SYSVAR 'A' value not YES or NO!
+:xpl.The value for :xph.SYSVAR='A :pv.value:epv.':exph. must be
+either YES or NO.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.123
+:msg.:mv.option:emv. is an unknown option
+:xpl.The displayed value is not recognized as a &sysname. option.
+:severity.Normally, &sysname. terminates, but this behavior can be
+overridden using the :spotref refid=procact..
+.*-----
+:msgno.&mpref.124
+:msg.:mv.option:emv. option can not be set from within a source
+file unless prior to the first non-comment
+record of the main input file (:mv.file:emv.)!
+:xpl.Some &sysname. options require special handling, and
+restrictions apply if included within the source file.
+See :spotref refid=optspec. for more information.
+:severity.&warn
+:sysact.The option is ignored.
+.*-----
+:msgno.&mpref.125
+:msg.:mv.value:emv. is an invalid value for :mv.option:emv.
+:xpl.For the displayed option, the specified value is unknown or
+invalid.
+:severity.Normally, &sysname. terminates, but this behavior can be
+overridden using the :spotref refid=procact..
+.*-----
+:msgno.&mpref.126
+:msg.:mv.option:emv. not available when HTML=2
+:xpl.The option (or specific value for an option) is not available
+when generating &html. 2 output.
+:severity.&warn
+:sysact.The option (or value) is ignored.
+.*-----
+.*:msgno.&mpref.127
+.*:msg.Splitting HTML output not available when
+.*:xph.SOURCE=SCRIPTONLY:exph.,
+.*:rev refid=r42.:xph.AUTOSPLIT=NO:exph.:erev refid=r42. assumed
+.*:xpl.Splitting of the output &html. file is not available when
+.*converting a source file using :xph.SOURCE=SCRIPTONLY:exph. rules.
+.*See :hdref refid=split. for more information.
+.*:severity.&warn
+.*:sysact.:rev refid=r42.:xph.AUTOSPLIT=NO:exph.:erev refid=r42. is
+.*assumed
+.*-----
+:rev refid=r43.
+:msgno.&mpref.128
+:msg.Output stream :q.:mv.x:emv.:eq. not defined for LOG=STREAM:mv.x:emv.
+:xpl.When &sysname. is running as a Pipeline filter, you have
+requested that it write its log records to the specified output
+stream.  But the specified output stream is not defined within the
+pipeline.
+:severity.Normally, &sysname. terminates, but this behavior can be
+overridden using the :spotref refid=procact..
+:erev refid=r43.
+.*-----
+:msgno.&mpref.151
+:msg.Unknown symbol table record
+:xpl.The displayed record was encountered within a symbol table,
+but is unrecognizable.
+See :hdref refid=symbol. for additional information.
+:rev refid=r45.
+:severity.Normally, &sysname. terminates, but this behavior can be
+overridden using the :spotref refid=procact..
+:erev refid=r45.
+.*-----
+:rev refid=r45.
+:msgno.&mpref.152
+:msg.Unknown symbol table statement
+:xpl.The previously displayed record (see message 109) encountered
+within the source file is unrecognizable as a symbol table record.
+See :hdref refid=symbol. for the syntax of a symbol table record.
+:severity.Normally, &sysname. terminates, but this behavior can be
+overridden using the :spotref refid=procact..
+:erev refid=r45.
+.*-----
+:msgno.&mpref.160
+:msg.Loading :mv.file:emv. ...
+:xpl.The specified profile or symbol table file is being processed.
+:severity.&info
+.*-----
+:msgno.&mpref.161
+:msg.:mv.file:emv.(:mv.recno:emv.)&colon. :mv.record:emv.
+:xpl. Shows a processed profile record
+(if :xph.SHOWPROF=YES:exph. specified)
+or processed symbol table record
+(if :xph.SHOWSYM=YES:exph. specified).
+Used for problem determination by &sysname. support.
+:severity.&info
+.*-----
+:rev refid=r45.
+:msgno.&mpref.162
+:msg.Debug data&colon. :mv.text:emv.
+:xpl.Shows various problem determination data when
+:xph.DEBUG=YES:exph. is specified.
+Used for problem determination by &sysname. support.
+:severity.&info
+:erev refid=r45.
+.*-----
+:msgno.&mpref.200
+:msg.Environment type :mv.env:emv. unknown!
+:xpl.You are attempting to execute &sysname. on an unknown
+or unsupported platform.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.300
+:msg.:mv.file:emv. not found!
+:xpl.The specified file could not be located.
+On MVS and VM/CMS, &sysname. follows the same steps to locate an
+imbedded file as &script./GML/&bm. does.  On a PC workstation,
+&sysname. provides the :spotref refid=imbft., the :spotref
+refid=imbftex. and the :spotref refid=imbpath.s to determine the
+name and location of an imbedded file.
+:severity.Depends on which file could not be found
+:sysact.Depends on which file could not be found
+.*-----
+:msgno.&mpref.301
+:msg.Unable to create :mv.file:emv.
+:xpl.&sysname. was unable to create the specified file.
+There are many reasons why this can occur:
+:ul compact.
+:li.On MVS:
+:ul compact.
+:li.Attempting to create a dataset without appropriate RACF authority
+:li.Invalid syntax of the specified dataset name
+.* :li.Invalid values specified for the appropriate
+.* :xph.MVSALLOC.:pv.name:epv.=:exph. option resulting in the TSO
+.* :xph.ALLOC:exph. command failing.
+:eul.
+:li.On a PC workstation:
+:ul compact.
+:li.The syntax of the file is not compatible with the operating system
+:li.The output file or directory is marked as read-only
+:li.The output directory does not exist
+:li.The network drive is not available
+:li.etc.
+:eul.
+:li.On VM:
+:ul compact.
+:li.Invalid syntax, such as no filetype or a numeric filemode
+:li.The output disk is either read-only or not accessed
+:li.The filemode refers to an SFS directory, but you do not
+have write authority
+:eul.
+:eul.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.302
+:msg.Reading :mv.file:emv. ...
+:xpl.The specified file has been opened and is being read.
+:severity.&info
+.*-----
+:msgno.&mpref.303
+:msg.&period.&period.Imbedding :mv.file:emv. ...
+:xpl.The specified source file is being imbedded.
+The message's indentation corresponds to the :q.nesting:eq.
+level of the imbed structure.
+:severity.&info
+.*-----
+:msgno.&mpref.304
+:msg.:mv.num:emv. lines read from :mv.file:emv.
+:xpl.Shows how many lines were read from the specified file.
+:severity.&info
+.*-----
+:msgno.&mpref.306
+:msg.:mv.num:emv. lines written to :mv.file:emv.
+:xpl.Shows how many lines were written to the specified file.
+:severity.&info
+.*-----
+:msgno.&mpref.310
+:msg.&period.&period.Reading line :mv.num:emv. from :mv.file:emv. ...
+:xpl.Status message showing progress in reading the specified file.
+See the :spotref refid=showlin. for controlling whether this message
+is displayed and how often.
+:severity.&info
+.*-----
+:msgno.&mpref.312
+:msg.Adding lines from :mv.file:emv.
+:xpl.The lines from the specified file are being added to the
+&html. output.
+:severity.&info
+.*-----
+:msgno.&mpref.313
+:msg.:mv.desc:emv. DD=:mv.ddname:emv. not allocated and unable to
+locate DSN=:mv.dataset-name:emv.
+:xpl.Under MVS, the specified &sysname. system file is neither
+pre-allocated to the specified DDname, nor can the file be located
+using the default dataset name.
+:severity.&error
+:sysact.Loading of the system file is bypassed, but additional
+errors often occur.
+.*-----
+:msgno.&mpref.314
+:msg.DD :mv.ddname:emv. not allocated
+:xpl.Under MVS, the indicated file was specified using the
+:q.:xph.DD&colon.:pv.ddname:epv.:exph.:eq. notation, but
+:pv.ddname:epv. is not allocated.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.315
+:msg.DD :mv.ddname:emv. not
+DSORG=&lbrc.PS|PO&rbrc.
+:xpl.Under MVS, the format of the :q.:xph.DD:exph.:eq. control word
+does not match the dataset organization of the indicated file.
+One of the two following situations was detected:
+:ul compact.
+:li.:q.:xph.DD&colon.:pv.ddname:epv.:exph.:eq. was specified,
+but the dataset is not a sequential dataset (DSORG=PS) or a member
+of a partitioned data set,
+:li.:q.:xph.DD&colon.:pv.ddname:epv.(:pv.member:epv.):exph.:eq. was
+specified, but the dataset is not a partitioned data set (DSORG=PO)
+:eul.
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:msgno.&mpref.316
+:msg.Member :mv.member:emv. not found in dataset(s) allocated to DD
+:mv.ddname:emv.
+:xpl.Under MVS, the input file was specified as
+:q.:xph.DD&colon.:pv.ddname:epv.(:pv.member:epv.):exph.:eq., but the
+specified member can not be found within the dataset(s) allocated to
+:pv.ddname:epv..
+:severity.&term
+:sysact.The conversion is halted.
+.*-----
+:rev refid=r45.
+:msgno.&mpref.317
+:msg.RC=:mv.rc:emv. :mv.optdesc:emv. writing to :mv.dataset:emv.
+:rev refid=r46.
+RECORD=:mv.record:emv.
+:erev refid=r46.
+:xpl.An error was detected while writing to the specified output
+file.  The most common cause is that the output disk (or output
+allocation) has filled up.
+:rev refid=r46.
+:pv.record:epv. is the record being written when the error occurred.
+:erev refid=r46.
+:severity.&term
+:sysact.The conversion is halted.
+:erev refid=r45.
+.*-----
+:rev refid=r45.
+:msgno.&mpref.318
+:msg.RC=:mv.rc:emv. allocating DD=:mv.ddname:emv. Command=:mv.alloc-cmd:emv.
+:xpl.An error was detected while attempting to allocate a new
+dataset under MVS.  :mv.alloc-cmd:emv. contains the command attempted.
+This is usually caused by an invalid value specified for the
+:xph.MVSALLOC.:pv.name:epv.=:exph. option resulting in the TSO
+:xph.ALLOC:exph. command failing.
+:severity.&term
+:sysact.The conversion is halted.
+:erev refid=r45.
+.*-----
+:msgno.&mpref.401
+:msg.Not a valid SCRIPT/VS control word
+:xpl.The specified control word is not recognized.  Custom control
+words and macros can be supported by defining them in a symbol
+table, see :hdref refid=custtag. for more information.
+:severity.Normally, &warn., but this behavior can be overridden
+using the :spotref refid=procact..
+.*-----
+:msgno.&mpref.403
+:msg.:mv.tag:emv. not a valid BookMaster/GML tag
+:xpl.The specified tag is not recognized.  Custom tags can be
+supported by defining them in a symbol table, see :hdref
+refid=custtag. for more information.
+:severity.Normally, &warn., but this behavior can be overridden
+using the :spotref refid=procact..
+.*-----
+:msgno.&mpref.411
+:msg.:mv.tag:emv. (in record :mv.num:emv. of :mv.file:emv.)
+never ended
+:xpl.A :q.start-type:eq. tag was encountered, but no accompanying
+:q.end-type:eq. tag was found, e.g. :xph.&colon.hp1:exph. missing
+it's :xph.&colon.ehp1:exph. tag.
+See :spotref refid=tagche. for suppressing this message.
+:severity.Normally, &warn., but this behavior can be overridden
+using the :spotref refid=procact..
+.*-----
+:msgno.&mpref.412
+:msg.Missing :xph.&colon.ETITLE.:exph. or
+:xph.&colon.ETITLEP.:exph. tag!
+:xpl.A start-of-title-page was encountered (a :xph.&colon.TITLE:exph.,
+:xph.&colon.LIBRARY:exph. or :xph.&colon.TOPIC:exph. tag was found),
+but the title page was never ended.
+See :spotref refid=tagche. for suppressing this message.
+:severity.Normally, &warn., but this behavior can be overridden
+using the :spotref refid=procact..
+:sysact.The main document is treated as part of the title.
+This usually results in only the title-page tags being displayed
+(the remainder of the document disappears!).
+.*-----
+:msgno.&mpref.413
+:msg.:mv.tag:emv. found outside of a :mv.tag-group:emv.
+:xpl.A tag was found outside of where it is supposed to be.
+For example, a :xph.&colon.C:exph. or :xph.&colon.ROW:exph. outside
+of a table, :xph.&colon.CHOICE:exph. not within a
+:xph.&colon.QUESTION:exph., a :xph.&colon.DD:exph. outside of a
+:xph.&colon.DL:exph., etc.
+See :spotref refid=tagche. for suppressing this message.
+:severity.&warn
+.*-----
+:msgno.&mpref.414
+:msg.:mv.tag:emv. out of sequence
+:xpl.A tag is not in the right sequence with it's related tags.
+For example, within a definition list (:xph.&colon.DL:exph.),
+a :xph.&colon.DD:exph. has no preceding
+:xph.&colon.DT:exph., or multiple :xph.&colon.DT:exph. tags
+were encountered with no intervening :xph.&colon.DD:exph. tags.
+See :spotref refid=tagche. for suppressing this message.
+:severity.&warn
+.*-----
+:msgno.&mpref.415
+:msg.:mv.tag:emv. already in effect
+:xpl.A :q.start-tag:eq. (which can not be :q.nested:eq.) was
+encountered while a previous :q.start-tag:eq. of the same type is
+still in effect.  For example, a :xph.&colon.FIG:exph. within a
+figure, a :xph.&colon.TABLE:exph. within a table, a
+:xph.&colon.REV:exph. within a revision of the same identifier.
+This situation can also be caused by a missing :q.end-tag:eq..
+See :spotref refid=tagche. for suppressing this message.
+:severity.&warn
+.*-----
+:msgno.&mpref.416
+:msg.No :mv.tag:emv. outstanding!
+:xpl.An :q.end-tag:eq. was encountered, but it's equivalent
+:q.start-tag:eq. is not in effect.  For example, an
+:xph.&colon.EHP1:exph. with no preceding :xph.&colon.HP1:exph. or an
+:xph.&colon.EFIG:exph. with no preceding :xph.&colon.FIG:exph..
+See :spotref refid=tagche. for suppressing this message.
+:severity.&warn
+.*-----
+:msgno.&mpref.417
+:msg.:xph.&colon.SCHEDULE LISTID=:mv.id:emv.:exph. not defined prior
+to :xph.&colon.SCHDATE:exph.
+:xpl.The :xph.&colon.SCHEDULE:exph. tag referenced by
+:xph.&colon.SCHDATE:exph. was not physically defined before the
+:xph.&colon.SCHDATE:exph. tag was encountered.
+:severity.&warn
+.*-----
+:msgno.&mpref.418
+:msg.Out-of-sequence :xph.&period.CONFIG:exph.
+:xpl.A sequence of :xph.&period.CONFIG:exph. statements is
+improperly nested
+:severity.&error
+.*-----
+:msgno.&mpref.431
+:msg.Number of columns not specified! Assuming :xph.COLS='*':exph..
+:xpl.A tag (or the referenced definition tag) does not specify the
+number of desired columns (neither :xph.COLS=:exph. or
+:xph.CWIDTHS=:exph. is specified).
+:severity.&error
+:sysact.A single column is assumed
+.*-----
+:msgno.&mpref.432
+:msg.Out-of-sequence table cell detected
+:xpl.A table cell in non-ascending order was detected.
+See :spotref refid=tblcell. for more information.
+:severity.&warn
+:sysact.The cell data is placed into the next ascending cell.
+.*-----
+:msgno.&mpref.433
+:msg.Out-of-sequence ARRANGE cell layout detected
+:xpl.The cell numbers in the :xph.ARRANGE=:exph. attribute are
+out of sequence.
+See :spotref refid=tblcell. for more information.
+:severity.&warn
+:sysact.the cell data is placed into the table in physical order.
+.*-----
+:msgno.&mpref.434
+:msg.:mv.tag:emv. not supported in a table
+:xpl.The specified markup has been identified as not supported
+within a table.  See the description of the :xph.TV=:exph. attribute
+in :hdref refid=scmd. for more information.
+:severity.&warn
+.*-----
+:msgno.&mpref.440
+:msg.Reference not found, following ignored: :mv.tag:emv.
+:xpl.The target for a reference-type tag (e.g.
+:xph.&colon.HDREF:exph., :xph.&colon.FIGREF:exph.) could not be found.
+:severity.Normally, &error., but this behavior can be
+overridden using the :spotref refid=procact..
+.*-----
+:msgno.&mpref.451
+:msg.Invalid :q.:mv.control-word:emv.:eq. condition
+:xpl.The expression for an
+:xph..AN:exph., :xph..IF:exph. or
+:xph..OR:exph. is invalid.
+:severity.&error
+:sysact.The condition is assumed to be false.
+.*-----
+:msgno.&mpref.452
+:msg.Invalid or missing category!
+:xpl.The category on the :xph.&colon.LEDI:exph. tag is either
+missing or invalid.
+:severity.&error
+.*-----
+:msgno.&mpref.453
+:msg.Invalid syntax in :mv.tag:emv.
+:xpl.An internally-generated tag, specific to &sysname.,
+contains a syntax error.
+:severity.&term
+:sysact.The conversion is halted.
+:uresp.Contact the author to report the problem.
+.*-----
+:msgno.&mpref.454
+:msg.Invalid arithmetic expression! :xph.&period.SE:exph.
+:mv.string:emv. Expression resolves to: :mv.expression:emv.
+:xpl.The arithmetic expression for a :xph.&period.SE:exph. control
+word has generated an error (e.g. divide-by-zero, non-numeric
+value).
+:severity.&error
+:sysact.A zero (0) is assigned to the symbol and conversion continues.
+.*-----
+:msgno.&mpref.455
+:msg.No tag-ending period found
+:xpl.The period signifying the end of a tag could not be found.
+:severity.Normally, &warn., but this behavior can be
+overridden using the :spotref refid=procact..
+:sysact.A period is inserted into what should be the correct
+position and conversion continues.
+.*-----
+:msgno.&mpref.456
+:msg.Syntax error detected in the following: :mv.tag string:emv.
+:xpl.An invalid or missing value was detected in the specified
+markup, such as :q.:xph.&period.CS&rbl.1&rbl.OOF:exph.:eq.
+instead of :q.:xph.&period.CS&rbl.1&rbl.OFF:exph.:eq..
+:severity.&error
+.*-----
+:msgno.&mpref.457
+:msg.:mv.xx:emv. is an invalid hex value.
+:xpl.A non-hexadecimal character has been detected where only
+hexadecimal characters (0-9,A-F,a-f) are expected.
+:severity.&error
+.*-----
+:msgno.&mpref.458
+:msg.:mv.type:emv. is an invalid GMLTYPE value.
+:xpl.The value specified for :xph.GMLTYPE=:exph. on the
+:xph.&period.NAMEIT:exph. macro is invalid.
+:severity.&error
+.*-----
+:msgno.&mpref.459
+:msg.:q.Backward GoTo:eq. not supported
+:xpl.A :q.:xph.&period.GO&rbl.:pv.label:epv.:exph.:eq. control word
+is attempting to branch to a label defined :hp1.earlier:ehp1. in the
+file.  &sysname. supports branching only to a label :hp1.later:ehp1.
+in the file.
+:severity.&warn
+:sysact.The :xph.&period.GO:exph. control word is ignored and
+processing continues with the next physical record.
+.*-----
+:msgno.&mpref.460
+:msg.Label :q.:mv.label:emv.:eq. not found!
+:xpl.A :q.:xph.&period.GO&rbl.:pv.label:epv.:exph.:eq. control word
+was processed, but the named label could not be located in the
+current file.
+:severity.&error
+:sysact.The source lines from the :xph.&period.GO:exph.
+control word to the end of the document are ignored.
+.*-----
+:msgno.&mpref.461
+:msg.DD :q.:mv.ddname:emv.:eq. not pre-allocated!
+:xpl.A :q.:xph.&period.DD&rbl.:pv.label:epv.&rbl.DD&rbl.&cont.
+:pv.ddname:epv.:exph.:eq. control word was processed,
+but the referenced DDname is not pre-allocated.
+:severity.&error
+:sysact.The imbed request is bypassed and processing continues.
+.*-----
+:msgno.&mpref.462
+:msg.Conflicting attributes!
+:xpl.More than one valid attribute specified where only one is
+allowed.
+:severity.&error
+:sysact.The default attribute is assumed.
+.*-----
+:msgno.&mpref.463
+:msg.Syntax note reference not defined
+:xpl.A :q.:xph.&colon.SYNNTREF&rbl.REFID=:pv.label:epv..:exph.:eq.
+tag was encountered, but the referenced
+:xph.&colon.SYNNT&rbl.ID=:pv.label:epv..:exph.
+was not yet processed.
+:severity.&error
+:sysact.The reference request is ignored
+.*-----
+:msgno.&mpref.481
+:msg.+++:mv.code:emv. :mv.message:emv.
+:xpl.The output of the :xph.&period.MG:exph. control word.
+:severity.&info
+.*-----
+:msgno.&mpref.482
+:msg.:mv.data:emv.
+:xpl.This is the data entered by the user in response to
+the :xph.&period.RV:exph. control word.
+:severity.&info
+.*-----
+:msgno.&mpref.483
+:msg.:mv.message:emv.
+:xpl.The output of the :xph.&period.TY:exph. control word.
+:severity.&info
+.*-----
+:msgno.&mpref.484
+:msg.Text for :mv.tag:emv. being bypassed!
+:xpl.This is the warning message when a tag that has been
+:q.mapped:eq. to :q.:xph.&colon.IGNOREW:exph.:eq. is encountered.
+See :hdref refid=spectag. for more information.
+:severity.&warn
+.*-----
+:msgno.&mpref.485
+:msg.:mv.markup:emv. has no HTML equivalent!
+:xpl.This is the warning message when a control word, macro or tag
+that has been :q.mapped:eq. to :q.:xph.=IGNOREW:exph.:eq. is
+encountered.  See :hdref refid=speccmd. and :hdref refid=spectag.
+for more information.
+:severity.&warn
+:emsgl.

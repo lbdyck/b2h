@@ -1,0 +1,83 @@
+************************ IBM Internal Use Only ************************
+* :NICK.B2H     :SEC.COPYRIGHT (c) Copyright 2002 AT&T
+* :TITLE.Convert Bookmaster/GML/Flat files to HTML
+* :VERSION.4.7          :DATE.2002-05-20  :OPS.VM,MVS,OS2,Win,AIX,LINUX,UNIX
+* :oname.Gary Richtmeyer                  :onode.SPPVM1   :ouser.NSGR6QD
+* :aname.Gary Richtmeyer                  :anode.SPPVM1   :auser.NSGR6QD
+* :email.grichtmeyer@att.com
+* :support.Y    :doc.Bookmaster,Help      :lang.REXX
+* :sw.VM, MVS, OS/2, Win9x/ME/NT/2000/XP, AIX, LINUX, UNIX :hw.none
+*
+* :kwd. HTML INTERNET WORLD WIDE WEB BOOKMASTER GML SCRIPT FLAT
+* :abs. B2H converts a Bookmaster, GML, Script/VS document or "flat" file
+*       into HTML Release 2, 3 or 4
+*       Runs under AIX, LINUX, MVS, OS/2, VM/CMS, Windows 9x/ME,
+*       Windows NT/2000/XP or UNIX.
+*       (In VM and MVS, B2H can run stand-alone or as a pipeline filter).
+***********************************************************************
+*
+*   B2H      ZIP        dated 2002-05-20   Contains all files needed for
+*                                          using B2H on a workstation
+      B2H      ZIP      *
+*
+*   B2H      ANNOUNCE   dated 2002-05-20   Announcement & installation info
+      B2H      ANNOUNCE *
+*
+*   B2H      NEWS       dated 2002-05-20   News about recent changes
+      B2H      NEWS     *
+*
+*   B2H      EXEC       dated 2002-05-20   Main-line routine (compiled for VM)
+      B2H      EXEC     *
+*
+*   B2H      MVSCEXEC   dated 2002-05-20   Main-line routine (compiled for MVS)
+      B2H      MVSCEXEC *
+*
+*   B2H      SEXEC      dated 2002-05-20   Main-line routine (REXX source)
+      B2H      SEXEC    *
+*
+*   B2H      PROFILE    dated 2002-05-20   Profile file
+      B2H      PROFILE  *
+*
+*   B2H      SYMBOLS    dated 2002-05-20   Define various symbols
+      B2H      SYMBOLS  *
+*
+*   B2H      HELPCMS    dated 2002-05-20   Helpfile
+      B2H      HELPCMS  *
+*
+*   B2H      SCRIPT     dated 2002-05-20   User's Guide (Bookmaster source)
+*   B2HSETUP SCRIPT     dated 2002-05-20
+*   B2HINF   SCRIPT     dated 2002-05-20
+*   B2HSYS   SCRIPT     dated 2002-05-20
+*   B2HUSE   SCRIPT     dated 2002-05-20
+*   B2HEXA   SCRIPT     dated 2002-05-20
+*   B2HAPP   SCRIPT     dated 2002-05-20
+*   B2HMSG   SCRIPT     dated 2002-05-20
+      B2H      SCRIPT   *
+      B2HSETUP SCRIPT   *
+      B2HINF   SCRIPT   *
+      B2HSYS   SCRIPT   *
+      B2HUSE   SCRIPT   *
+      B2HEXA   SCRIPT   *
+      B2HAPP   SCRIPT   *
+      B2HMSG   SCRIPT   *
+*
+*   B2H      LIST3820   dated 2002-05-20   User's Guide (3820 print-ready)
+      B2H      LIST3820 *
+*
+*   B2H      HTML       dated 2002-05-20   User's Guide (in HTML 3 format)
+      B2H      HTML     *
+*
+*   B2HR2    HTML       dated 2002-05-20   User's Guide (in HTML 2 format)
+      B2HR2    HTML     *
+*
+*   B2HLINK  GIFBIN     dated 1995-12-05   ARTSHOW=LINK default graphic
+      B2HLINK  GIFBIN   *
+*
+*   B2HIBM   FOOTER     dated 1997-11-15   Standard IBM footer (if desired)
+      B2HIBM   FOOTER   *
+*
+*   B2HUSER  EXEC       dated 1995-07-23   Sample user exit
+      B2HUSER  EXEC     *
+*
+*   B2HUSER  SYMBOLS    dated 1995-07-23   Sample user symbol definitions
+      B2HUSER  SYMBOLS  *
