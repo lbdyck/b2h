@@ -218,9 +218,9 @@ do while string \= ''
   end
  
 /*----- B2H system filespec/DDnames on MVS -----*/       /* !OPSYS! */
-/* ----------------------------------------------------------------- *
- | Change the DSnames here before using                              |
- * ----------------------------------------------------------------- */
+  /* --------------------------------------------- *
+   | Change the DSnames here before using *CHANGE* |
+   * --------------------------------------------- */
 MVSsys.!pro.!dd="B2HPRO" ; MVSsys.!pro.!dsn="hlq.B2H.PROFILE"
 MVSsys.!sym.!dd="B2HSYM" ; MVSsys.!sym.!dsn="hlq.B2H.SYMBOLS"
 MVSsys.!hlp.!dd="B2HHELP"; MVSsys.!hlp.!dsn="hlq.B2H.HELP"

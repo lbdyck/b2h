@@ -39,4 +39,4 @@ Installation:
  
    1. Copy member B2H into a SYSPROC or SYSEXEC library
    2. Edit member B2H to change the dataset names for the HLP, PRO and
-      SYM datasets.
+      SYM datasets.  *** Find *CHANGE* for location to change
