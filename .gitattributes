@@ -30,3 +30,4 @@
 *.bin binary
 B2H.PDS/B2HPDF git-encoding=BINARY zos-working-tree-encoding=BINARY binary
 B2H.PDS/LINKGIF git-encoding=BINARY zos-working-tree-encoding=BINARY binary
+B2H.PDS/HCDDOC git-encoding=BINARY zos-working-tree-encoding=BINARY binary
